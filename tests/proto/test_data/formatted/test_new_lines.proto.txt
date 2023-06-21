@@ -1,0 +1,42 @@
+/*
+**    test multiple empty lines at the end of proto file.
+*/
+syntax = "proto3";
+
+package dasdsadsd;
+
+option java_package      = "ba.la.ba.la";
+option objc_class_prefix = "dasdas";
+
+import "base.proto";
+
+/*
+**    TestOuter
+*/
+message TestOuter {
+    string header = 1;  // header
+    /*
+    **    TestInner
+    */
+    message TestInner {
+        string header = 1;  // TestInner header
+        string market = 2;  // TestInner market
+        /*
+        **    TestInner message inner bottomTestInner message inner bottom
+        **    TestInner message inner bottom bottombottombottombottomTestInner message inner bottom bottombottombottombottom
+        */
+    }
+    /*
+    **    market
+    **    market marketmarketmarket
+    */
+    string market = 2;  // market
+    /*
+    **    TestOuter message inner bottomTestOuter message inner bottom
+    **    TestOuter message inner bottom bottombottombottombottomTestOuter message inner bottom bottombottombottombottom
+    */
+}
+/*
+**    proto bottom
+**    proto bottom bottombottombottombottom
+*/

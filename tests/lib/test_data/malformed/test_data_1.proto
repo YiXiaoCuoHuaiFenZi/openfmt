@@ -1,0 +1,149 @@
+/*
+**    asdddddddd
+**    price demo  API request message
+**    sdfghjk
+*/
+syntax = "proto3";  // The price sdfgfhg API request message //asd /*asdfghj*/ AS
+
+/*
+**    asdddddddd
+**    sdfghjk
+*/
+package yxchfz.dalao.api;  // The price availabil
+
+/*
+**    The price demo  API request message
+**    aaaaaaaaaaaaaa
+**    asdasdasd
+**    The price demo  API request messageadssd
+**    asdasdasd //asdsad
+**    y API request messageadssd
+*/
+option java_package         = "net.yxchfz.schema.api";  // Chronological work  legs
+option java_outer_classname = "Demo Proto";             // Chronological work  legs
+option java_multiple_files  = true;                     // Chronological work  legss
+
+import "yixiaocuohuaifenzi/democontract/common/client.proto";   // currency must be the same as
+import "yixiaocuohuaifenzi/democontract/common/pass.proto";     // Chronological work  legs
+import "yixiaocuohuaifenzi/democontract/common/dasdasd.proto";  // asdfgh
+import "yixiaocuohuaifenzi/democontract/common/ewegrhf.proto";  // sdsads
+
+/*
+**    The fasdghjk adsfgh
+**    Chronological work  legs
+**
+**
+**    safdf
+**    Chronological work  legs
+*/
+message DemoRequestA {  // dasdasd
+  /*
+  **    asdfghjkytrewqrty
+  **    adasdasd
+  */
+  common.RequestContext request_context        = 1;                                        // Basic request context data
+  /*
+  **    asdfghjkytrewqrty
+  */
+  repeated common.WorkerGroup passenger_groups = 2;                                        // Worker groups
+  /*
+  **    BaggageType
+  */
+  enum InnerBaggageType {
+    BAGGAGE_TYPE_UNSPECIFIED = 0;                    // BAGGAGE_TYPE_UNSPECIFIED
+    BAGGAGE_TYPE_CARRY_ON    = 1 [deprecated=true];  // BAGGAGE_TYPE_CARRY_ON
+    /*
+    **    asdfgh
+    */
+    BAGGAGE_TYPE_CHECKED     = 2;                    // BAGGAGE_TYPE_CHECKED
+  }
+  /*
+  **    adasdasd
+  */
+  repeated common.Tiger work_legs              = 3 [(validate.rules).string.min_len = 2];  // Chronological work  legs
+  common.Money quote_price                     = 4 [deprecated=true];                      // Use to validate the work  price, the currency must be the same as
+  message MiddleAA {  // Level 1
+    message Inner {  // Level 2
+      int64 ival = 1;  // ival ivalivalivalivalivalivalival
+      bool booly = 2;  // urrency must be the same as
+    }
+    bool booly_aa = 1;  // urrency must be the same as
+  }
+}
+
+/*
+**    The fasdghjk adsfgh
+**    Chronological work  legs
+**    asdfg
+**
+**    safdf
+**    Chronological work  legss
+*/
+message DemoRequestB {
+  /*
+  **    asdfghjkytrewqrty
+  */
+  common.RequestContext request_context        = 1;  // Basic request context data
+  /*
+  **    asdfghjkytrewqrty
+  */
+  repeated common.WorkerGroup passenger_groups = 2;  // Worker groups
+  /*
+  **    adasdasd
+  */
+  repeated common.Tiger work_legs              = 3;  // Chronological work  legs
+  common.Money quote_price                     = 4;  // Use to validate the work  price, the currency must be the same as
+  /*
+  **    map field comment a
+  **    map field comment b
+  **
+  **    map field comment c
+  */
+  map<string, Project>                         = 3;  // map field comment d
+  common.Money quote_pasdasrice                = 5;  // Use to validate the work  price
+  /*
+  **    test_oneoftest_oneoftest_oneoftest_oneof test_oneof
+  */
+  oneof test_oneof {
+    string name            = 6;  // Use to validate the test_oneof name
+    /*
+    **    Use to validate the test_oneof sub_message
+    */
+    SubMessage sub_message = 7;
+  }
+  SubMessage DemoRequestBed                    = 8;  // asdasd
+}
+
+/*
+**    BaggageType
+*/
+enum BaggageType {
+  BAGGAGE_TYPE_UNSPECIFIED = 0;                    // BAGGAGE_TYPE_UNSPECIFIED
+  BAGGAGE_TYPE_CARRY_ON    = 1 [deprecated=true];  // BAGGAGE_TYPE_CARRY_ON
+  /*
+  **    asdfgh
+  */
+  BAGGAGE_TYPE_CHECKED     = 2;                    // BAGGAGE_TYPE_CHECKED
+}
+
+message DemoRequestC {
+  common.RequestContext request_context        = 1;  // Basic request context data
+  repeated common.WorkerGroup passenger_groups = 2;  // Worker groups
+  /*
+  **    adasdasd
+  */
+  repeated common.Tiger work_legs              = 3;  // Chronological work  legs
+  common.Money quote_price                     = 4;  // Use to validate the work  price, the currency must be the same as
+  common.Money quote_pasdasrice                = 5;  // Use to validate the work  price
+}
+
+/*
+**    The price Demo  rpc service
+*/
+service Demo {
+  /*
+  **    asdfgf
+  */
+  rpc DemoA (DemoRequest) returns (DemoResponse);  // sadfdDemo
+  rpc DemoB (DemoRequest) returns (DemoResponse);  // Demo
+}
