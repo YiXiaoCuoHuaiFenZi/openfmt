@@ -55,7 +55,7 @@ Protobuf *parse(const char *filePath)
     textColorConfig.service_element_name = 95;
     textColorConfig.service_element_request = 97;
     textColorConfig.service_element_response = 97;
-    textColorConfig.comment = 37;
+    textColorConfig.comment = 90;
 
     PbConfig config;
     config.indentsUnit = 4;
