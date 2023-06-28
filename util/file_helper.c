@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：
 **    创建日期：    2022-09-30
-**    更新日期：    2022-09-30
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,26 +11,26 @@
 #include "../lib/memory.h"
 
 
-List ReadLineToList(const char *filePath)
+List read_line_to_list(const char *file_path)
 {
     FILE *fp;
     char *des_line = NULL;
     size_t len = 0;
     size_t read = 0;
 
-    fp = fopen(filePath, "r");
+    fp = fopen(file_path, "r");
     if (fp == NULL)
     {
-        printf("could not open file: %s", filePath);
+        printf("could not open file: %s", file_path);
         return NULL;
     }
 
-    List list = CreateList();
+    List list = create_linked_list();
     while ((read = getline(&des_line, &len, fp)) != -1)
     {
         char *line = (char *) g_malloc(strlen(des_line) + 1);
         strcpy(line, des_line);
-        AppendList(line, "char", list);
+        append_linked_list(line, "char", list);
     }
 
     fclose(fp);
@@ -39,37 +39,37 @@ List ReadLineToList(const char *filePath)
     return list;
 }
 
-void PrintLineList(List lines)
+void print_line_list(List lines)
 {
-    PtrToNode pNode = lines->next;
-    while (pNode)
+    PtrToNode ptr_node = lines->next;
+    while (ptr_node)
     {
-        char *line = (char *) pNode->data;
+        char *line = (char *) ptr_node->data;
         printf("%s", line);
-        pNode = pNode->next;
+        ptr_node = ptr_node->next;
     }
 }
 
-SQueue ReadLineToSQueue(const char *filePath)
+SQueue read_line_to_str_queue(const char *file_path)
 {
     FILE *fp;
     char *des_line = NULL;
     size_t len = 0;
     size_t read = 0;
 
-    fp = fopen(filePath, "r");
+    fp = fopen(file_path, "r");
     if (fp == NULL)
     {
-        printf("could not open file: %s", filePath);
+        printf("could not open file: %s", file_path);
         return NULL;
     }
 
-    SQueue lines = CreateSQueue();
+    SQueue lines = create_str_queue();
     while ((read = getline(&des_line, &len, fp)) != -1)
     {
         char *line = (char *) g_malloc(strlen(des_line) + 1);
         strcpy(line, des_line);
-        EnSQueue(line, lines);
+        en_str_queue(line, lines);
     }
 
     fclose(fp);
@@ -78,9 +78,9 @@ SQueue ReadLineToSQueue(const char *filePath)
     return lines;
 }
 
-void PrintSQueue(SQueue lineQueue)
+void print_str_queue(SQueue line_queue)
 {
-    PtrToSQueueNode currentNode = lineQueue->head;
+    PtrToSQueueNode currentNode = line_queue->head;
     while (currentNode)
     {
         printf("%s", currentNode->str);

@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：
 **    创建日期：    2022-10-03
-**    更新日期：    2022-10-03
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #ifndef OPENFMT_STACK_H
 #define OPENFMT_STACK_H
@@ -19,19 +19,19 @@ struct Node
     struct Node *next;
 };
 
-Stack CreateStack();
+Stack create_stack();
 
-void DisposeStack(Stack stack, void (*FreeDataCallBack)(PtrToNode pNode));
+void dispose_stack(Stack stack, void (*free_data_callback)(PtrToNode ptr_node));
 
-Stack EmptyStack(Stack stack);
+Stack empty_stack(Stack stack);
 
-bool IsEmptyStack(Stack stack);
+bool is_empty_stack(Stack stack);
 
-void PushStack(void *data, Stack stack);
+void push_stack(void *data, Stack stack);
 
-void *TopStack(Stack stack, void (*FreeDataCallBack)(PtrToNode pNode));
+void *top_stack(Stack stack, void (*free_data_callback)(PtrToNode ptr_node));
 
-void PopStack(Stack stack, void (*FreeDataCallBack)(PtrToNode pNode));
+void pop_stack(Stack stack, void (*free_data_callback)(PtrToNode ptr_node));
 
 
 #endif //OPENFMT_STACK_H

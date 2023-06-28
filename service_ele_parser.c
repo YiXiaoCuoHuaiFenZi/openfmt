@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：    Parse service element.
 **    创建日期：    2022-11-15
-**    更新日期：    2023-06-20
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include <string.h>
 #include "lib/str.h"
@@ -10,7 +10,7 @@
 #include "service_ele_parser.h"
 #include "lib/memory.h"
 
-PbServiceElement *parse_pb_service_element(char *line, PbCommentList *topComments, SQueue lineQueue)
+PbServiceElement *parse_pb_service_element(char *line, PbCommentList *top_comments, SQueue line_queue)
 {
     //  to avoid impact the original line string, create a copy.
     char *s0 = str_copy(line);
@@ -40,15 +40,15 @@ PbServiceElement *parse_pb_service_element(char *line, PbCommentList *topComment
     ele->name = parts[0];
     ele->request = parts[1];
     ele->response = parts[3];
-    ele->comments = topComments;
+    ele->comments = top_comments;
     g_free(&(parts[2])); // release resource of string "returns"
 
-    PbComment *pbComment = parse_comment(line);
-    if (pbComment != NULL)
+    PbComment *pb_comment = parse_comment(line);
+    if (pb_comment != NULL)
     {
-        append_list(PbCommentNode, ele->comments, pbComment);
+        append_list(PbCommentNode, ele->comments, pb_comment);
     }
-    DeSQueue(lineQueue);
+    de_str_queue(line_queue);
 
     return ele;
 }

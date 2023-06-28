@@ -52,8 +52,6 @@ add_executable(openfmt
         lib/str.h
         lib/str_queue.c
         lib/str_queue.h
-        lib/str_list.c
-        lib/str_list.h
         lib/g_list.c
         lib/g_list.h
         lib/g_hash_table.c
@@ -167,8 +165,6 @@ add_executable(openfmt-tester
         lib/str.h
         lib/str_queue.c
         lib/str_queue.h
-        lib/str_list.c
-        lib/str_list.h
         lib/g_list.c
         lib/g_list.h
         lib/g_hash_table.c

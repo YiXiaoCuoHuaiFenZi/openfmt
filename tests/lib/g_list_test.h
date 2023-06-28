@@ -13,7 +13,7 @@ int test_G_NodeTemplate_int();
 
 int test_G_NodeTemplate_char();
 
-int test_create_list();
+int test_create_linked_list();
 
 int test_append_list();
 

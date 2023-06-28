@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：
 **    创建日期：    2022-10-24
-**    更新日期：    2023-06-01
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include "import_parser.h"
 #include "package_parser.h"
@@ -16,9 +16,9 @@ PbImport *parse_import(char *line)
     char *v = trim(s);
     g_free(&s);
 
-    PbImport *pbImport = (PbImport *) g_malloc(sizeof(PbImport));
-    pbImport->value = v;
-    pbImport->comments = NULL;
+    PbImport *pb_import = (PbImport *) g_malloc(sizeof(PbImport));
+    pb_import->value = v;
+    pb_import->comments = NULL;
 
-    return pbImport;
+    return pb_import;
 }

@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：    Parse message.
 **    创建日期：    2022-10-25
-**    更新日期：    2022-10-25
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include "lib/str.h"
 #include "lib/uuid.h"
@@ -10,7 +10,7 @@
 #include "message_parser.h"
 #include "lib/memory.h"
 
-PbMessage *parse_pb_message(char *line, SQueue lineQueue, PbCommentList *comments)
+PbMessage *parse_pb_message(char *line, SQueue line_queue, PbCommentList *comments)
 {
     char *s = sub_str_between_str(line, "message", "{");
     char *name = trim(s);
@@ -19,16 +19,16 @@ PbMessage *parse_pb_message(char *line, SQueue lineQueue, PbCommentList *comment
     PbMessage *obj = (PbMessage *) g_malloc(sizeof(PbMessage));
     UUID *uuid = uuid4();
     obj->id = str_copy(uuid->hex);
-    obj->parentId = NULL;
+    obj->parent_id = NULL;
     obj->name = name;
     obj->comments = comments;
-    obj->elements = CreateList();
-    PbComment *pbComment = parse_comment(line);
-    if (pbComment != NULL)
+    obj->elements = create_linked_list();
+    PbComment *pb_comment = parse_comment(line);
+    if (pb_comment != NULL)
     {
-        append_list(PbCommentNode, obj->comments, pbComment);
+        append_list(PbCommentNode, obj->comments, pb_comment);
     }
-    DeSQueue(lineQueue);
+    de_str_queue(line_queue);
     free_uuid4(uuid);
     return obj;
 }

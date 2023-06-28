@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：    Proto ADT(Abstract Data Type).
 **    创建日期：    2022-10-03
-**    更新日期：    2023-06-01
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include <string.h>
 #include "proto.h"
@@ -13,12 +13,12 @@
 
 void print_text(PbText *text)
 {
-    PrintTextWithColor(text->text, text->color, false);
+    print_text_with_color(text->text, text->color, false);
 }
 
-void print_text_list(PbTextList *textList)
+void print_text_list(PbTextList *text_list)
 {
-    PbTextNode *node = textList->next;
+    PbTextNode *node = text_list->next;
     while (node)
     {
         PbText *text = (PbText *) (node->data);
@@ -29,43 +29,43 @@ void print_text_list(PbTextList *textList)
 
 PbText *create_pb_text(char *text, int color)
 {
-    PbText *pbText = (PbText *) g_malloc(sizeof(PbText));
-    pbText->text = text;
-    pbText->color = color;
-    return pbText;
+    PbText *pb_text = (PbText *) g_malloc(sizeof(PbText));
+    pb_text->text = text;
+    pb_text->color = color;
+    return pb_text;
 }
 
-void create_add_pb_text(char *text, int color, PbTextList *textList)
+void create_add_pb_text(char *text, int color, PbTextList *text_list)
 {
-    PbText *pbText = create_pb_text(str_copy(text), color);
-    append_list(PbTextNode, textList, pbText);
+    PbText *pb_text = create_pb_text(str_copy(text), color);
+    append_list(PbTextNode, text_list, pb_text);
 }
 
-void format_protobuf(Protobuf *protobuf, const char *filePath)
+void format_protobuf(Protobuf *protobuf, const char *file_path)
 {
-    PbTextList *textList = create_list(PbTextNode);
-    format_syntax(protobuf, textList);
-    format_package(protobuf, textList);
-    format_options(protobuf, textList);
-    format_imports(protobuf, textList);
-    format_objects(protobuf, textList);
-    format_comments(protobuf, textList);
+    PbTextList *text_list = create_list(PbTextNode);
+    format_syntax(protobuf, text_list);
+    format_package(protobuf, text_list);
+    format_options(protobuf, text_list);
+    format_imports(protobuf, text_list);
+    format_objects(protobuf, text_list);
+    format_comments(protobuf, text_list);
 
     if (protobuf->config.preview)
     {
-        print_text_list(textList);
+        print_text_list(text_list);
     } else
     {
-        write_to_file(textList, filePath);
+        write_to_file(text_list, file_path);
     }
 
-    dispose_list(PbTextNode, textList, free_PbText);
+    dispose_list(PbTextNode, text_list, free_PbText);
 }
 
-char *str_join(PbTextList *textList)
+char *str_join(PbTextList *text_list)
 {
     unsigned long int length = 0;
-    PbTextNode *node = textList->next;
+    PbTextNode *node = text_list->next;
     while (node)
     {
         PbText *text = (PbText *) (node->data);
@@ -75,7 +75,7 @@ char *str_join(PbTextList *textList)
     unsigned long int size = length;
     char *buff = (char *) g_malloc(sizeof(char) * size + 1);
 
-    PbTextNode *cur = textList->next;
+    PbTextNode *cur = text_list->next;
     while (cur)
     {
         PbText *text = (PbText *) (cur->data);
@@ -87,10 +87,10 @@ char *str_join(PbTextList *textList)
     return buff;
 }
 
-void write_to_file(PbTextList *textList, const char *filePath)
+void write_to_file(PbTextList *text_list, const char *file_path)
 {
     FILE *fptr;
-    fptr = fopen(filePath, "w");
+    fptr = fopen(file_path, "w");
 
     if (fptr == NULL)
     {
@@ -98,7 +98,7 @@ void write_to_file(PbTextList *textList, const char *filePath)
         exit(1);
     }
 
-    PbTextNode *node = textList->next;
+    PbTextNode *node = text_list->next;
     while (node)
     {
         PbText *text = (PbText *) (node->data);
@@ -109,9 +109,9 @@ void write_to_file(PbTextList *textList, const char *filePath)
     fclose(fptr);
 }
 
-bool has_top_comment(PbCommentList *commentList)
+bool has_top_comment(PbCommentList *comment_list)
 {
-    PbCommentNode *cur = commentList->next;
+    PbCommentNode *cur = comment_list->next;
     while (cur)
     {
         if (cur->data->pos == TOP)
@@ -123,9 +123,9 @@ bool has_top_comment(PbCommentList *commentList)
     return false;
 }
 
-bool has_right_comment(PbCommentList *commentList)
+bool has_right_comment(PbCommentList *comment_list)
 {
-    PbCommentNode *cur = commentList->next;
+    PbCommentNode *cur = comment_list->next;
     while (cur)
     {
         if (cur->data->pos == RIGHT)
@@ -137,9 +137,9 @@ bool has_right_comment(PbCommentList *commentList)
     return false;
 }
 
-bool has_bottom_comment(PbCommentList *commentList)
+bool has_bottom_comment(PbCommentList *comment_list)
 {
-    PbCommentNode *cur = commentList->next;
+    PbCommentNode *cur = comment_list->next;
     while (cur)
     {
         if (cur->data->pos == BOTTOM)
@@ -152,34 +152,34 @@ bool has_bottom_comment(PbCommentList *commentList)
 }
 
 void build_top_comment(
-        PbCommentList *commentList,
+        PbCommentList *comment_list,
         int color,
         unsigned int indents,
-        PbTextList *textList,
-        bool includeRightComment
+        PbTextList *text_list,
+        bool include_right_comment
 )
 {
-    if (!has_top_comment(commentList) && !has_right_comment(commentList))
+    if (!has_top_comment(comment_list) && !has_right_comment(comment_list))
     {
         return;
     }
 
-    PbCommentNode *cur = commentList->next;
+    PbCommentNode *cur = comment_list->next;
 
-    if (has_top_comment(commentList))
+    if (has_top_comment(comment_list))
     {
         char *spaces = repeat(" ", indents);
-        create_add_pb_text(spaces, color, textList); // add indents
+        create_add_pb_text(spaces, color, text_list); // add indents
         g_free(&spaces);
-        create_add_pb_text("/*\n", color, textList);
+        create_add_pb_text("/*\n", color, text_list);
     } else
     {
-        if (has_right_comment(commentList) && includeRightComment)
+        if (has_right_comment(comment_list) && include_right_comment)
         {
             char *spaces = repeat(" ", indents);
-            create_add_pb_text(spaces, color, textList); // add indents
+            create_add_pb_text(spaces, color, text_list); // add indents
             g_free(&spaces);
-            create_add_pb_text("/*\n", color, textList);
+            create_add_pb_text("/*\n", color, text_list);
         }
     }
 
@@ -188,319 +188,319 @@ void build_top_comment(
         if (cur->data->pos == TOP)
         {
             char *spaces = repeat(" ", indents);
-            create_add_pb_text(spaces, color, textList); // add indents
+            create_add_pb_text(spaces, color, text_list); // add indents
             g_free(&spaces);
             if (strcmp(cur->data->text, "") == 0)
             {
-                create_add_pb_text("**", color, textList);
+                create_add_pb_text("**", color, text_list);
             } else
             {
-                create_add_pb_text("**    ", color, textList);
-                create_add_pb_text(cur->data->text, color, textList);
+                create_add_pb_text("**    ", color, text_list);
+                create_add_pb_text(cur->data->text, color, text_list);
             }
-            create_add_pb_text("\n", color, textList);
+            create_add_pb_text("\n", color, text_list);
         }
         cur = cur->next;
     }
 
-    if (!includeRightComment)
+    if (!include_right_comment)
     {
-        if (has_top_comment(commentList))
+        if (has_top_comment(comment_list))
         {
             char *spaces = repeat(" ", indents);
-            create_add_pb_text(spaces, color, textList); // add indents
+            create_add_pb_text(spaces, color, text_list); // add indents
             g_free(&spaces);
-            create_add_pb_text("*/\n", color, textList);
+            create_add_pb_text("*/\n", color, text_list);
             return;
         }
         return;
     }
 
-    cur = commentList->next;
+    cur = comment_list->next;
     while (cur)
     {
         if (cur->data->pos == RIGHT)
         {
             char *spaces = repeat(" ", indents);
-            create_add_pb_text(spaces, color, textList); // add indents
+            create_add_pb_text(spaces, color, text_list); // add indents
             g_free(&spaces);
             if (strcmp(cur->data->text, "") == 0)
             {
-                create_add_pb_text("**", color, textList);
+                create_add_pb_text("**", color, text_list);
             } else
             {
-                create_add_pb_text("**    ", color, textList);
-                create_add_pb_text(cur->data->text, color, textList);
+                create_add_pb_text("**    ", color, text_list);
+                create_add_pb_text(cur->data->text, color, text_list);
             }
-            create_add_pb_text(cur->data->text, color, textList);
-            create_add_pb_text("\n", color, textList);
+            create_add_pb_text(cur->data->text, color, text_list);
+            create_add_pb_text("\n", color, text_list);
         }
         cur = cur->next;
     }
     char *spaces = repeat(" ", indents);
-    create_add_pb_text(spaces, color, textList); // add indents
+    create_add_pb_text(spaces, color, text_list); // add indents
     g_free(&spaces);
-    create_add_pb_text("*/\n", color, textList);
+    create_add_pb_text("*/\n", color, text_list);
 }
 
-void format_right_comment(PbCommentList *commentList, int color, PbTextList *textList)
+void format_right_comment(PbCommentList *comment_list, int color, PbTextList *text_list)
 {
-    PbCommentNode *cur = commentList->next;
+    PbCommentNode *cur = comment_list->next;
     while (cur)
     {
         if (cur->data->pos == RIGHT)
         {
-            create_add_pb_text("// ", color, textList);
-            create_add_pb_text(cur->data->text, color, textList);
+            create_add_pb_text("// ", color, text_list);
+            create_add_pb_text(cur->data->text, color, text_list);
             return;
         }
         cur = cur->next;
     }
 }
 
-void format_bottom_comment(PbCommentList *commentList, int color, unsigned int indents, PbTextList *textList)
+void format_bottom_comment(PbCommentList *comment_list, int color, unsigned int indents, PbTextList *text_list)
 {
-    if (!has_bottom_comment(commentList))
+    if (!has_bottom_comment(comment_list))
     {
         return;
     }
 
     char *spaces = repeat(" ", indents);
-    create_add_pb_text(spaces, color, textList); // add indents
+    create_add_pb_text(spaces, color, text_list); // add indents
     g_free(&spaces);
-    create_add_pb_text("/*\n", color, textList);
+    create_add_pb_text("/*\n", color, text_list);
 
-    PbCommentNode *cur = commentList->next;
+    PbCommentNode *cur = comment_list->next;
     while (cur)
     {
         if (cur->data->pos == BOTTOM)
         {
             char *spaces = repeat(" ", indents);
-            create_add_pb_text(spaces, color, textList); // add indents
+            create_add_pb_text(spaces, color, text_list); // add indents
             g_free(&spaces);
             if (strcmp(cur->data->text, "") == 0)
             {
-                create_add_pb_text("**", color, textList);
+                create_add_pb_text("**", color, text_list);
             } else
             {
-                create_add_pb_text("**    ", color, textList);
-                create_add_pb_text(cur->data->text, color, textList);
+                create_add_pb_text("**    ", color, text_list);
+                create_add_pb_text(cur->data->text, color, text_list);
             }
-            create_add_pb_text(cur->data->text, color, textList);
-            create_add_pb_text("\n", color, textList);
+            create_add_pb_text(cur->data->text, color, text_list);
+            create_add_pb_text("\n", color, text_list);
         }
         cur = cur->next;
     }
     char *spaces_end = repeat(" ", indents);
-    create_add_pb_text(spaces_end, color, textList); // add indents
+    create_add_pb_text(spaces_end, color, text_list); // add indents
     g_free(&spaces_end);
-    create_add_pb_text("*/\n", color, textList);
+    create_add_pb_text("*/\n", color, text_list);
 }
 
-void format_syntax(Protobuf *protobuf, PbTextList *textList)
+void format_syntax(Protobuf *protobuf, PbTextList *text_list)
 {
     if (protobuf->syntax == NULL)
     {
         return;
     }
     PbConfig config = protobuf->config;
-    PbTextColorConfig colorConfig = protobuf->config.textColorConfig;
+    PbTextColorConfig color_config = protobuf->config.text_color_config;
 
-    build_top_comment(protobuf->syntax->comments, colorConfig.comment, 0, textList, config.topComment);
-    create_add_pb_text("syntax", colorConfig.syntax_key, textList);
-    create_add_pb_text(" = ", colorConfig.default_color, textList);
-    create_add_pb_text(protobuf->syntax->value, colorConfig.syntax_value, textList);
-    create_add_pb_text(";", colorConfig.default_color, textList);
+    build_top_comment(protobuf->syntax->comments, color_config.comment, 0, text_list, config.top_comment);
+    create_add_pb_text("syntax", color_config.syntax_key, text_list);
+    create_add_pb_text(" = ", color_config.default_color, text_list);
+    create_add_pb_text(protobuf->syntax->value, color_config.syntax_value, text_list);
+    create_add_pb_text(";", color_config.default_color, text_list);
 
-    if (!config.topComment && has_right_comment(protobuf->syntax->comments))
+    if (!config.top_comment && has_right_comment(protobuf->syntax->comments))
     {
-        create_add_pb_text("  ", colorConfig.default_color, textList);
-        format_right_comment(protobuf->syntax->comments, colorConfig.comment, textList);
+        create_add_pb_text("  ", color_config.default_color, text_list);
+        format_right_comment(protobuf->syntax->comments, color_config.comment, text_list);
     }
-    create_add_pb_text("\n\n", colorConfig.default_color, textList);
+    create_add_pb_text("\n\n", color_config.default_color, text_list);
 }
 
-void format_package(Protobuf *protobuf, PbTextList *textList)
+void format_package(Protobuf *protobuf, PbTextList *text_list)
 {
     if (protobuf->package == NULL)
     {
         return;
     }
     PbConfig config = protobuf->config;
-    PbTextColorConfig colorConfig = protobuf->config.textColorConfig;
+    PbTextColorConfig color_config = protobuf->config.text_color_config;
 
-    build_top_comment(protobuf->package->comments, colorConfig.comment, 0, textList, config.topComment);
-    create_add_pb_text("package", colorConfig.package_key, textList);
-    create_add_pb_text(" ", colorConfig.default_color, textList);
-    create_add_pb_text(protobuf->package->value, colorConfig.package_value, textList);
-    create_add_pb_text(";", colorConfig.default_color, textList);
+    build_top_comment(protobuf->package->comments, color_config.comment, 0, text_list, config.top_comment);
+    create_add_pb_text("package", color_config.package_key, text_list);
+    create_add_pb_text(" ", color_config.default_color, text_list);
+    create_add_pb_text(protobuf->package->value, color_config.package_value, text_list);
+    create_add_pb_text(";", color_config.default_color, text_list);
 
-    if (!config.topComment && has_right_comment(protobuf->package->comments))
+    if (!config.top_comment && has_right_comment(protobuf->package->comments))
     {
-        create_add_pb_text("  ", colorConfig.default_color, textList);
-        format_right_comment(protobuf->package->comments, colorConfig.comment, textList);
+        create_add_pb_text("  ", color_config.default_color, text_list);
+        format_right_comment(protobuf->package->comments, color_config.comment, text_list);
     }
-    create_add_pb_text("\n\n", colorConfig.default_color, textList);
+    create_add_pb_text("\n\n", color_config.default_color, text_list);
 }
 
 void format_option(
         Protobuf *protobuf,
-        PbOption *pbOption,
-        unsigned int maxOptionNameLength,
-        unsigned int maxOptionValueLength,
-        PbTextList *textList
+        PbOption *pb_option,
+        unsigned int max_option_name_len,
+        unsigned int max_option_value_len,
+        PbTextList *text_list
 )
 {
     PbConfig config = protobuf->config;
-    PbTextColorConfig colorConfig = protobuf->config.textColorConfig;
-    build_top_comment(pbOption->comments, colorConfig.comment, 0, textList, config.topComment);
+    PbTextColorConfig color_config = protobuf->config.text_color_config;
+    build_top_comment(pb_option->comments, color_config.comment, 0, text_list, config.top_comment);
 
-    create_add_pb_text("option", colorConfig.option_key, textList);
-    create_add_pb_text(" ", colorConfig.default_color, textList);
-    create_add_pb_text(pbOption->name, colorConfig.option_name, textList);
+    create_add_pb_text("option", color_config.option_key, text_list);
+    create_add_pb_text(" ", color_config.default_color, text_list);
+    create_add_pb_text(pb_option->name, color_config.option_name, text_list);
 
     /*
     ** align by equal sign, fill extra spaces between the option name and equal sign.
     */
-    if (config.alignByEqualSign)
+    if (config.align_by_equal_sign)
     {
-        unsigned int optionNameLen = strlen(pbOption->name);
-        unsigned int fillSpaceAmount = maxOptionNameLength - optionNameLen;
-        char *spaces = repeat(" ", fillSpaceAmount);
-        create_add_pb_text(spaces, colorConfig.default_color, textList);
+        unsigned int option_name_len = strlen(pb_option->name);
+        unsigned int fill_space_amount = max_option_name_len - option_name_len;
+        char *spaces = repeat(" ", fill_space_amount);
+        create_add_pb_text(spaces, color_config.default_color, text_list);
         g_free(&spaces);
     }
-    create_add_pb_text(" = ", colorConfig.default_color, textList);
-    create_add_pb_text(pbOption->value, colorConfig.option_value, textList);
-    create_add_pb_text(";", colorConfig.default_color, textList);
+    create_add_pb_text(" = ", color_config.default_color, text_list);
+    create_add_pb_text(pb_option->value, color_config.option_value, text_list);
+    create_add_pb_text(";", color_config.default_color, text_list);
 
-    if (!config.topComment && has_right_comment(pbOption->comments))
+    if (!config.top_comment && has_right_comment(pb_option->comments))
     {
         /*
         ** align comments if align by equal sign, fill extra spaces between the option value and single line comment.
         */
-        if (config.alignByEqualSign)
+        if (config.align_by_equal_sign)
         {
-            unsigned int optionValueLen = strlen(pbOption->value);
-            unsigned int fillSpaceAmount = maxOptionValueLength - optionValueLen;
-            char *spaces = repeat(" ", fillSpaceAmount);
-            create_add_pb_text(spaces, colorConfig.default_color, textList);
+            unsigned int option_value_len = strlen(pb_option->value);
+            unsigned int fill_space_amount = max_option_value_len - option_value_len;
+            char *spaces = repeat(" ", fill_space_amount);
+            create_add_pb_text(spaces, color_config.default_color, text_list);
             g_free(&spaces);
         }
 
-        create_add_pb_text("  ", colorConfig.default_color, textList);
-        format_right_comment(pbOption->comments, colorConfig.comment, textList);
+        create_add_pb_text("  ", color_config.default_color, text_list);
+        format_right_comment(pb_option->comments, color_config.comment, text_list);
     }
 }
 
 unsigned int get_max_option_name_length(Protobuf *protobuf)
 {
     PbOptionNode *cur = protobuf->options->next;
-    unsigned int maxLength = 0;
+    unsigned int max_len = 0;
     while (cur)
     {
-        if (strlen(cur->data->name) > maxLength)
+        if (strlen(cur->data->name) > max_len)
         {
-            maxLength = strlen(cur->data->name);
+            max_len = strlen(cur->data->name);
         }
         cur = cur->next;
     }
-    return maxLength;
+    return max_len;
 }
 
 unsigned int get_max_option_value_length(Protobuf *protobuf)
 {
     PbOptionNode *cur = protobuf->options->next;
-    unsigned int maxLength = 0;
+    unsigned int max_len = 0;
     while (cur)
     {
-        if (strlen(cur->data->value) > maxLength)
+        if (strlen(cur->data->value) > max_len)
         {
-            maxLength = strlen(cur->data->value);
+            max_len = strlen(cur->data->value);
         }
         cur = cur->next;
     }
-    return maxLength;
+    return max_len;
 }
 
-void format_options(Protobuf *protobuf, PbTextList *textList)
+void format_options(Protobuf *protobuf, PbTextList *text_list)
 {
     if (protobuf->options == NULL)
     {
         return;
     }
-    PbTextColorConfig colorConfig = protobuf->config.textColorConfig;
-    unsigned int maxOptionNameLength = get_max_option_name_length(protobuf);
-    unsigned int maxOptionValueLength = get_max_option_value_length(protobuf);
+    PbTextColorConfig color_config = protobuf->config.text_color_config;
+    unsigned int max_option_name_len = get_max_option_name_length(protobuf);
+    unsigned int max_option_value_len = get_max_option_value_length(protobuf);
 
     PbOptionNode *cur = protobuf->options->next;
     while (cur)
     {
-        format_option(protobuf, cur->data, maxOptionNameLength, maxOptionValueLength, textList);
-        create_add_pb_text("\n", colorConfig.default_color, textList);
+        format_option(protobuf, cur->data, max_option_name_len, max_option_value_len, text_list);
+        create_add_pb_text("\n", color_config.default_color, text_list);
         cur = cur->next;
     }
-    create_add_pb_text("\n", colorConfig.default_color, textList);
+    create_add_pb_text("\n", color_config.default_color, text_list);
 }
 
 unsigned int get_max_import_value_length(Protobuf *protobuf)
 {
     PbImportNode *cur = protobuf->imports->next;
-    unsigned int maxLength = 0;
+    unsigned int max_len = 0;
     while (cur)
     {
-        if (strlen(cur->data->value) > maxLength)
+        if (strlen(cur->data->value) > max_len)
         {
-            maxLength = strlen(cur->data->value);
+            max_len = strlen(cur->data->value);
         }
         cur = cur->next;
     }
-    return maxLength;
+    return max_len;
 }
 
-void format_import(Protobuf *protobuf, PbImport *pbImport, unsigned int maxImportValueLength, PbTextList *textList)
+void format_import(Protobuf *protobuf, PbImport *pb_import, unsigned int max_import_value_len, PbTextList *text_list)
 {
     PbConfig config = protobuf->config;
-    PbTextColorConfig colorConfig = protobuf->config.textColorConfig;
+    PbTextColorConfig color_config = protobuf->config.text_color_config;
 
-    build_top_comment(pbImport->comments, colorConfig.comment, 0, textList, config.topComment);
-    create_add_pb_text("import", colorConfig.import_key, textList);
-    create_add_pb_text(" ", colorConfig.default_color, textList);
-    create_add_pb_text(pbImport->value, colorConfig.import_value, textList);
-    create_add_pb_text(";", colorConfig.default_color, textList);
+    build_top_comment(pb_import->comments, color_config.comment, 0, text_list, config.top_comment);
+    create_add_pb_text("import", color_config.import_key, text_list);
+    create_add_pb_text(" ", color_config.default_color, text_list);
+    create_add_pb_text(pb_import->value, color_config.import_value, text_list);
+    create_add_pb_text(";", color_config.default_color, text_list);
 
-    if (!config.topComment && has_right_comment(pbImport->comments))
+    if (!config.top_comment && has_right_comment(pb_import->comments))
     {
-        unsigned int importValueLen = strlen(pbImport->value);
-        unsigned int fillSpaceAmount = maxImportValueLength - importValueLen;
-        char *spaces = repeat(" ", fillSpaceAmount);
-        create_add_pb_text(spaces, colorConfig.default_color, textList);
+        unsigned int import_value_len = strlen(pb_import->value);
+        unsigned int fill_space_amount = max_import_value_len - import_value_len;
+        char *spaces = repeat(" ", fill_space_amount);
+        create_add_pb_text(spaces, color_config.default_color, text_list);
         g_free(&spaces);
-        create_add_pb_text("  ", colorConfig.default_color, textList);
-        format_right_comment(pbImport->comments, colorConfig.comment, textList);
+        create_add_pb_text("  ", color_config.default_color, text_list);
+        format_right_comment(pb_import->comments, color_config.comment, text_list);
     }
 }
 
-void format_imports(Protobuf *protobuf, PbTextList *textList)
+void format_imports(Protobuf *protobuf, PbTextList *text_list)
 {
     if (protobuf->imports == NULL)
     {
         return;
     }
-    PbTextColorConfig colorConfig = protobuf->config.textColorConfig;
-    unsigned int maxImportValueLength = get_max_import_value_length(protobuf);
+    PbTextColorConfig color_config = protobuf->config.text_color_config;
+    unsigned int max_import_value_len = get_max_import_value_length(protobuf);
 
     PbImportNode *cur = protobuf->imports->next;
     while (cur)
     {
-        format_import(protobuf, cur->data, maxImportValueLength, textList);
-        create_add_pb_text("\n", colorConfig.default_color, textList);
+        format_import(protobuf, cur->data, max_import_value_len, text_list);
+        create_add_pb_text("\n", color_config.default_color, text_list);
         cur = cur->next;
     }
-    create_add_pb_text("\n", colorConfig.default_color, textList);
+    create_add_pb_text("\n", color_config.default_color, text_list);
 }
 
-void get_max_message_element_length(List elements, MessageElementLengthInfo *messageElementLengthInfo)
+void get_max_message_element_length(List elements, MessageElementLengthInfo *message_element_len_info)
 {
     List cur = elements->next;
     while (cur)
@@ -515,9 +515,9 @@ void get_max_message_element_length(List elements, MessageElementLengthInfo *mes
                 len1 = strlen(ele->label) + strlen(ele->type) + strlen(ele->name);
                 len1++; // additional space between label and type.
             }
-            if (len1 > messageElementLengthInfo->maxLengthBeforeEqualSign)
+            if (len1 > message_element_len_info->max_len_before_equal_sign)
             {
-                messageElementLengthInfo->maxLengthBeforeEqualSign = len1;
+                message_element_len_info->max_len_before_equal_sign = len1;
             }
 
             unsigned int len2 = strlen(ele->number);
@@ -526,9 +526,9 @@ void get_max_message_element_length(List elements, MessageElementLengthInfo *mes
                 len2 = strlen(ele->number) + strlen(ele->annotation);
                 len2++; // additional space between number and annotation.
             }
-            if (len2 > messageElementLengthInfo->maxLengthBetweenEqualSignAndSemicolon)
+            if (len2 > message_element_len_info->max_len_between_equal_sign_and_semicolon)
             {
-                messageElementLengthInfo->maxLengthBetweenEqualSignAndSemicolon = len2;
+                message_element_len_info->max_len_between_equal_sign_and_semicolon = len2;
             }
         }
         cur = cur->next;
@@ -540,73 +540,73 @@ void format_message_element(
         PbMessageElement *ele,
         unsigned int indents,
         MessageElementLengthInfo meli,
-        PbTextList *textList
+        PbTextList *text_list
 )
 {
     PbConfig config = protobuf->config;
-    PbTextColorConfig colorConfig = protobuf->config.textColorConfig;
+    PbTextColorConfig color_config = protobuf->config.text_color_config;
 
-    build_top_comment(ele->comments, colorConfig.comment, indents, textList, config.topComment);
+    build_top_comment(ele->comments, color_config.comment, indents, text_list, config.top_comment);
 
     char *spaces = repeat(" ", indents);
-    create_add_pb_text(spaces, colorConfig.default_color, textList); // add indents
+    create_add_pb_text(spaces, color_config.default_color, text_list); // add indents
     g_free(&spaces);
-    unsigned int cmlbes = strlen(ele->type) + strlen(ele->name); // maxLengthBeforeEqualSign of current element.
+    unsigned int cmlbes = strlen(ele->type) + strlen(ele->name); // max_len_before_equal_sign of current element.
     if (ele->label)
     {
         cmlbes = strlen(ele->label) + strlen(ele->type) + strlen(ele->name);
         cmlbes++; // additional space between label and type.
 
-        create_add_pb_text(ele->label, colorConfig.message_element_label, textList);
-        create_add_pb_text(" ", colorConfig.default_color, textList);
+        create_add_pb_text(ele->label, color_config.message_element_label, text_list);
+        create_add_pb_text(" ", color_config.default_color, text_list);
     }
-    create_add_pb_text(ele->type, colorConfig.message_element_type, textList);
-    create_add_pb_text(" ", colorConfig.default_color, textList);
-    create_add_pb_text(ele->name, colorConfig.message_element_name, textList);
+    create_add_pb_text(ele->type, color_config.message_element_type, text_list);
+    create_add_pb_text(" ", color_config.default_color, text_list);
+    create_add_pb_text(ele->name, color_config.message_element_name, text_list);
 
     /*
     ** align by equal sign, fill extra spaces between the element name and equal sign.
     */
-    if (config.alignByEqualSign)
+    if (config.align_by_equal_sign)
     {
-        unsigned int fillSpaceAmount = meli.maxLengthBeforeEqualSign - cmlbes;
-        char *spaces = repeat(" ", fillSpaceAmount);
-        create_add_pb_text(spaces, colorConfig.default_color, textList);
+        unsigned int fill_space_amount = meli.max_len_before_equal_sign - cmlbes;
+        char *spaces = repeat(" ", fill_space_amount);
+        create_add_pb_text(spaces, color_config.default_color, text_list);
         g_free(&spaces);
     }
 
-    create_add_pb_text(" = ", colorConfig.default_color, textList);
-    create_add_pb_text(ele->number, colorConfig.message_element_number, textList);
+    create_add_pb_text(" = ", color_config.default_color, text_list);
+    create_add_pb_text(ele->number, color_config.message_element_number, text_list);
 
-    unsigned int cmlbesas = strlen(ele->number); // maxLengthBetweenEqualSignAndSemicolon of current element.
+    unsigned int cmlbesas = strlen(ele->number); // max_len_between_equal_sign_and_semicolon of current element.
     if (ele->annotation)
     {
-        create_add_pb_text(" ", colorConfig.default_color, textList);
+        create_add_pb_text(" ", color_config.default_color, text_list);
 
         cmlbesas = strlen(ele->number) + strlen(ele->annotation);
         cmlbesas++; // additional space between number and annotation.
 
-        create_add_pb_text(ele->annotation, colorConfig.message_element_annotation, textList);
-        create_add_pb_text(";", colorConfig.default_color, textList);
+        create_add_pb_text(ele->annotation, color_config.message_element_annotation, text_list);
+        create_add_pb_text(";", color_config.default_color, text_list);
     } else
     {
-        create_add_pb_text(";", colorConfig.default_color, textList);
+        create_add_pb_text(";", color_config.default_color, text_list);
     }
 
-    if (!config.topComment && has_right_comment(ele->comments))
+    if (!config.top_comment && has_right_comment(ele->comments))
     {
-        unsigned int space_amount = meli.maxLengthBetweenEqualSignAndSemicolon - cmlbesas;
+        unsigned int space_amount = meli.max_len_between_equal_sign_and_semicolon - cmlbesas;
         space_amount = space_amount + 2; // make sure there are two spaces between semicolon and single line comment
         char *spaces = repeat(" ", space_amount);
-        create_add_pb_text(spaces, colorConfig.default_color, textList);
+        create_add_pb_text(spaces, color_config.default_color, text_list);
         g_free(&spaces);
-        format_right_comment(ele->comments, colorConfig.comment, textList);
+        format_right_comment(ele->comments, color_config.comment, text_list);
     }
 
-    create_add_pb_text("\n", colorConfig.default_color, textList);
+    create_add_pb_text("\n", color_config.default_color, text_list);
 }
 
-void format_message_elements(Protobuf *protobuf, List elements, unsigned int indents, PbTextList *textList)
+void format_message_elements(Protobuf *protobuf, List elements, unsigned int indents, PbTextList *text_list)
 {
     MessageElementLengthInfo meli = {0, 0};
 
@@ -618,17 +618,17 @@ void format_message_elements(Protobuf *protobuf, List elements, unsigned int ind
         if (strcmp(cur->data_type, "PbMessageElement") == 0)
         {
             PbMessageElement *ele = (PbMessageElement *) cur->data;
-            format_message_element(protobuf, ele, indents, meli, textList);
+            format_message_element(protobuf, ele, indents, meli, text_list);
         } else
         {
-            format_object(protobuf, cur->data, cur->data_type, indents, textList);
+            format_object(protobuf, cur->data, cur->data_type, indents, text_list);
         }
         cur = cur->next;
     }
 }
 
 
-void find_max_enum_element_length(List elements, EnumElementLengthInfo *messageElementLengthInfo)
+void find_max_enum_element_length(List elements, EnumElementLengthInfo *message_element_len_info)
 {
     List cur = elements->next;
     while (cur)
@@ -637,9 +637,9 @@ void find_max_enum_element_length(List elements, EnumElementLengthInfo *messageE
         {
             PbEnumElement *ele = (PbEnumElement *) cur->data;
 
-            if (strlen(ele->name) > messageElementLengthInfo->maxLengthOfName)
+            if (strlen(ele->name) > message_element_len_info->maxLengthOfName)
             {
-                messageElementLengthInfo->maxLengthOfName = strlen(ele->name);
+                message_element_len_info->maxLengthOfName = strlen(ele->name);
             }
 
             unsigned int len = strlen(ele->number);
@@ -648,9 +648,9 @@ void find_max_enum_element_length(List elements, EnumElementLengthInfo *messageE
                 len = strlen(ele->number) + strlen(ele->annotation);
                 len++; // additional space between number and annotation.
             }
-            if (len > messageElementLengthInfo->maxLengthBetweenEqualSignAndSemicolon)
+            if (len > message_element_len_info->max_len_between_equal_sign_and_semicolon)
             {
-                messageElementLengthInfo->maxLengthBetweenEqualSignAndSemicolon = len;
+                message_element_len_info->max_len_between_equal_sign_and_semicolon = len;
             }
         }
         cur = cur->next;
@@ -662,62 +662,62 @@ void format_enum_element(
         PbEnumElement *ele,
         unsigned int indents,
         EnumElementLengthInfo eeli,
-        PbTextList *textList
+        PbTextList *text_list
 )
 {
     PbConfig config = protobuf->config;
-    PbTextColorConfig colorConfig = protobuf->config.textColorConfig;
+    PbTextColorConfig color_config = protobuf->config.text_color_config;
 
-    build_top_comment(ele->comments, colorConfig.comment, indents, textList, config.topComment);
+    build_top_comment(ele->comments, color_config.comment, indents, text_list, config.top_comment);
 
     char *spaces = repeat(" ", indents);
-    create_add_pb_text(spaces, colorConfig.default_color, textList); // add indents
+    create_add_pb_text(spaces, color_config.default_color, text_list); // add indents
     g_free(&spaces);
-    create_add_pb_text(ele->name, colorConfig.enum_element_name, textList);
+    create_add_pb_text(ele->name, color_config.enum_element_name, text_list);
 
     /*
     ** align by equal sign, fill extra spaces between the element name and equal sign.
     */
-    if (config.alignByEqualSign)
+    if (config.align_by_equal_sign)
     {
         char *spaces = repeat(" ", eeli.maxLengthOfName - strlen(ele->name));
-        create_add_pb_text(spaces, colorConfig.default_color, textList);
+        create_add_pb_text(spaces, color_config.default_color, text_list);
         g_free(&spaces);
     }
 
-    create_add_pb_text(" = ", colorConfig.default_color, textList);
-    create_add_pb_text(ele->number, colorConfig.enum_element_number, textList);
+    create_add_pb_text(" = ", color_config.default_color, text_list);
+    create_add_pb_text(ele->number, color_config.enum_element_number, text_list);
 
-    unsigned int cmlbesas = strlen(ele->number); // maxLengthBetweenEqualSignAndSemicolon of current element.
+    unsigned int cmlbesas = strlen(ele->number); // max_len_between_equal_sign_and_semicolon of current element.
     if (ele->annotation)
     {
-        create_add_pb_text(" ", colorConfig.default_color, textList);
+        create_add_pb_text(" ", color_config.default_color, text_list);
 
         cmlbesas = strlen(ele->number) + strlen(ele->annotation);
         cmlbesas++; // additional space between number and annotation.
 
-        create_add_pb_text(ele->annotation, colorConfig.enum_element_annotation, textList);
-        create_add_pb_text(";", colorConfig.default_color, textList);
+        create_add_pb_text(ele->annotation, color_config.enum_element_annotation, text_list);
+        create_add_pb_text(";", color_config.default_color, text_list);
     } else
     {
-        create_add_pb_text(";", colorConfig.default_color, textList);
+        create_add_pb_text(";", color_config.default_color, text_list);
     }
 
 
-    if (!config.topComment && has_right_comment(ele->comments))
+    if (!config.top_comment && has_right_comment(ele->comments))
     {
-        unsigned int space_amount = eeli.maxLengthBetweenEqualSignAndSemicolon - cmlbesas;
+        unsigned int space_amount = eeli.max_len_between_equal_sign_and_semicolon - cmlbesas;
         space_amount = space_amount + 2; // make sure there are two spaces between semicolon and single line comment
         char *spaces = repeat(" ", space_amount);
-        create_add_pb_text(spaces, colorConfig.default_color, textList);
+        create_add_pb_text(spaces, color_config.default_color, text_list);
         g_free(&spaces);
-        format_right_comment(ele->comments, colorConfig.comment, textList);
+        format_right_comment(ele->comments, color_config.comment, text_list);
     }
 
-    create_add_pb_text("\n", colorConfig.default_color, textList);
+    create_add_pb_text("\n", color_config.default_color, text_list);
 }
 
-void format_enum_elements(Protobuf *protobuf, List elements, unsigned int indents, PbTextList *textList)
+void format_enum_elements(Protobuf *protobuf, List elements, unsigned int indents, PbTextList *text_list)
 {
     EnumElementLengthInfo eeli = {0, 0};
 
@@ -729,7 +729,7 @@ void format_enum_elements(Protobuf *protobuf, List elements, unsigned int indent
         if (strcmp(cur->data_type, "PbEnumElement") == 0)
         {
             PbEnumElement *ele = (PbEnumElement *) cur->data;
-            format_enum_element(protobuf, ele, indents, eeli, textList);
+            format_enum_element(protobuf, ele, indents, eeli, text_list);
         }
         cur = cur->next;
     }
@@ -739,35 +739,35 @@ void format_service_element(
         Protobuf *protobuf,
         PbServiceElement *ele,
         unsigned int indents,
-        PbTextList *textList
+        PbTextList *text_list
 )
 {
     PbConfig config = protobuf->config;
-    PbTextColorConfig colorConfig = protobuf->config.textColorConfig;
+    PbTextColorConfig color_config = protobuf->config.text_color_config;
 
-    build_top_comment(ele->comments, colorConfig.comment, indents, textList, config.topComment);
+    build_top_comment(ele->comments, color_config.comment, indents, text_list, config.top_comment);
     char *spaces = repeat(" ", indents);
-    create_add_pb_text(spaces, colorConfig.default_color, textList); // add indents
+    create_add_pb_text(spaces, color_config.default_color, text_list); // add indents
     g_free(&spaces);
-    create_add_pb_text(ele->label, colorConfig.service_element_label, textList);
-    create_add_pb_text(" ", colorConfig.default_color, textList);
-    create_add_pb_text(ele->name, colorConfig.service_element_name, textList);
-    create_add_pb_text(" (", colorConfig.default_color, textList);
-    create_add_pb_text(ele->request, colorConfig.service_element_request, textList);
-    create_add_pb_text(")", colorConfig.default_color, textList);
-    create_add_pb_text(" returns ", colorConfig.service_element_label, textList);
-    create_add_pb_text("(", colorConfig.default_color, textList);
-    create_add_pb_text(ele->response, colorConfig.service_element_response, textList);
-    create_add_pb_text(");", colorConfig.default_color, textList);
-    if (!config.topComment && has_right_comment(ele->comments))
+    create_add_pb_text(ele->label, color_config.service_element_label, text_list);
+    create_add_pb_text(" ", color_config.default_color, text_list);
+    create_add_pb_text(ele->name, color_config.service_element_name, text_list);
+    create_add_pb_text(" (", color_config.default_color, text_list);
+    create_add_pb_text(ele->request, color_config.service_element_request, text_list);
+    create_add_pb_text(")", color_config.default_color, text_list);
+    create_add_pb_text(" returns ", color_config.service_element_label, text_list);
+    create_add_pb_text("(", color_config.default_color, text_list);
+    create_add_pb_text(ele->response, color_config.service_element_response, text_list);
+    create_add_pb_text(");", color_config.default_color, text_list);
+    if (!config.top_comment && has_right_comment(ele->comments))
     {
-        create_add_pb_text("  ", colorConfig.default_color, textList);
-        format_right_comment(ele->comments, colorConfig.comment, textList);
+        create_add_pb_text("  ", color_config.default_color, text_list);
+        format_right_comment(ele->comments, color_config.comment, text_list);
     }
-    create_add_pb_text("\n", colorConfig.default_color, textList);
+    create_add_pb_text("\n", color_config.default_color, text_list);
 }
 
-void format_service_elements(Protobuf *protobuf, List elements, unsigned int indents, PbTextList *textList)
+void format_service_elements(Protobuf *protobuf, List elements, unsigned int indents, PbTextList *text_list)
 {
     List cur = elements->next;
     while (cur)
@@ -775,51 +775,51 @@ void format_service_elements(Protobuf *protobuf, List elements, unsigned int ind
         if (strcmp(cur->data_type, "PbServiceElement") == 0)
         {
             PbServiceElement *ele = (PbServiceElement *) cur->data;
-            format_service_element(protobuf, ele, indents, textList);
+            format_service_element(protobuf, ele, indents, text_list);
         }
         cur = cur->next;
     }
 }
 
 void create_object_text(
-        char *objectType,
-        char *objectName,
-        PbCommentList *objectComments,
-        List objectElements,
+        char *object_type,
+        char *object_name,
+        PbCommentList *object_comments,
+        List object_elements,
         Protobuf *protobuf,
         unsigned int indents,
-        PbTextList *textList,
-        void (ElementFormatFunc)(Protobuf *, List, unsigned int, PbTextList *)
+        PbTextList *text_list,
+        void (element_format_func)(Protobuf *, List, unsigned int, PbTextList *)
 )
 {
     PbConfig config = protobuf->config;
-    PbTextColorConfig colorConfig = protobuf->config.textColorConfig;
+    PbTextColorConfig color_config = protobuf->config.text_color_config;
 
-    build_top_comment(objectComments, colorConfig.comment, indents, textList, config.topComment);
+    build_top_comment(object_comments, color_config.comment, indents, text_list, config.top_comment);
     char *spaces = repeat(" ", indents);
-    create_add_pb_text(spaces, colorConfig.default_color, textList); // add indents
+    create_add_pb_text(spaces, color_config.default_color, text_list); // add indents
     g_free(&spaces);
-    create_add_pb_text(objectType, colorConfig.obj_key, textList);
-    create_add_pb_text(" ", colorConfig.default_color, textList);
-    create_add_pb_text(objectName, colorConfig.obj_name, textList);
-    create_add_pb_text(" ", colorConfig.default_color, textList);
-    create_add_pb_text("{", colorConfig.default_color, textList);
+    create_add_pb_text(object_type, color_config.obj_key, text_list);
+    create_add_pb_text(" ", color_config.default_color, text_list);
+    create_add_pb_text(object_name, color_config.obj_name, text_list);
+    create_add_pb_text(" ", color_config.default_color, text_list);
+    create_add_pb_text("{", color_config.default_color, text_list);
 
-    if (!config.topComment && has_right_comment(objectComments))
+    if (!config.top_comment && has_right_comment(object_comments))
     {
-        create_add_pb_text("  ", colorConfig.default_color, textList);
-        format_right_comment(objectComments, colorConfig.comment, textList);
+        create_add_pb_text("  ", color_config.default_color, text_list);
+        format_right_comment(object_comments, color_config.comment, text_list);
     }
-    create_add_pb_text("\n", colorConfig.default_color, textList);
-    ElementFormatFunc(protobuf, objectElements, indents + config.indentsUnit, textList);
-    format_bottom_comment(objectComments, colorConfig.comment, indents + config.indentsUnit, textList);
+    create_add_pb_text("\n", color_config.default_color, text_list);
+    element_format_func(protobuf, object_elements, indents + config.indents_unit, text_list);
+    format_bottom_comment(object_comments, color_config.comment, indents + config.indents_unit, text_list);
     char *spaces_bottom = repeat(" ", indents);
-    create_add_pb_text(spaces_bottom, colorConfig.default_color, textList); // add indents
+    create_add_pb_text(spaces_bottom, color_config.default_color, text_list); // add indents
     g_free(&spaces_bottom);
-    create_add_pb_text("}\n", colorConfig.default_color, textList);
+    create_add_pb_text("}\n", color_config.default_color, text_list);
 }
 
-void format_object(Protobuf *protobuf, void *object, char *data_type, unsigned int indents, PbTextList *textList)
+void format_object(Protobuf *protobuf, void *object, char *data_type, unsigned int indents, PbTextList *text_list)
 {
     if (strcmp(data_type, "PbMessage") == 0)
     {
@@ -831,7 +831,7 @@ void format_object(Protobuf *protobuf, void *object, char *data_type, unsigned i
                 obj->elements,
                 protobuf,
                 indents,
-                textList,
+                text_list,
                 format_message_elements
         );
         return;
@@ -847,7 +847,7 @@ void format_object(Protobuf *protobuf, void *object, char *data_type, unsigned i
                 obj->elements,
                 protobuf,
                 indents,
-                textList,
+                text_list,
                 format_enum_elements
         );
         return;
@@ -863,7 +863,7 @@ void format_object(Protobuf *protobuf, void *object, char *data_type, unsigned i
                 obj->elements,
                 protobuf,
                 indents,
-                textList,
+                text_list,
                 format_service_elements
         );
         return;
@@ -879,7 +879,7 @@ void format_object(Protobuf *protobuf, void *object, char *data_type, unsigned i
                 obj->elements,
                 protobuf,
                 indents,
-                textList,
+                text_list,
                 format_message_elements
         );
         return;
@@ -895,57 +895,57 @@ void format_object(Protobuf *protobuf, void *object, char *data_type, unsigned i
                 obj->elements,
                 protobuf,
                 indents,
-                textList,
+                text_list,
                 format_message_elements
         );
         return;
     }
 }
 
-void format_objects(Protobuf *protobuf, PbTextList *textList)
+void format_objects(Protobuf *protobuf, PbTextList *text_list)
 {
-    PbTextColorConfig colorConfig = protobuf->config.textColorConfig;
+    PbTextColorConfig color_config = protobuf->config.text_color_config;
     List cur = protobuf->objects->next;
     while (cur)
     {
-        format_object(protobuf, cur->data, cur->data_type, 0, textList);
+        format_object(protobuf, cur->data, cur->data_type, 0, text_list);
         if (cur->next)
         {
-            create_add_pb_text("\n", colorConfig.default_color, textList);
+            create_add_pb_text("\n", color_config.default_color, text_list);
         }
         cur = cur->next;
     }
 }
 
 
-void format_comments(Protobuf *protobuf, PbTextList *textList)
+void format_comments(Protobuf *protobuf, PbTextList *text_list)
 {
     if (protobuf->comments == NULL)
         return;
 
     PbConfig config = protobuf->config;
-    PbTextColorConfig colorConfig = protobuf->config.textColorConfig;
+    PbTextColorConfig color_config = protobuf->config.text_color_config;
 
-    int indents = config.indentsUnit;
+    int indents = config.indents_unit;
 
     // convert all comments as bottom comments
     PbCommentNode *cur = protobuf->comments->next;
-    create_add_pb_text("/*\n", colorConfig.default_color, textList);
+    create_add_pb_text("/*\n", color_config.default_color, text_list);
     while (cur)
     {
         if (cur->data->pos == BOTTOM)
         {
-            create_add_pb_text("**", colorConfig.comment, textList);
+            create_add_pb_text("**", color_config.comment, text_list);
             char *spaces = repeat(" ", indents);
-            create_add_pb_text(spaces, colorConfig.default_color, textList); // add indents
+            create_add_pb_text(spaces, color_config.default_color, text_list); // add indents
             g_free(&spaces);
-            create_add_pb_text(cur->data->text, colorConfig.comment, textList);
-            create_add_pb_text("\n", colorConfig.default_color, textList);
+            create_add_pb_text(cur->data->text, color_config.comment, text_list);
+            create_add_pb_text("\n", color_config.default_color, text_list);
         }
         cur = cur->next;
     }
-    create_add_pb_text("*/", colorConfig.comment, textList);
-    create_add_pb_text("\n", colorConfig.default_color, textList);
+    create_add_pb_text("*/", color_config.comment, text_list);
+    create_add_pb_text("\n", color_config.default_color, text_list);
 }
 
 void free_comment_list(PbCommentList **comments)
@@ -963,7 +963,7 @@ void free_PbText(PbTextNode *ptr)
 void free_pb_message(PbMessage *obj)
 {
     g_free(&obj->id);
-    g_free(&obj->parentId);
+    g_free(&obj->parent_id);
     g_free(&obj->name);
     free_comment_list(&obj->comments);
     free_objects(&obj->elements);
@@ -1001,7 +1001,7 @@ void free_pb_oneof(PbOneOf *obj)
 {
     g_free(&obj->id);
     g_free(&obj->name);
-    g_free(&obj->parentId);
+    g_free(&obj->parent_id);
     free_comment_list(&obj->comments);
     free_objects(&obj->elements);
     g_free(&obj);

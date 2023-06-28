@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：    generic methods to handle string.
 **    创建日期：    2022-10-05
-**    更新日期：    2023-06-02
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include <string.h>
 #include <ctype.h>
@@ -53,15 +53,15 @@ char *trim(const char *str)
 
 char *trim_prefix(const char *str, const char *prefix)
 {
-    unsigned int strLen = strlen(str);
-    unsigned int prefixLen = strlen(prefix);
-    if (strLen < prefixLen || prefixLen == 0)
+    unsigned int str_len = strlen(str);
+    unsigned int prefix_len = strlen(prefix);
+    if (str_len < prefix_len || prefix_len == 0)
     {
         return str_copy(str);
     }
 
     unsigned int index = 0;
-    while (index < prefixLen)
+    while (index < prefix_len)
     {
         if (*str == *prefix)
         {
@@ -74,11 +74,11 @@ char *trim_prefix(const char *str, const char *prefix)
         }
     }
 
-    if (index == prefixLen - 1)
+    if (index == prefix_len - 1)
     {
-        unsigned int size = strLen - prefixLen + 1;
+        unsigned int size = str_len - prefix_len + 1;
         char *result = (char *) g_malloc(size);
-        memcpy(result, str, strLen);
+        memcpy(result, str, str_len);
         result[size - 1] = '\0';
         return result;
     } else
@@ -89,22 +89,22 @@ char *trim_prefix(const char *str, const char *prefix)
 
 char *trim_suffix(const char *str, const char *suffix)
 {
-    unsigned int strLen = strlen(str);
-    unsigned int suffixLen = strlen(suffix);
-    if (strLen < suffixLen || suffixLen == 0)
+    unsigned int str_len = strlen(str);
+    unsigned int suffix_len = strlen(suffix);
+    if (str_len < suffix_len || suffix_len == 0)
     {
         return str_copy(str);
     }
 
-    unsigned int index = suffixLen;
-    const char *strEnd = str + strlen(str) - 1;
-    const char *suffixEnd = suffix + strlen(suffix) - 1;
+    unsigned int index = suffix_len;
+    const char *str_end = str + strlen(str) - 1;
+    const char *suffix_end = suffix + strlen(suffix) - 1;
     while (index > 0)
     {
-        if (*strEnd == *suffixEnd)
+        if (*str_end == *suffix_end)
         {
-            strEnd--;
-            suffixEnd--;
+            str_end--;
+            suffix_end--;
             index--;
         } else
         {
@@ -114,9 +114,9 @@ char *trim_suffix(const char *str, const char *suffix)
 
     if (index == 0)
     {
-        unsigned int size = strLen - suffixLen + 1;
+        unsigned int size = str_len - suffix_len + 1;
         char *result = (char *) g_malloc(size);
-        memcpy(result, str, strLen - strlen(strEnd + 1));
+        memcpy(result, str, str_len - strlen(str_end + 1));
         result[size - 1] = '\0';
         return result;
     } else
@@ -127,10 +127,10 @@ char *trim_suffix(const char *str, const char *suffix)
 
 char *trim_pre_suf(const char *str, const char *substr)
 {
-    char *trimmedPrefixStr = trim_prefix(str, substr);
-    char *trimmedStr = trim_suffix(trimmedPrefixStr, substr);
-    g_free(&trimmedPrefixStr);
-    return trimmedStr;
+    char *s = trim_prefix(str, substr);
+    char *r = trim_suffix(s, substr);
+    g_free(&s);
+    return r;
 }
 
 bool starts_with(const char *pre, const char *str)
@@ -145,9 +145,9 @@ bool ends_with(const char *suffix, const char *str)
     if (!str || !suffix)
         return true;
 
-    size_t lenStr = strlen(str);
-    size_t lenSuffix = strlen(suffix);
-    return lenSuffix > lenStr ? false : memcmp(str + lenStr - lenSuffix, suffix, lenSuffix) == 0;
+    size_t len = strlen(str);
+    size_t len_suffix = strlen(suffix);
+    return len_suffix > len ? false : memcmp(str + len - len_suffix, suffix, len_suffix) == 0;
 }
 
 char *replace(const char *old, const char *new, const char *str)

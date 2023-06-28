@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：    Parse Message, Enum, Service, Extend.
 **    创建日期：    2022-11-14
-**    更新日期：    2023-06-20
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include <string.h>
 #include "comment_parser.h"
@@ -24,50 +24,50 @@
 #include "lib/str.h"
 #include "lib/memory.h"
 
-void append_as_bottom_comments(PbCommentList *comments, PbCommentList *bottomComments)
+void append_as_bottom_comments(PbCommentList *comments, PbCommentList *bottom_comments)
 {
-    PbCommentNode *cur = bottomComments->next;
+    PbCommentNode *cur = bottom_comments->next;
     while (cur)
     {
-        PbComment *pbComment = cur->data;
-        pbComment->pos = BOTTOM;
+        PbComment *pb_comment = cur->data;
+        pb_comment->pos = BOTTOM;
         /*
-        ** create a total new comment data, and append it to the target comments list, so we can release bottomComments
-        ** by calling dispose_list.
+        ** create a total new comment data, and append it to the target comments list, so we can release bottom_comments
+        ** by calling dispose_linked_list.
         */
         PbComment *new_comment = (PbComment *) malloc(sizeof(PbComment));
-        memcpy(new_comment, pbComment, sizeof(PbComment));
-        new_comment->text = str_copy(pbComment->text);
+        memcpy(new_comment, pb_comment, sizeof(PbComment));
+        new_comment->text = str_copy(pb_comment->text);
         // append the new comment data to the comments list.
         append_list(PbCommentNode, comments, new_comment);
         cur = cur->next;
     }
 }
 
-void update_current_obj_comments(State *state, PbCommentList *bottomComments)
+void update_current_obj_comments(State *state, PbCommentList *bottom_comments)
 {
     if (strcmp(state->current_obj_type, "PbMessage") == 0)
     {
         PbMessage *current_obj = (PbMessage *) (state->current_obj);
-        append_as_bottom_comments(current_obj->comments, bottomComments);
+        append_as_bottom_comments(current_obj->comments, bottom_comments);
         return;
     }
     if (strcmp(state->current_obj_type, "PbEnum") == 0)
     {
         PbEnum *current_obj = (PbEnum *) (state->current_obj);
-        append_as_bottom_comments(current_obj->comments, bottomComments);
+        append_as_bottom_comments(current_obj->comments, bottom_comments);
         return;
     }
     if (strcmp(state->current_obj_type, "PbOneOf") == 0)
     {
         PbOneOf *current_obj = (PbOneOf *) (state->current_obj);
-        append_as_bottom_comments(current_obj->comments, bottomComments);
+        append_as_bottom_comments(current_obj->comments, bottom_comments);
         return;
     }
     if (strcmp(state->current_obj_type, "PbExtend") == 0)
     {
         PbExtend *current_obj = (PbExtend *) (state->current_obj);
-        append_as_bottom_comments(current_obj->comments, bottomComments);
+        append_as_bottom_comments(current_obj->comments, bottom_comments);
         return;
     }
 }
@@ -161,50 +161,50 @@ void parent_obj_to_current_obj(State *state)
     if (strcmp(state->parent_obj_type, "PbMessage") == 0)
     {
         PbMessage *current_obj = (PbMessage *) (state->current_obj);
-        state->current_obj = GHashTableGet(current_obj->parentId, state->obj_dic);
+        state->current_obj = g_hashtable_get(current_obj->parent_id, state->obj_dic);
         state->current_obj_type = "PbMessage";
         return;
     }
     if (strcmp(state->parent_obj_type, "PbEnum") == 0)
     {
         PbEnum *current_obj = (PbEnum *) (state->current_obj);
-        state->current_obj = GHashTableGet(current_obj->parentId, state->obj_dic);
+        state->current_obj = g_hashtable_get(current_obj->parent_id, state->obj_dic);
         state->current_obj_type = "PbEnum";
         return;
     }
     if (strcmp(state->parent_obj_type, "PbOneOf") == 0)
     {
         PbOneOf *current_obj = (PbOneOf *) (state->current_obj);
-        state->current_obj = GHashTableGet(current_obj->parentId, state->obj_dic);
+        state->current_obj = g_hashtable_get(current_obj->parent_id, state->obj_dic);
         state->current_obj_type = "PbOneOf";
         return;
     }
     if (strcmp(state->parent_obj_type, "PbExtend") == 0)
     {
         PbExtend *current_obj = (PbExtend *) (state->current_obj);
-        state->current_obj = GHashTableGet(current_obj->parentId, state->obj_dic);
+        state->current_obj = g_hashtable_get(current_obj->parent_id, state->obj_dic);
         state->current_obj_type = "PbExtend";
         return;
     }
 }
 
-void parse_object(Protobuf *protobuf, SQueue lineQueue, PbCommentList *topComments, State *state)
+void parse_object(Protobuf *protobuf, SQueue line_queue, PbCommentList *top_comments, State *state)
 {
-    if (IsEmptySQueue(lineQueue))
+    if (is_empty_str_queue(line_queue))
     {
         return;
     }
 
-    if (topComments == NULL)
+    if (top_comments == NULL)
     {
-        topComments = make_top_comments(lineQueue);
+        top_comments = make_top_comments(line_queue);
     }
 
-    char *line = str_copy(lineQueue->head->str);
+    char *line = str_copy(line_queue->head->str);
     char *tmp = trim(line);
     if (strstr(tmp, "}") && starts_with("}", tmp))
     {
-        DeSQueue(lineQueue);
+        de_str_queue(line_queue);
         state->r_brace++;
         /*
         ** There are comments exist at bottom of the message:
@@ -214,14 +214,14 @@ void parse_object(Protobuf *protobuf, SQueue lineQueue, PbCommentList *topCommen
         **     //message inner bottom bottombottombottombottom
         ** }
         **/
-        if (topComments != NULL)
+        if (top_comments != NULL)
         {
-            update_current_obj_comments(state, topComments);
+            update_current_obj_comments(state, top_comments);
             /*
-            ** the topComments is bottom comments actually, and the comment value data will be added to the object,
+            ** the top_comments is bottom comments actually, and the comment value data will be added to the object,
             ** so we must release this extra list data.
             */
-            free_comment_list(&topComments);
+            free_comment_list(&top_comments);
         }
 
         if (state->l_brace == state->r_brace)
@@ -238,80 +238,80 @@ void parse_object(Protobuf *protobuf, SQueue lineQueue, PbCommentList *topCommen
     }
     g_free(&tmp);
 
-    PbType pbType = get_pb_type(line);
+    PbType pb_type = get_pb_type(line);
 
-    switch (pbType)
+    switch (pb_type)
     {
         case Message:
         {
-            PbMessage *obj = parse_pb_message(line, lineQueue, topComments);
+            PbMessage *obj = parse_pb_message(line, line_queue, top_comments);
             if (state->current_obj != NULL)
             {
-                obj->parentId = get_parent_id(state);
-                AppendList(obj, "PbMessage", get_parent_elements(state));
+                obj->parent_id = get_parent_id(state);
+                append_linked_list(obj, "PbMessage", get_parent_elements(state));
                 current_obj_to_parent_obj(state);
             } else
             {
-                AppendList(obj, "PbMessage", protobuf->objects);
+                append_linked_list(obj, "PbMessage", protobuf->objects);
             }
             state->l_brace++;
             state->current_obj = obj;
             state->current_obj_type = "PbMessage";
-            GHashTablePut(obj->id, state->current_obj_type, obj, NULL, state->obj_dic);
+            g_hashtable_put(obj->id, state->current_obj_type, obj, NULL, state->obj_dic);
             break;
         }
         case Enum:
         {
-            PbEnum *obj = parse_pb_enum(line, lineQueue, topComments);
+            PbEnum *obj = parse_pb_enum(line, line_queue, top_comments);
             if (state->current_obj != NULL)
             {
-                obj->parentId = get_parent_id(state);
-                AppendList(obj, "PbEnum", get_parent_elements(state));
+                obj->parent_id = get_parent_id(state);
+                append_linked_list(obj, "PbEnum", get_parent_elements(state));
                 current_obj_to_parent_obj(state);
             } else
             {
-                AppendList(obj, "PbEnum", protobuf->objects);
+                append_linked_list(obj, "PbEnum", protobuf->objects);
             }
             state->l_brace++;
             state->current_obj = obj;
             state->current_obj_type = "PbEnum";
-            GHashTablePut(obj->id, state->current_obj_type, obj, NULL, state->obj_dic);
+            g_hashtable_put(obj->id, state->current_obj_type, obj, NULL, state->obj_dic);
             break;
         }
         case Service:
         {
-            PbService *obj = parse_pb_service(line, lineQueue, topComments);
+            PbService *obj = parse_pb_service(line, line_queue, top_comments);
             state->l_brace++;
             state->current_obj = obj;
             state->current_obj_type = "PbService";
-            AppendList(obj, "PbService", protobuf->objects);
+            append_linked_list(obj, "PbService", protobuf->objects);
             break;
         }
         case Extend:
         {
-            PbExtend *obj = parse_pb_extend(line, lineQueue, topComments);
+            PbExtend *obj = parse_pb_extend(line, line_queue, top_comments);
             if (state->current_obj != NULL)
             {
-                obj->parentId = get_parent_id(state);
-                AppendList(obj, "PbExtend", get_parent_elements(state));
+                obj->parent_id = get_parent_id(state);
+                append_linked_list(obj, "PbExtend", get_parent_elements(state));
                 current_obj_to_parent_obj(state);
             } else
             {
-                AppendList(obj, "PbExtend", protobuf->objects);
+                append_linked_list(obj, "PbExtend", protobuf->objects);
             }
             state->l_brace++;
             state->current_obj = obj;
             state->current_obj_type = "PbExtend";
-            GHashTablePut(obj->id, state->current_obj_type, obj, NULL, state->obj_dic);
+            g_hashtable_put(obj->id, state->current_obj_type, obj, NULL, state->obj_dic);
             break;
         }
         case OneOf:
         {
-            PbOneOf *obj = parse_pb_oneof(line, lineQueue, topComments);
+            PbOneOf *obj = parse_pb_oneof(line, line_queue, top_comments);
             if (state->current_obj != NULL)
             {
-                obj->parentId = get_parent_id(state);
-                AppendList(obj, "PbOneOf", get_parent_elements(state));
+                obj->parent_id = get_parent_id(state);
+                append_linked_list(obj, "PbOneOf", get_parent_elements(state));
                 current_obj_to_parent_obj(state);
             }
 
@@ -323,23 +323,23 @@ void parse_object(Protobuf *protobuf, SQueue lineQueue, PbCommentList *topCommen
             // The element of Message, OneOf and Extend has the same structure, so can be used by all of them.
         case MessageElement:
         {
-            PbMessageElement *element = parse_pb_message_element(line, topComments, lineQueue);
+            PbMessageElement *element = parse_pb_message_element(line, top_comments, line_queue);
             PbMessage *obj = (PbMessage *) (state->current_obj);
-            AppendList(element, "PbMessageElement", obj->elements);
+            append_linked_list(element, "PbMessageElement", obj->elements);
             break;
         }
         case EnumElement:
         {
-            PbEnumElement *element = parse_pb_enum_element(line, topComments, lineQueue);
+            PbEnumElement *element = parse_pb_enum_element(line, top_comments, line_queue);
             PbEnum *obj = (PbEnum *) (state->current_obj);
-            AppendList(element, "PbEnumElement", obj->elements);
+            append_linked_list(element, "PbEnumElement", obj->elements);
             break;
         }
         case ServiceElement:
         {
-            PbServiceElement *element = parse_pb_service_element(line, topComments, lineQueue);
+            PbServiceElement *element = parse_pb_service_element(line, top_comments, line_queue);
             PbService *obj = (PbService *) (state->current_obj);
-            AppendList(element, "PbServiceElement", obj->elements);
+            append_linked_list(element, "PbServiceElement", obj->elements);
             break;
         }
         default:
@@ -348,5 +348,5 @@ void parse_object(Protobuf *protobuf, SQueue lineQueue, PbCommentList *topCommen
         }
     }
     g_free(&line);
-    parse_object(protobuf, lineQueue, NULL, state);
+    parse_object(protobuf, line_queue, NULL, state);
 }

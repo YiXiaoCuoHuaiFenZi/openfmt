@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：
 **    创建日期：    2022-11-23
-**    更新日期：    2022-11-23
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #ifndef OPENFMT_G_HASH_TABLE_H
 #define OPENFMT_G_HASH_TABLE_H
@@ -29,18 +29,18 @@ struct GHashTable
     int count;
 };
 
-unsigned long HashFunc(const char *str);
+unsigned long g_hash_func(const char *str);
 
-GItem *CreateGItem(const char *key, const char *data_type, void *data, void (*data_free_func)(void *));
+GItem *g_create_item(const char *key, const char *data_type, void *data, void (*data_free_func)(void *));
 
-void FreeGItem(GItem *item);
+void g_free_item(GItem *item);
 
-GHashTable *CreateGHashTable(int size);
+GHashTable *g_create_hashtable(int size);
 
-void GHashTablePut(char *key, const char *data_type, void *data, void (*data_free_func)(void *), GHashTable *table);
+void g_hashtable_put(char *key, const char *data_type, void *data, void (*data_free_func)(void *), GHashTable *table);
 
-void *GHashTableGet(char *key, GHashTable *table);
+void *g_hashtable_get(char *key, GHashTable *table);
 
-void FreeGHashTable(GHashTable *table);
+void g_free_hashtable(GHashTable *table);
 
 #endif //OPENFMT_G_HASH_TABLE_H

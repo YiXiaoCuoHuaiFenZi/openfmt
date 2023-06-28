@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：
 **    创建日期：    2022-10-21
-**    更新日期：    2023-06-01
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include "package_parser.h"
 #include <stdlib.h>
@@ -15,9 +15,9 @@ PbPackage *parse_package(char *line)
     char *value = trim(s);
     g_free(&s);
 
-    PbPackage *pbPackage = (PbPackage *) g_malloc(sizeof(PbPackage));
-    pbPackage->value = value;
-    pbPackage->comments = NULL;
+    PbPackage *pb_package = (PbPackage *) g_malloc(sizeof(PbPackage));
+    pb_package->value = value;
+    pb_package->comments = NULL;
 
-    return pbPackage;
+    return pb_package;
 }

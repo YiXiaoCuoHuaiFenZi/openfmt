@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：
 **    创建日期：    2022-10-01
-**    更新日期：    2022-10-01
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #ifndef OPENFMT_LINKED_LIST_H
 #define OPENFMT_LINKED_LIST_H
@@ -11,24 +11,24 @@
 
 struct Node;
 typedef struct Node *PtrToNode;
-typedef PtrToNode List;
-typedef PtrToNode Position;
+typedef struct Node *List;
+typedef struct Node *Position;
 
-List CreateList();
+List create_linked_list();
 
-bool InitList(List list);
+bool init_linked_list(List list);
 
-List EmptyList(List list);
+List empty_linked_list(List list);
 
-bool IsEmptyList(List list);
+bool is_empty_linked_list(List list);
 
-bool IsLastList(Position position, List list);
+bool is_linked_list_last(Position position, List list);
 
-void InsertList(void *data, Position position, List list);
+void insert_linked_list(void *data, Position position, List list);
 
-void AppendList(void *data, const char *dataType, List list);
+void append_linked_list(void *data, const char *data_type, List list);
 
-void DisposeList(List list, void (*FreeDataCallBack)(PtrToNode pNode));
+void dispose_linked_list(List list, void (*free_data_callback)(void *data));
 
 struct Node
 {

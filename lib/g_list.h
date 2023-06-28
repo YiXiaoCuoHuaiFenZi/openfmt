@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：    Generic list implementations using macros.
 **    创建日期：    2022-10-26
-**    更新日期：    2023-05-18
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #ifndef OPENFMT_G_LIST_H
 #define OPENFMT_G_LIST_H
@@ -89,10 +89,10 @@ typedef G_NodeTemplate(UnsignedLong) GUnsignedLongNode, GUnsignedLongList;
         type *cur = head->next;                                                \
         while (cur != NULL)                                                    \
         {                                                                      \
-            type *tempNode = cur;                                              \
+            type *temp_node = cur;                                             \
             cur = cur->next;                                                   \
-            data_free_func(tempNode);                                          \
-            free(tempNode);                                                    \
+            data_free_func(temp_node);                                         \
+            free(temp_node);                                                   \
         }                                                                      \
         head->next = NULL;                                                     \
         free(inst);                                                            \

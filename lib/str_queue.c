@@ -2,13 +2,13 @@
 **    作   者：    一小撮坏分子
 **    功能描述：
 **    创建日期：    2022-10-04
-**    更新日期：    2023-06-01
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include <stdio.h>
 #include "str_queue.h"
 #include "memory.h"
 
-SQueue CreateSQueue()
+SQueue create_str_queue()
 {
     SQueue queue = (struct SQueueStruct *) g_malloc(sizeof(struct SQueueStruct));
     queue->head = NULL;
@@ -16,62 +16,62 @@ SQueue CreateSQueue()
     return queue;
 }
 
-void DisposeSQueue(SQueue queue)
+void dispose_str_queue(SQueue queue)
 {
-    PtrToSQueueNode currentNode = queue->head;
-    while (currentNode != NULL)
+    PtrToSQueueNode cur = queue->head;
+    while (cur != NULL)
     {
-        PtrToSQueueNode nextNode = currentNode->next;
-        g_free(&(currentNode->str));
-        g_free(&currentNode);
-        currentNode = nextNode;
+        PtrToSQueueNode next = cur->next;
+        g_free(&(cur->str));
+        g_free(&cur);
+        cur = next;
     }
     queue->head = NULL;
     queue->rear = NULL;
     g_free(&queue);
 }
 
-bool IsEmptySQueue(SQueue queue)
+bool is_empty_str_queue(SQueue queue)
 {
     return queue->head == NULL;
 }
 
-void EnSQueue(char *str, SQueue queue)
+void en_str_queue(char *str, SQueue queue)
 {
-    PtrToSQueueNode newNode = (struct SQueueNode *) g_malloc(sizeof(struct SQueueNode));
-    newNode->str = str;
-    newNode->next = NULL;
-    if (IsEmptySQueue(queue))
+    PtrToSQueueNode new_node = (struct SQueueNode *) g_malloc(sizeof(struct SQueueNode));
+    new_node->str = str;
+    new_node->next = NULL;
+    if (is_empty_str_queue(queue))
     {
-        queue->head = queue->rear = newNode;
+        queue->head = queue->rear = new_node;
     } else
     {
-        queue->rear->next = newNode;
-        queue->rear = newNode;
+        queue->rear->next = new_node;
+        queue->rear = new_node;
     }
 }
 
-void DeSQueue(SQueue queue)
+void de_str_queue(SQueue queue)
 {
-    if (IsEmptySQueue(queue))
+    if (is_empty_str_queue(queue))
     {
         printf("%s", "SQueue is empty!");
     } else
     {
-        PtrToSQueueNode frontNode = queue->head;
+        PtrToSQueueNode front_node = queue->head;
         queue->head = queue->head->next;
-        if (queue->rear == frontNode)
+        if (queue->rear == front_node)
         {
             queue->rear = NULL;
         }
-        g_free(&(frontNode->str));
-        g_free(&frontNode);
+        g_free(&(front_node->str));
+        g_free(&front_node);
     }
 }
 
-char *SQueueFront(SQueue queue)
+char *str_queue_front(SQueue queue)
 {
-    if (IsEmptySQueue(queue))
+    if (is_empty_str_queue(queue))
     {
         printf("%s", "SQueue is empty!");
         return NULL;
@@ -80,9 +80,9 @@ char *SQueueFront(SQueue queue)
     return queue->head->str;
 }
 
-int SQueueSize(SQueue queue)
+int str_queue_size(SQueue queue)
 {
-    if (IsEmptySQueue(queue))
+    if (is_empty_str_queue(queue))
     {
         return 0;
     }

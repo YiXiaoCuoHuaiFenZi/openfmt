@@ -30,7 +30,7 @@ int test_G_NodeTemplate_char()
     return TEST_SUCCESS;
 }
 
-int test_create_list()
+int test_create_linked_list()
 {
     GIntList *l = create_list(GIntNode);
     if (l->next != NULL)

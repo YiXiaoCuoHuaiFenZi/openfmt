@@ -2,50 +2,50 @@
 **    作   者：    一小撮坏分子
 **    功能描述：
 **    创建日期：    2022-10-03
-**    更新日期：    2023-06-01
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include "stack.h"
 #include "memory.h"
 
-Stack CreateStack()
+Stack create_stack()
 {
     Stack stack = (struct Node *) g_malloc(sizeof(struct Node));
     stack->next = NULL;
     return stack;
 }
 
-bool IsEmptyStack(Stack stack)
+bool is_empty_stack(Stack stack)
 {
     return stack->next == NULL;
 }
 
-void PopStack(Stack stack, void (*FreeDataCallBack)(PtrToNode pNode))
+void pop_stack(Stack stack, void (*free_data_callback)(PtrToNode ptr_node))
 {
-    if (IsEmptyStack(stack))
+    if (is_empty_stack(stack))
     {
         printf("%s", "Empty stack!");
     } else
     {
-        PtrToNode firstCell = stack->next;
+        PtrToNode first_node = stack->next;
         stack->next = stack->next->next;
-        FreeDataCallBack(firstCell->data);
-        g_free(&firstCell);
+        free_data_callback(first_node->data);
+        g_free(&first_node);
     }
 }
 
-void PushStack(void *data, Stack stack)
+void push_stack(void *data, Stack stack)
 {
-    PtrToNode tempCell = (struct Node *) g_malloc(sizeof(struct Node));
-    tempCell->data = data;
-    tempCell->next = stack->next;
-    stack->next = tempCell;
+    PtrToNode ptr_node = (struct Node *) g_malloc(sizeof(struct Node));
+    ptr_node->data = data;
+    ptr_node->next = stack->next;
+    stack->next = ptr_node;
 }
 
-void *TopStack(Stack stack, void (*FreeDataCallBack)(PtrToNode pNode))
+void *top_stack(Stack stack, void (*free_data_callback)(PtrToNode ptr_node))
 {
-    if (!IsEmptyStack(stack))
+    if (!is_empty_stack(stack))
     {
         return stack->next->data;
     }

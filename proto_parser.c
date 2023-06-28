@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：    Provide methods to deserialize proto file to Protobuf object.
 **    创建日期：    2022-09-30
-**    更新日期：    2023-03-17
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
@@ -19,149 +19,149 @@
 #include "object_parser.h"
 #include "lib/memory.h"
 
-Protobuf *parse(const char *filePath)
+Protobuf *parse(const char *file_path)
 {
     Protobuf *protobuf = (Protobuf *) g_malloc(sizeof(Protobuf));
     protobuf->syntax = NULL;
     protobuf->package = NULL;
     protobuf->options = NULL;
     protobuf->imports = NULL;
-    protobuf->objects = CreateList();
-    protobuf->colorfulTextList = NULL;
-    PbTextColorConfig textColorConfig;
-    textColorConfig.default_color = 0;
-    textColorConfig.default_key_word = 93;
-    textColorConfig.syntax_key = 93;
-    textColorConfig.syntax_value = 92;
-    textColorConfig.package_key = 93;
-    textColorConfig.package_value = 92;
-    textColorConfig.option_key = 93;
-    textColorConfig.option_name = 97;
-    textColorConfig.option_value = 92;
-    textColorConfig.import_key = 93;
-    textColorConfig.import_value = 92;
-    textColorConfig.obj_key = 93;
-    textColorConfig.obj_name = 97;
-    textColorConfig.message_element_key = 196;
-    textColorConfig.message_element_label = 93;
-    textColorConfig.message_element_type = 32;
-    textColorConfig.message_element_name = 95;
-    textColorConfig.message_element_number = 94;
-    textColorConfig.message_element_annotation = 97;
-    textColorConfig.enum_element_name = 95;
-    textColorConfig.enum_element_number = 94;
-    textColorConfig.enum_element_annotation = 97;
-    textColorConfig.service_element_label = 93;
-    textColorConfig.service_element_name = 95;
-    textColorConfig.service_element_request = 97;
-    textColorConfig.service_element_response = 97;
-    textColorConfig.comment = 90;
+    protobuf->objects = create_linked_list();
+    protobuf->colorful_text_list = NULL;
+    PbTextColorConfig text_color_config;
+    text_color_config.default_color = 0;
+    text_color_config.default_key_word = 93;
+    text_color_config.syntax_key = 93;
+    text_color_config.syntax_value = 92;
+    text_color_config.package_key = 93;
+    text_color_config.package_value = 92;
+    text_color_config.option_key = 93;
+    text_color_config.option_name = 97;
+    text_color_config.option_value = 92;
+    text_color_config.import_key = 93;
+    text_color_config.import_value = 92;
+    text_color_config.obj_key = 93;
+    text_color_config.obj_name = 97;
+    text_color_config.message_element_key = 196;
+    text_color_config.message_element_label = 93;
+    text_color_config.message_element_type = 32;
+    text_color_config.message_element_name = 95;
+    text_color_config.message_element_number = 94;
+    text_color_config.message_element_annotation = 97;
+    text_color_config.enum_element_name = 95;
+    text_color_config.enum_element_number = 94;
+    text_color_config.enum_element_annotation = 97;
+    text_color_config.service_element_label = 93;
+    text_color_config.service_element_name = 95;
+    text_color_config.service_element_request = 97;
+    text_color_config.service_element_response = 97;
+    text_color_config.comment = 90;
 
     PbConfig config;
-    config.indentsUnit = 4;
-    config.alignByEqualSign = true;
-    config.topComment = false;
-    config.commentMaxLength = 10000;
+    config.indents_unit = 4;
+    config.align_by_equal_sign = true;
+    config.top_comment = false;
+    config.max_comment_len = 10000;
     config.preview = false;
-    config.textColorConfig = textColorConfig;
+    config.text_color_config = text_color_config;
 
     protobuf->config = config;
     protobuf->comments = NULL;
 
-    SQueue lines = ReadLineToSQueue(filePath);
+    SQueue lines = read_line_to_str_queue(file_path);
     parse_string_queue(protobuf, lines);
-    DisposeSQueue(lines);
+    dispose_str_queue(lines);
     return protobuf;
 }
 
-void parse_string_queue(Protobuf *protobuf, SQueue lineQueue)
+void parse_string_queue(Protobuf *protobuf, SQueue line_queue)
 {
-    if (IsEmptySQueue(lineQueue))
+    if (is_empty_str_queue(line_queue))
         return;
 
-    PbCommentList *topComments = make_top_comments(lineQueue);
+    PbCommentList *top_comments = make_top_comments(line_queue);
 
-    if (IsEmptySQueue(lineQueue))
+    if (is_empty_str_queue(line_queue))
     {
-        if (topComments->next != NULL)
+        if (top_comments->next != NULL)
         {
             // convert all comments as bottom comments
-            PbCommentNode *cur = topComments->next;
+            PbCommentNode *cur = top_comments->next;
             while (cur)
             {
                 cur->data->pos = BOTTOM;
                 cur = cur->next;
             }
-            protobuf->comments = topComments;
+            protobuf->comments = top_comments;
         } else
         {
-            dispose_list(PbCommentNode, topComments, free_PbComment);
+            dispose_list(PbCommentNode, top_comments, free_PbComment);
         }
         return;
     }
 
-    char *line = lineQueue->head->str;
-    PbType pbType = get_pb_type(line);
-    switch (pbType)
+    char *line = line_queue->head->str;
+    PbType pb_type = get_pb_type(line);
+    switch (pb_type)
     {
         case Syntax:
         {
             PbSyntax *syntax = parse_syntax(line);
-            syntax->comments = topComments;
+            syntax->comments = top_comments;
             protobuf->syntax = syntax;
-            PbComment *pbComment = parse_comment(line);
-            if (pbComment != NULL)
+            PbComment *pb_comment = parse_comment(line);
+            if (pb_comment != NULL)
             {
-                append_list(PbCommentNode, syntax->comments, pbComment);
+                append_list(PbCommentNode, syntax->comments, pb_comment);
             }
-            DeSQueue(lineQueue);
+            de_str_queue(line_queue);
             break;
         }
         case Package:
         {
-            PbPackage *pbPackage = parse_package(line);
-            pbPackage->comments = topComments;
-            protobuf->package = pbPackage;
-            PbComment *pbComment = parse_comment(line);
-            if (pbComment != NULL)
+            PbPackage *pb_package = parse_package(line);
+            pb_package->comments = top_comments;
+            protobuf->package = pb_package;
+            PbComment *pb_comment = parse_comment(line);
+            if (pb_comment != NULL)
             {
-                append_list(PbCommentNode, pbPackage->comments, pbComment);
+                append_list(PbCommentNode, pb_package->comments, pb_comment);
             }
-            DeSQueue(lineQueue);
+            de_str_queue(line_queue);
             break;
         }
         case Option:
         {
-            PbOption *pbOption = parse_option(line);
-            pbOption->comments = topComments;
+            PbOption *pb_option = parse_option(line);
+            pb_option->comments = top_comments;
             if (protobuf->options == NULL)
             {
                 protobuf->options = create_list(PbOptionNode);
             }
-            append_list(PbOptionNode, protobuf->options, pbOption);
-            PbComment *pbComment = parse_comment(line);
-            if (pbComment != NULL)
+            append_list(PbOptionNode, protobuf->options, pb_option);
+            PbComment *pb_comment = parse_comment(line);
+            if (pb_comment != NULL)
             {
-                append_list(PbCommentNode, pbOption->comments, pbComment);
+                append_list(PbCommentNode, pb_option->comments, pb_comment);
             }
-            DeSQueue(lineQueue);
+            de_str_queue(line_queue);
             break;
         }
         case Import:
         {
-            PbImport *pbImport = parse_import(line);
-            pbImport->comments = topComments;
+            PbImport *pb_import = parse_import(line);
+            pb_import->comments = top_comments;
             if (protobuf->imports == NULL)
             {
                 protobuf->imports = create_list(PbImportNode);
             }
-            append_list(PbImportNode, protobuf->imports, pbImport);
-            PbComment *pbComment = parse_comment(line);
-            if (pbComment != NULL)
+            append_list(PbImportNode, protobuf->imports, pb_import);
+            PbComment *pb_comment = parse_comment(line);
+            if (pb_comment != NULL)
             {
-                append_list(PbCommentNode, pbImport->comments, pbComment);
+                append_list(PbCommentNode, pb_import->comments, pb_comment);
             }
-            DeSQueue(lineQueue);
+            de_str_queue(line_queue);
             break;
         }
         default:
@@ -174,15 +174,13 @@ void parse_string_queue(Protobuf *protobuf, SQueue lineQueue)
             state->current_obj_type = NULL;
             state->parent_obj = NULL;
             state->parent_obj_type = NULL;
-            state->obj_dic = CreateGHashTable(G_CAPACITY);
+            state->obj_dic = g_create_hashtable(G_CAPACITY);
 
-            parse_object(protobuf, lineQueue, topComments, state);
-            // TODO release resource of state, and state->obj_dic
-            FreeGHashTable(state->obj_dic);
-            g_free(&state);//"        "
-            int d = 0;
+            parse_object(protobuf, line_queue, top_comments, state);
+            g_free_hashtable(state->obj_dic);
+            g_free(&state);
         }
     }
-    parse_string_queue(protobuf, lineQueue);
+    parse_string_queue(protobuf, line_queue);
 }
 

@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：
 **    创建日期：    2022-11-23
-**    更新日期：    2023-06-01
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include <stdlib.h>
 #include <string.h>
@@ -11,7 +11,7 @@
 #include "str.h"
 #include "memory.h"
 
-unsigned long HashFunc(const char *str)
+unsigned long g_hash_func(const char *str)
 {
     unsigned long sum = 0;
     for (int i = 0; str[i]; i++)
@@ -21,7 +21,7 @@ unsigned long HashFunc(const char *str)
     return sum % G_CAPACITY;
 }
 
-GItem *CreateGItem(const char *key, const char *data_type, void *data, void (*data_free_func)(void *))
+GItem *g_create_item(const char *key, const char *data_type, void *data, void (*data_free_func)(void *))
 {
     GItem *item = (GItem *) g_malloc(sizeof(GItem));
     item->key = str_copy(key);
@@ -32,7 +32,7 @@ GItem *CreateGItem(const char *key, const char *data_type, void *data, void (*da
     return item;
 }
 
-void FreeGItem(GItem *item)
+void g_free_item(GItem *item)
 {
     g_free(&(item->key));
     g_free(&(item->data_type));
@@ -48,7 +48,7 @@ void FreeGItem(GItem *item)
     g_free(&item);
 }
 
-GHashTable *CreateGHashTable(int size)
+GHashTable *g_create_hashtable(int size)
 {
     GHashTable *table = (GHashTable *) g_malloc(sizeof(GHashTable));
     table->size = size;
@@ -62,31 +62,31 @@ GHashTable *CreateGHashTable(int size)
     return table;
 }
 
-void FreeGHashTable(GHashTable *table)
+void g_free_hashtable(GHashTable *table)
 {
     for (int i = 0; i < table->size; i++)
     {
         GItem *item = table->items[i];
         if (item != NULL)
         {
-            FreeGItem(item);
+            g_free_item(item);
         }
     }
     g_free(&(table->items));
     g_free(&table);
 }
 
-void GHashTablePut(char *key, const char *data_type, void *data, void (*data_free_func)(void *), GHashTable *table)
+void g_hashtable_put(char *key, const char *data_type, void *data, void (*data_free_func)(void *), GHashTable *table)
 {
-    GItem *item = CreateGItem(key, data_type, data, data_free_func);
-    unsigned long index = HashFunc((key));
+    GItem *item = g_create_item(key, data_type, data, data_free_func);
+    unsigned long index = g_hash_func((key));
     GItem *current_item = table->items[index];
     if (current_item == NULL)
     {
         if (table->count == table->size)
         {
             printf("Insert Error: Hash Table is full\n");
-            FreeGItem(item);
+            g_free_item(item);
             return;
         }
         table->items[index] = item;
@@ -96,7 +96,7 @@ void GHashTablePut(char *key, const char *data_type, void *data, void (*data_fre
         if (strcmp(key, current_item->key) == 0)
         {
             table->items[index]->data = data;
-            FreeGItem(item);
+            g_free_item(item);
         } else
         {
             // TODO: handle collision.
@@ -104,9 +104,9 @@ void GHashTablePut(char *key, const char *data_type, void *data, void (*data_fre
     }
 }
 
-void *GHashTableGet(char *key, GHashTable *table)
+void *g_hashtable_get(char *key, GHashTable *table)
 {
-    unsigned long index = HashFunc((key));
+    unsigned long index = g_hash_func((key));
     GItem *item = table->items[index];
     if (item != NULL)
     {

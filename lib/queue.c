@@ -2,13 +2,13 @@
 **    作   者：    一小撮坏分子
 **    功能描述：
 **    创建日期：    2022-10-04
-**    更新日期：    2023-06-01
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include <stdio.h>
 #include "queue.h"
 #include "memory.h"
 
-Queue CreateQueue()
+Queue create_queue()
 {
     Queue queue = (struct QueueStruct *) g_malloc(sizeof(struct QueueStruct));
     queue->head = NULL;
@@ -16,58 +16,58 @@ Queue CreateQueue()
     return queue;
 }
 
-void DisposeQueue(Queue queue, void (*FreeDataCallBack)(PtrToQueueNode queueNode))
+void dispose_queue(Queue queue, void (*free_data_callback)(PtrToQueueNode queueNode))
 {
-    PtrToQueueNode currentNode = queue->head;
-    while (currentNode != NULL)
+    PtrToQueueNode cur = queue->head;
+    while (cur != NULL)
     {
-        PtrToQueueNode nextNode = currentNode->next;
-        FreeDataCallBack(currentNode);
-        g_free(&currentNode);
-        currentNode = nextNode;
+        PtrToQueueNode nextNode = cur->next;
+        free_data_callback(cur);
+        g_free(&cur);
+        cur = nextNode;
     }
     queue->head = NULL;
     queue->rear = NULL;
     g_free(&queue);
 }
 
-bool IsEmptyQueue(Queue queue)
+bool is_empty_queue(Queue queue)
 {
     return queue->head == NULL;
 }
 
-void Enqueue(void *data, Queue queue)
+void en_queue(void *data, Queue queue)
 {
-    PtrToQueueNode newNode = (struct QueueNode *) g_malloc(sizeof(struct QueueNode));
-    newNode->data = data;
-    newNode->next = NULL;
-    if (IsEmptyQueue(queue))
+    PtrToQueueNode new_node = (struct QueueNode *) g_malloc(sizeof(struct QueueNode));
+    new_node->data = data;
+    new_node->next = NULL;
+    if (is_empty_queue(queue))
     {
-        queue->head = queue->rear = newNode;
+        queue->head = queue->rear = new_node;
     } else
     {
-        queue->rear->next = newNode;
-        queue->rear = newNode;
+        queue->rear->next = new_node;
+        queue->rear = new_node;
     }
 }
 
-void Dequeue(Queue queue, void (*FreeDataCallBack)(PtrToQueueNode queueNode))
+void de_queue(Queue queue, void (*free_data_callback)(PtrToQueueNode queueNode))
 {
-    if (IsEmptyQueue(queue))
+    if (is_empty_queue(queue))
     {
         printf("%s", "Queue is empty!");
     } else
     {
-        PtrToQueueNode frontNode = queue->head;
+        PtrToQueueNode front_node = queue->head;
         queue->head = queue->head->next;
-        FreeDataCallBack(frontNode);
+        free_data_callback(front_node);
         //g_free(&frontNode);
     }
 }
 
-void *QueueFront(Queue queue)
+void *queue_front(Queue queue)
 {
-    if (IsEmptyQueue(queue))
+    if (is_empty_queue(queue))
     {
         printf("%s", "Queue is empty!");
         return NULL;
@@ -76,9 +76,9 @@ void *QueueFront(Queue queue)
     return queue->head->data;
 }
 
-int QueueSize(Queue queue)
+int queue_size(Queue queue)
 {
-    if (IsEmptyQueue(queue))
+    if (is_empty_queue(queue))
     {
         return 0;
     }

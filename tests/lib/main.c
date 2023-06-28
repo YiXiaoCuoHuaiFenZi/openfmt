@@ -52,7 +52,7 @@ int main(int argc, char *args[])
     if (strcmp(args[1], "test_G_NodeTemplate_char") == 0)
         return test_G_NodeTemplate_char();
     if (strcmp(args[1], "test_create_list") == 0)
-        return test_create_list();
+        return test_create_linked_list();
     if (strcmp(args[1], "test_append_list") == 0)
         return test_append_list();
     if (strcmp(args[1], "test_is_empty_list") == 0)

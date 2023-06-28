@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：    Proto ADT(Abstract Data Type).
 **    创建日期：    2022-10-03
-**    更新日期：    2023-03-17
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #ifndef OPENFMT_PROTO_H
 #define OPENFMT_PROTO_H
@@ -78,7 +78,7 @@ typedef struct MessageElementStruct
 typedef struct MessageStruct
 {
     char *id;
-    char *parentId;
+    char *parent_id;
     char *name;
     PbCommentList *comments;
     List elements;
@@ -97,7 +97,7 @@ typedef struct ExtendElementStruct
 typedef struct ExtendStruct
 {
     char *id;
-    char *parentId;
+    char *parent_id;
     char *name;
     PbCommentList *comments;
     List elements;
@@ -116,7 +116,7 @@ typedef struct OneOfElementStruct
 typedef struct OneOfStruct
 {
     char *id;
-    char *parentId;
+    char *parent_id;
     char *name;
     PbCommentList *comments;
     List elements;
@@ -133,7 +133,7 @@ typedef struct EnumElementStruct
 typedef struct EnumStruct
 {
     char *id;
-    char *parentId;
+    char *parent_id;
     char *name;
     PbCommentList *comments;
     List elements;
@@ -151,7 +151,7 @@ typedef struct ServiceElementStruct
 typedef struct ServiceStruct
 {
     char *id;
-    char *parentId;
+    char *parent_id;
     char *name;
     PbCommentList *comments;
     List elements;
@@ -190,12 +190,12 @@ typedef struct TextColorConfigStruct
 
 typedef struct ConfigStruct
 {
-    int indentsUnit;
-    bool alignByEqualSign;
-    bool topComment;
-    int commentMaxLength;
+    int indents_unit;
+    bool align_by_equal_sign;
+    bool top_comment;
+    int max_comment_len;
     bool preview;
-    PbTextColorConfig textColorConfig;
+    PbTextColorConfig text_color_config;
 } PbConfig;
 
 typedef struct TextStruct
@@ -219,72 +219,72 @@ typedef struct ProtobufStruct
     **  PbMessage, PbService, PbEnum object list
     */
     List objects;
-    PbTextList *colorfulTextList;
+    PbTextList *colorful_text_list;
     PbConfig config;
     PbCommentList *comments;
 } Protobuf;
 
 typedef struct MessageElementLengthInfo
 {
-    unsigned int maxLengthBeforeEqualSign;
-    unsigned int maxLengthBetweenEqualSignAndSemicolon;
+    unsigned int max_len_before_equal_sign;
+    unsigned int max_len_between_equal_sign_and_semicolon;
 } MessageElementLengthInfo;
 
 typedef struct EnumElementLengthInfo
 {
     unsigned int maxLengthOfName;
-    unsigned int maxLengthBetweenEqualSignAndSemicolon;
+    unsigned int max_len_between_equal_sign_and_semicolon;
 } EnumElementLengthInfo;
 
 void print_text(PbText *text);
 
-void print_text_list(PbTextList *textList);
+void print_text_list(PbTextList *text_list);
 
 PbText *create_pb_text(char *text, int color);
 
-void create_add_pb_text(char *text, int color, PbTextList *textList);
+void create_add_pb_text(char *text, int color, PbTextList *text_list);
 
-bool has_top_comment(PbCommentList *commentList);
+bool has_top_comment(PbCommentList *comment_list);
 
-bool has_right_comment(PbCommentList *commentList);
+bool has_right_comment(PbCommentList *comment_list);
 
-bool has_bottom_comment(PbCommentList *commentList);
+bool has_bottom_comment(PbCommentList *comment_list);
 
 void build_top_comment(
-        PbCommentList *commentList,
+        PbCommentList *comment_list,
         int color,
         unsigned int indents,
-        PbTextList *textList,
-        bool includeRightComment
+        PbTextList *text_list,
+        bool include_right_comment
 );
 
-void format_right_comment(PbCommentList *commentList, int color, PbTextList *textList);
+void format_right_comment(PbCommentList *comment_list, int color, PbTextList *text_list);
 
-void format_bottom_comment(PbCommentList *commentList, int color, unsigned int indents, PbTextList *textList);
+void format_bottom_comment(PbCommentList *comment_list, int color, unsigned int indents, PbTextList *text_list);
 
-void format_syntax(Protobuf *protobuf, PbTextList *textList);
+void format_syntax(Protobuf *protobuf, PbTextList *text_list);
 
-void format_package(Protobuf *protobuf, PbTextList *textList);
+void format_package(Protobuf *protobuf, PbTextList *text_list);
 
 void format_option(
         Protobuf *protobuf,
-        PbOption *pbOption,
-        unsigned int maxOptionNameLength,
-        unsigned int maxOptionValueLength,
-        PbTextList *textList
+        PbOption *pb_option,
+        unsigned int max_option_name_len,
+        unsigned int max_option_value_len,
+        PbTextList *text_list
 );
 
 unsigned int get_max_option_name_length(Protobuf *protobuf);
 
 unsigned int get_max_option_value_length(Protobuf *protobuf);
 
-void format_options(Protobuf *protobuf, PbTextList *textList);
+void format_options(Protobuf *protobuf, PbTextList *text_list);
 
 unsigned int get_max_import_value_length(Protobuf *protobuf);
 
-void format_import(Protobuf *protobuf, PbImport *pbImport, unsigned int maxImportValueLength, PbTextList *textList);
+void format_import(Protobuf *protobuf, PbImport *pb_import, unsigned int max_import_value_len, PbTextList *text_list);
 
-void format_imports(Protobuf *protobuf, PbTextList *textList);
+void format_imports(Protobuf *protobuf, PbTextList *text_list);
 
 void get_max_message_element_length(List elements, MessageElementLengthInfo *meli);
 
@@ -292,55 +292,55 @@ void format_message_element(
         Protobuf *protobuf,
         PbMessageElement *ele,
         unsigned int indents,
-        MessageElementLengthInfo messageElementLengthInfo,
-        PbTextList *textList
+        MessageElementLengthInfo message_element_len_info,
+        PbTextList *text_list
 );
 
-void format_message_elements(Protobuf *protobuf, List elements, unsigned int indents, PbTextList *textList);
+void format_message_elements(Protobuf *protobuf, List elements, unsigned int indents, PbTextList *text_list);
 
-void find_max_enum_element_length(List elements, EnumElementLengthInfo *enumElementLengthInfo);
+void find_max_enum_element_length(List elements, EnumElementLengthInfo *enum_element_len_info);
 
 void format_enum_element(
         Protobuf *protobuf,
         PbEnumElement *ele,
         unsigned int indents,
-        EnumElementLengthInfo enumElementLengthInfo,
-        PbTextList *textList
+        EnumElementLengthInfo enum_element_len_info,
+        PbTextList *text_list
 );
 
-void format_enum_elements(Protobuf *protobuf, List elements, unsigned int indents, PbTextList *textList);
+void format_enum_elements(Protobuf *protobuf, List elements, unsigned int indents, PbTextList *text_list);
 
 void format_service_element(
         Protobuf *protobuf,
         PbServiceElement *ele,
         unsigned int indents,
-        PbTextList *textList
+        PbTextList *text_list
 );
 
-void format_service_elements(Protobuf *protobuf, List elements, unsigned int indents, PbTextList *textList);
+void format_service_elements(Protobuf *protobuf, List elements, unsigned int indents, PbTextList *text_list);
 
 void create_object_text(
-        char *objectTypeName,
-        char *objectName,
-        PbCommentList *objectComments,
-        List objectElements,
+        char *object_type,
+        char *object_name,
+        PbCommentList *object_comments,
+        List object_elements,
         Protobuf *protobuf,
         unsigned int indents,
-        PbTextList *textList,
-        void (*ElementFormatFunc)(Protobuf *, List, unsigned int, PbTextList *)
+        PbTextList *text_list,
+        void (*element_format_func)(Protobuf *, List, unsigned int, PbTextList *)
 );
 
-void format_object(Protobuf *protobuf, void *object, char *data_type, unsigned int indents, PbTextList *textList);
+void format_object(Protobuf *protobuf, void *object, char *data_type, unsigned int indents, PbTextList *text_list);
 
-void format_objects(Protobuf *protobuf, PbTextList *textList);
+void format_objects(Protobuf *protobuf, PbTextList *text_list);
 
-void format_comments(Protobuf *protobuf, PbTextList *textList);
+void format_comments(Protobuf *protobuf, PbTextList *text_list);
 
-void format_protobuf(Protobuf *protobuf, const char *filePath);
+void format_protobuf(Protobuf *protobuf, const char *file_path);
 
-char *str_join(PbTextList *textList);
+char *str_join(PbTextList *text_list);
 
-void write_to_file(PbTextList *textList, const char *filePath);
+void write_to_file(PbTextList *text_list, const char *file_path);
 
 void free_PbText(PbTextNode *ptr);
 
@@ -361,8 +361,8 @@ void free_pb_enum_element(PbEnumElement *obj);
 void free_pb_service_element(PbServiceElement *obj);
 
 /*
- * the pointer to List(pointer to Node pointer), so we can free the List in method inner
- */
+** the pointer to List(pointer to Node pointer), so we can free the List in method inner
+*/
 void free_objects(List *objects);
 
 void free_protobuf(Protobuf *protobuf);

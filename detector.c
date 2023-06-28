@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：
 **    创建日期：    2022-10-07
-**    更新日期：    2023-06-01
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include <string.h>
 #include <printf.h>
@@ -48,36 +48,36 @@ bool is_message(char *line)
 {
     char *t = trim(line);
     bool is = starts_with("message ", t);
-    char *hasBrace = strstr(t, "{");
+    char *has_brace = strstr(t, "{");
     g_free(&t);
-    return is && hasBrace;
+    return is && has_brace;
 }
 
 bool is_enum(char *line)
 {
     char *t = trim(line);
     bool is = starts_with("enum ", t);
-    char *hasBrace = strstr(t, "{");
+    char *has_brace = strstr(t, "{");
     g_free(&t);
-    return is && hasBrace;
+    return is && has_brace;
 }
 
 bool is_service(char *line)
 {
     char *t = trim(line);
     bool is = starts_with("service ", t);
-    char *hasBrace = strstr(t, "{");
+    char *has_brace = strstr(t, "{");
     g_free(&t);
-    return is && hasBrace;
+    return is && has_brace;
 }
 
 bool is_extend(char *line)
 {
     char *t = trim(line);
     bool is = starts_with("extend ", t);
-    char *hasBrace = strstr(t, "{");
+    char *has_brace = strstr(t, "{");
     g_free(&t);
-    return is && hasBrace;
+    return is && has_brace;
 }
 
 bool is_map_element(char *line)
@@ -94,16 +94,16 @@ bool is_map_element(char *line)
 bool is_element(char *line)
 {
     char *semicolon = strstr(line, ";");
-    char *doubleSlash = strstr(line, "//");
-    char *slashStar = strstr(line, "/*");
-    char *equalSign = strstr(line, "=");
+    char *double_slash = strstr(line, "//");
+    char *slash_star = strstr(line, "/*");
+    char *equal_sign = strstr(line, "=");
     if (semicolon == NULL)
         return false;
 
-    if (doubleSlash && semicolon > doubleSlash)
+    if (double_slash && semicolon > double_slash)
         return false;
 
-    if (slashStar && semicolon > slashStar)
+    if (slash_star && semicolon > slash_star)
         return false;
 
     if (is_service_element(line))
@@ -112,7 +112,7 @@ bool is_element(char *line)
     if (is_map_element(line))
         return true;
 
-    if (equalSign)
+    if (equal_sign)
         return true;
 
     return false;
@@ -149,14 +149,14 @@ bool is_message_element(char *line)
     token = strtok(token, " ");
 
     // check if the left of equal sign has only one string(the enum element name).
-    int sumCubStr = 0;
+    int space_amount = 0;
     while (token != NULL)
     {
         if (strcmp(token, " ") != 0)
-            sumCubStr++;
+            space_amount++;
         token = strtok(NULL, " ");
     }
-    return sumCubStr >= 2;
+    return space_amount >= 2;
 }
 
 bool is_enum_element(char *line)
@@ -180,14 +180,14 @@ bool is_enum_element(char *line)
     token = strtok(token, " ");
 
     // check if the left of equal sign has only one string(the enum element name).
-    int sumCubStr = 0;
+    int space_amount = 0;
     while (token != NULL)
     {
         if (strcmp(token, " ") != 0)
-            sumCubStr++;
+            space_amount++;
         token = strtok(NULL, " ");
     }
-    return sumCubStr == 1;
+    return space_amount == 1;
 }
 
 bool is_service_element(char *line)
@@ -207,9 +207,9 @@ bool is_oneof(char *line)
 {
     char *t = trim(line);
     bool is = starts_with("oneof ", t);
-    char *hasBrace = strstr(t, "{");
+    char *has_brace = strstr(t, "{");
     g_free(&t);
-    return is && hasBrace;
+    return is && has_brace;
 }
 
 PbType get_pb_type(char *line)

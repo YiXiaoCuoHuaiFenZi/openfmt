@@ -10,7 +10,7 @@
 
 int test_format_directory(char *malformed_file_directory, char *formatted_file_directory)
 {
-    List proto_files = CreateList();
+    List proto_files = create_linked_list();
     list_type_files(malformed_file_directory, "proto", proto_files);
 
     PtrToNode file_cur = proto_files->next;
@@ -22,9 +22,9 @@ int test_format_directory(char *malformed_file_directory, char *formatted_file_d
 
         Protobuf *proto = parse(file_path);
 
-        proto->config.indentsUnit = 4;
-        proto->config.alignByEqualSign = true;
-        proto->config.topComment = false;
+        proto->config.indents_unit = 4;
+        proto->config.align_by_equal_sign = true;
+        proto->config.top_comment = false;
         proto->config.preview = false;
 
         unsigned int length_of_malformed_fp = strlen(file_path);

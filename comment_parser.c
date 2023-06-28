@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：    Pick up comments.
 **    创建日期：    2022-10-03
-**    更新日期：    2023-06-01
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include <stdlib.h>
 #include <string.h>
@@ -11,14 +11,14 @@
 #include "proto.h"
 #include "lib/memory.h"
 
-GCharList *pickup_comments(SQueue lineQueue)
+GCharList *pickup_comments(SQueue line_queue)
 {
     GCharList *comments = create_list(GCharNode);
 
     bool isComment = false;
-    while (!IsEmptySQueue(lineQueue))
+    while (!is_empty_str_queue(line_queue))
     {
-        char *data = SQueueFront(lineQueue);
+        char *data = str_queue_front(line_queue);
         char *line = str_copy((char *) data);
         char *trimmedSpaceLine = trim(line);
 
@@ -32,7 +32,7 @@ GCharList *pickup_comments(SQueue lineQueue)
             break;
         } else
         {
-            DeSQueue(lineQueue);
+            de_str_queue(line_queue);
         }
 
         // comment case: /* I'am a comment */
@@ -44,7 +44,7 @@ GCharList *pickup_comments(SQueue lineQueue)
             if (strlen(trimmedLine3) != 0)
             {
                 append_list(GCharNode, comments, trimmedLine3);
-                DeSQueue(lineQueue);
+                de_str_queue(line_queue);
             } else
             {
                 g_free(&trimmedLine3);
@@ -132,22 +132,22 @@ GCharList *pickup_comments(SQueue lineQueue)
 
 PbCommentList *make_comments(GCharList *commentLines, PbPosition position)
 {
-    PbCommentList *topComments = create_list(PbCommentList);
-    GCharNode *pNode = commentLines->next;   // jump over the head node
-    while (pNode)
+    PbCommentList *top_comments = create_list(PbCommentList);
+    GCharNode *ptr_node = commentLines->next;   // jump over the head node
+    while (ptr_node)
     {
-        PbComment *pbComment = (PbComment *) g_malloc(sizeof(PbComment));
-        pbComment->text = str_copy((char *) pNode->data);
-        pbComment->pos = position;
-        pNode = pNode->next;
-        append_list(PbCommentNode, topComments, pbComment);
+        PbComment *pb_comment = (PbComment *) g_malloc(sizeof(PbComment));
+        pb_comment->text = str_copy((char *) ptr_node->data);
+        pb_comment->pos = position;
+        ptr_node = ptr_node->next;
+        append_list(PbCommentNode, top_comments, pb_comment);
     }
-    return topComments;
+    return top_comments;
 }
 
-PbCommentList *make_top_comments(SQueue lineQueue)
+PbCommentList *make_top_comments(SQueue line_queue)
 {
-    GCharList *commentTextList = pickup_comments(lineQueue);
+    GCharList *commentTextList = pickup_comments(line_queue);
     PbCommentList *comments = make_comments(commentTextList, TOP);
     dispose_list(GCharNode, commentTextList, free_GChar);
     return comments;
@@ -155,9 +155,9 @@ PbCommentList *make_top_comments(SQueue lineQueue)
 
 void free_PbComment(PbCommentNode *ptr)
 {
-    PbComment *pbComment = (PbComment *) ptr->data;
-    g_free(&pbComment->text);
-    g_free(&pbComment);
+    PbComment *pb_comment = (PbComment *) ptr->data;
+    g_free(&pb_comment->text);
+    g_free(&pb_comment);
 }
 
 void free_GChar(GCharNode *ptr)
@@ -175,11 +175,11 @@ PbComment *parse_comment(char *line)
     {
         char *s3 = trim_prefix(s2, "//");
         char *s4 = trim(s3);
-        PbComment *pbComment = (PbComment *) g_malloc(sizeof(PbComment));
-        pbComment->text = s4;
-        pbComment->pos = RIGHT;
+        PbComment *pb_comment = (PbComment *) g_malloc(sizeof(PbComment));
+        pb_comment->text = s4;
+        pb_comment->pos = RIGHT;
         g_free(&s3);
-        return pbComment;
+        return pb_comment;
     }
     return NULL;
 }

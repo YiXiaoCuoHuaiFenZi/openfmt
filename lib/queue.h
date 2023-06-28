@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：
 **    创建日期：    2022-10-04
-**    更新日期：    2022-10-04
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #ifndef OPENFMT_QUEUE_H
 #define OPENFMT_QUEUE_H
@@ -27,19 +27,19 @@ struct QueueStruct
     struct QueueNode *rear;
 };
 
-Queue CreateQueue();
+Queue create_queue();
 
-void DisposeQueue(Queue queue, void (*FreeDataCallBack)(PtrToQueueNode queueNode));
+void dispose_queue(Queue queue, void (*free_data_callback)(PtrToQueueNode queueNode));
 
-bool IsEmptyQueue(Queue queue);
+bool is_empty_queue(Queue queue);
 
-void Enqueue(void *data, Queue queue);
+void en_queue(void *data, Queue queue);
 
-void Dequeue(Queue queue, void (*FreeDataCallBack)(PtrToQueueNode queueNode));
+void de_queue(Queue queue, void (*free_data_callback)(PtrToQueueNode queueNode));
 
-void *QueueFront(Queue queue);
+void *queue_front(Queue queue);
 
-int QueueSize(Queue queue);
+int queue_size(Queue queue);
 
 
 #endif //OPENFMT_QUEUE_H

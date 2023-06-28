@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：    Program entrance.
 **    创建日期：    2022-09-30
-**    更新日期：    2023-06-01
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include <string.h>
 #include <dirent.h>
@@ -44,15 +44,15 @@ void free_char(char *data);
 
 int main(int argc, char *argv[])
 {
-    PbConfig pbConfig;
-    pbConfig.indentsUnit = 4;
-    pbConfig.alignByEqualSign = true;
-    pbConfig.topComment = false;
-    pbConfig.commentMaxLength = 10000;
-    pbConfig.preview = false;
+    PbConfig pb_config;
+    pb_config.indents_unit = 4;
+    pb_config.align_by_equal_sign = true;
+    pb_config.top_comment = false;
+    pb_config.max_comment_len = 10000;
+    pb_config.preview = false;
 
     Config config;
-    config.pb_config = &pbConfig;
+    config.pb_config = &pb_config;
     config.proto_file_path = NULL;
     config.proto_directory = NULL;
 
@@ -234,28 +234,28 @@ void parse_commands(int argc, char *argv[], Config *config)
                         exit(EXIT_FAILURE);
                     }
 
-                    config->pb_config->indentsUnit = atoi(value);
+                    config->pb_config->indents_unit = atoi(value);
                 } else if (strcmp(option, "top-comment") == 0) // parse preview optional command
                 {
                     if (strcmp(value, "true") == 0)
                     {
-                        config->pb_config->topComment = true;
+                        config->pb_config->top_comment = true;
                     } else if (strcmp(value, "false") == 0)
                     {
-                        config->pb_config->topComment = false;
+                        config->pb_config->top_comment = false;
                     } else
                     {
-                        printf("%s", "invalid topComment value, type -h or --help to get help information.\n");
+                        printf("%s", "invalid top_comment value, type -h or --help to get help information.\n");
                         exit(EXIT_FAILURE);
                     }
                 } else if (strcmp(option, "align-by-equal-sign") == 0) // parse preview optional command
                 {
                     if (strcmp(value, "true") == 0)
                     {
-                        config->pb_config->alignByEqualSign = true;
+                        config->pb_config->align_by_equal_sign = true;
                     } else if (strcmp(value, "false") == 0)
                     {
-                        config->pb_config->alignByEqualSign = false;
+                        config->pb_config->align_by_equal_sign = false;
                     } else
                     {
                         printf("%s", "invalid align-by-equal-sign value, type -h or --help to get help information.\n");
@@ -298,7 +298,7 @@ void free_char(char *data)
 
 void run(Config *config)
 {
-    List proto_files = CreateList();
+    List proto_files = create_linked_list();
     if (config->mode == FILE_MODE)
     {
         if (!is_file(config->proto_file_path))
@@ -307,7 +307,7 @@ void run(Config *config)
             exit(EXIT_FAILURE);
         }
 
-        AppendList(str_copy(config->proto_file_path), "char", proto_files);
+        append_linked_list(str_copy(config->proto_file_path), "char", proto_files);
     } else if (config->mode == DIRECTORY_MODE)
     {
         DIR *dir = opendir(config->proto_directory);
@@ -328,16 +328,16 @@ void run(Config *config)
         printf("formatting %s\n", file_path);
         Protobuf *proto = parse(file_path);
         /*
-        ** override default value of indents, alignByEqualSign, topComment and preview.
+        ** override default value of indents, align_by_equal_sign, top_comment and preview.
         */
-        proto->config.indentsUnit = config->pb_config->indentsUnit;
-        proto->config.alignByEqualSign = config->pb_config->alignByEqualSign;
-        proto->config.topComment = config->pb_config->topComment;
+        proto->config.indents_unit = config->pb_config->indents_unit;
+        proto->config.align_by_equal_sign = config->pb_config->align_by_equal_sign;
+        proto->config.top_comment = config->pb_config->top_comment;
         proto->config.preview = config->pb_config->preview;
 
         format_protobuf(proto, file_path);
         free_protobuf(proto);
         file_cur = file_cur->next;
     }
-    DisposeList(proto_files, free_char);
+    dispose_linked_list(proto_files, free_char);
 }

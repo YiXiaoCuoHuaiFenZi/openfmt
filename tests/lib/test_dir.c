@@ -21,14 +21,14 @@ int test_is_file()
 
 int test_list_files()
 {
-    List file_list = CreateList();
+    List file_list = create_linked_list();
     list_files(".", file_list);
     return TEST_SUCCESS;
 }
 
 int test_print_files()
 {
-    List file_list = CreateList();
+    List file_list = create_linked_list();
     list_files(".", file_list);
     print_files(file_list);
     return TEST_SUCCESS;

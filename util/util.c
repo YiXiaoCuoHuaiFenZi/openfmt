@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：
 **    创建日期：    2022-10-03
-**    更新日期：    2022-10-03
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include <stdio.h>
 #include <string.h>
@@ -21,7 +21,7 @@
 #define ANSI_COLOR_CYAN    "\x1b[36m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
-void ShowBaseColors()
+void show_base_colors()
 {
     printf(ANSI_COLOR_RED     "This text is RED!"     ANSI_COLOR_RESET "\n");
     printf(ANSI_COLOR_GREEN   "This text is GREEN!"   ANSI_COLOR_RESET "\n");
@@ -31,28 +31,28 @@ void ShowBaseColors()
     printf(ANSI_COLOR_CYAN    "This text is CYAN!"    ANSI_COLOR_RESET "\n");
 }
 
-void ShowColors()
+void show_colors()
 {
     for (int i = 0; i < 16; i++)
     {
         for (int j = 0; j < 16; j++)
         {
-            int colorCode = i * 16 + j;
-            PrintTextWithColor("This text is colorful", colorCode, true);
+            int color_code = i * 16 + j;
+            print_text_with_color("This text is colorful", color_code, true);
             printf("\n");
         }
     }
 }
 
-void PrintTextWithColor(const char *message, int colorCode, bool printCode)
+void print_text_with_color(const char *message, int color_code, bool print_code)
 {
     char *colorCodeStr;
     char *anciColorStr;
-    if (colorCode < 10)
+    if (color_code < 10)
     {
         colorCodeStr = g_malloc(1);
         anciColorStr = g_malloc(7);
-    } else if (colorCode < 100)
+    } else if (color_code < 100)
     {
         colorCodeStr = g_malloc(2);
         anciColorStr = g_malloc(8);
@@ -61,15 +61,15 @@ void PrintTextWithColor(const char *message, int colorCode, bool printCode)
         colorCodeStr = g_malloc(3);
         anciColorStr = g_malloc(9);
     }
-    sprintf(colorCodeStr, "%d", colorCode);
+    sprintf(colorCodeStr, "%d", color_code);
     strcat(anciColorStr, ANSI_COLOR_PREFIX);
     strcat(anciColorStr, colorCodeStr);
     strcat(anciColorStr, ANSI_COLOR_SUFFIX);
 
     printf("%s", anciColorStr);
-    if (printCode)
+    if (print_code)
     {
-        printf("%d  %s", colorCode, message);
+        printf("%d  %s", color_code, message);
     } else
     {
         printf("%s", message);

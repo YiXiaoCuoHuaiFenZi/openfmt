@@ -2,7 +2,7 @@
 **    作   者：    一小撮坏分子
 **    功能描述：    Parse Message, Enum, Service, Extend.
 **    创建日期：    2022-11-14
-**    更新日期：    2022-11-14
+**    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #ifndef OPENFMT_OBJECT_PARSER_H
 #define OPENFMT_OBJECT_PARSER_H
@@ -25,11 +25,11 @@ struct StateStructure
     GHashTable *obj_dic;
 };
 
-void parse_object(Protobuf *protobuf, SQueue lineQueue, PbCommentList *topComments, State *state);
+void parse_object(Protobuf *protobuf, SQueue line_queue, PbCommentList *top_comments, State *state);
 
-void append_as_bottom_comments(PbCommentList *comments, PbCommentList *bottomComments);
+void append_as_bottom_comments(PbCommentList *comments, PbCommentList *bottom_comments);
 
-void update_current_obj_comments(State *state, PbCommentList *bottomComments);
+void update_current_obj_comments(State *state, PbCommentList *bottom_comments);
 
 void parent_obj_to_current_obj(State *state);
 
