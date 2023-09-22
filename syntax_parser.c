@@ -12,7 +12,7 @@
 
 PbSyntax *parse_syntax(char *line)
 {
-    // get option name
+    // get syntax value
     char *s = sub_str_between_str(line, "=", ";");
     char *value = trim(s);
     g_free(&s);
