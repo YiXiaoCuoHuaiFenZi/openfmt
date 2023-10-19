@@ -170,7 +170,6 @@ PbComment *parse_comment(char *line)
 {
     char *s1 = trim(line);
     char *s2 = strstr(s1, "//");
-    g_free(&s1);
     if (s2)
     {
         char *s3 = trim_prefix(s2, "//");
@@ -181,5 +180,6 @@ PbComment *parse_comment(char *line)
         g_free(&s3);
         return pb_comment;
     }
+	g_free(&s1);
     return NULL;
 }
