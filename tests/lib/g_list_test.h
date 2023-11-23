@@ -21,6 +21,6 @@ int test_is_empty_list();
 
 int test_dispose_list();
 
-void free_char_test(GCharNode *ptr);
+void free_char_test(GCharNode* ptr);
 
 #endif //OPENFMT_G_LIST_TEST_H

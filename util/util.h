@@ -14,6 +14,6 @@ void show_base_colors();
 void show_colors();
 
 
-void print_text_with_color(const char *message, int color_code, bool print_code);
+void print_text_with_color(const char* message, int color_code, bool print_code);
 
 #endif //OPENFMT_UTIL_H

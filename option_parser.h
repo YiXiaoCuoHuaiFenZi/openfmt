@@ -12,4 +12,4 @@
 #include "proto.h"
 #include "lib/queue.h"
 
-PbOption *parse_option(char *line);
+PbOption* parse_option(char* line);

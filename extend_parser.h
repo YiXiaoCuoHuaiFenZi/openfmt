@@ -10,6 +10,6 @@
 #include "proto.h"
 #include "lib/str_queue.h"
 
-PbExtend *parse_pb_extend(char *line, SQueue line_queue, PbCommentList *comments);
+PbExtend* parse_pb_extend(char* line, SQueue line_queue, PbCommentList* comments);
 
 #endif //OPENFMT_EXTEND_PARSER_H

@@ -15,8 +15,8 @@ typedef enum
 {
 	start,
 	idle,
-	single_line_comment,   // '/'
-	multiple_line_comment_start,
+	line_comment,   // '/'
+	block_comment_start,
 	in_multiple_line_comment,
 	multiple_line_comment_end,
 	comment,
@@ -47,8 +47,6 @@ bool is_new_line(const char c);
 char* clean_comment_str(const char* comment);
 
 Protobuf* parse(const char* file_path);
-
-void parse_string_queue(Protobuf* protobuf, SQueue line_queue);
 
 void parse_proto_string(Protobuf* protobuf, const char* proto_str);
 

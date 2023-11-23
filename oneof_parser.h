@@ -10,8 +10,6 @@
 #include "proto.h"
 #include "lib/str_queue.h"
 
-PbOneOf *parse_pb_oneof(char *line, SQueue line_queue, PbCommentList *comments);
-
-PbOneOf *new_parse_pb_oneof(char *name,PbCommentList *comments);
+PbOneOf* make_pb_oneof(char* name, PbCommentList* comments);
 
 #endif //OPENFMT_ONEOF_PARSER_H

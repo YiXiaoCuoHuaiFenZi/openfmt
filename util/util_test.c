@@ -8,6 +8,6 @@
 
 void util_test()
 {
-    show_colors();
-    show_base_colors();
+	show_colors();
+	show_base_colors();
 }

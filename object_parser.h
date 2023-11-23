@@ -34,8 +34,6 @@ struct ObjectInfoStructure
 	char* obj_type;
 };
 
-void parse_object(Protobuf* protobuf, SQueue line_queue, PbCommentList* top_comments, State* state);
-
 void append_as_bottom_comments(PbCommentList* comments, PbCommentList* bottom_comments);
 
 void update_current_obj_comments(State* state, PbCommentList* bottom_comments);

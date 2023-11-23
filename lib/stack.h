@@ -10,28 +10,28 @@
 #include <stdbool.h>
 
 struct Node;
-typedef struct Node *PtrToNode;
+typedef struct Node* PtrToNode;
 typedef PtrToNode Stack;
 
 struct Node
 {
-    void *data;
-    struct Node *next;
+	void* data;
+	struct Node* next;
 };
 
 Stack create_stack();
 
-void dispose_stack(Stack stack, void (*free_data_callback)(PtrToNode ptr_node));
+void dispose_stack(Stack stack, void (* free_data_callback)(PtrToNode ptr_node));
 
 Stack empty_stack(Stack stack);
 
 bool is_empty_stack(Stack stack);
 
-void push_stack(void *data, Stack stack);
+void push_stack(void* data, Stack stack);
 
-void *top_stack(Stack stack, void (*free_data_callback)(PtrToNode ptr_node));
+void* top_stack(Stack stack, void (* free_data_callback)(PtrToNode ptr_node));
 
-void pop_stack(Stack stack, void (*free_data_callback)(PtrToNode ptr_node));
+void pop_stack(Stack stack, void (* free_data_callback)(PtrToNode ptr_node));
 
 
 #endif //OPENFMT_STACK_H

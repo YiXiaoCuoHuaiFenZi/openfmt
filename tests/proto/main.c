@@ -7,14 +7,14 @@
 #include <string.h>
 #include "test_file_format.h"
 
-int main(int argc, char *args[])
+int main(int argc, char* args[])
 {
-    if (argc < 2)
-        return 1;
+	if (argc < 2)
+		return 1;
 
-    // test for format proto files under a directory.
-    if (strcmp(args[1], "test_format_directory") == 0)
-        return test_format_directory("test_data/malformed", "test_data/formatted");
+	// test for format proto files under a directory.
+	if (strcmp(args[1], "test_format_directory") == 0)
+		return test_format_directory("test_data/malformed", "test_data/formatted");
 
-    return 0;
+	return 0;
 }

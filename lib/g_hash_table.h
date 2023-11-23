@@ -13,34 +13,34 @@ typedef struct GItem GItem;
 // Define the Hash Table GItem here
 struct GItem
 {
-    char *key;
-    void *data;
-    char *data_type;
+	char* key;
+	void* data;
+	char* data_type;
 
-    void (*data_free_func)(void *);
+	void (* data_free_func)(void*);
 };
 
 typedef struct GHashTable GHashTable;
 
 struct GHashTable
 {
-    GItem **items;  // Contains an array of pointers to items
-    int size;
-    int count;
+	GItem** items;  // Contains an array of pointers to items
+	int size;
+	int count;
 };
 
-unsigned long g_hash_func(const char *str);
+unsigned long g_hash_func(const char* str);
 
-GItem *g_create_item(const char *key, const char *data_type, void *data, void (*data_free_func)(void *));
+GItem* g_create_item(const char* key, const char* data_type, void* data, void (* data_free_func)(void*));
 
-void g_free_item(GItem *item);
+void g_free_item(GItem* item);
 
-GHashTable *g_create_hashtable(int size);
+GHashTable* g_create_hashtable(int size);
 
-void g_hashtable_put(char *key, const char *data_type, void *data, void (*data_free_func)(void *), GHashTable *table);
+void g_hashtable_put(char* key, const char* data_type, void* data, void (* data_free_func)(void*), GHashTable* table);
 
-void *g_hashtable_get(char *key, GHashTable *table);
+void* g_hashtable_get(char* key, GHashTable* table);
 
-void g_free_hashtable(GHashTable *table);
+void g_free_hashtable(GHashTable* table);
 
 #endif //OPENFMT_G_HASH_TABLE_H

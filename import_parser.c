@@ -10,15 +10,15 @@
 #include "lib/str.h"
 #include "lib/memory.h"
 
-PbImport *parse_import(char *line)
+PbImport* parse_import(char* line)
 {
-    char *s = sub_str_between_str(line, "import", ";");
-    char *v = trim(s);
-    g_free(&s);
+	char* s = sub_str_between_str(line, "import", ";");
+	char* v = trim(s);
+	g_free(&s);
 
-    PbImport *pb_import = (PbImport *) g_malloc(sizeof(PbImport));
-    pb_import->value = v;
-    pb_import->comments = NULL;
+	PbImport* pb_import = (PbImport*)g_malloc(sizeof(PbImport));
+	pb_import->value = v;
+	pb_import->comments = NULL;
 
-    return pb_import;
+	return pb_import;
 }

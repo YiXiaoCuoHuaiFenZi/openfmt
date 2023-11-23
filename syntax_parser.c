@@ -10,16 +10,16 @@
 #include "lib/memory.h"
 
 
-PbSyntax *parse_syntax(char *line)
+PbSyntax* parse_syntax(char* line)
 {
-    // get syntax value
-    char *s = sub_str_between_str(line, "=", ";");
-    char *value = trim(s);
-    g_free(&s);
+	// get syntax value
+	char* s = sub_str_between_str(line, "=", ";");
+	char* value = trim(s);
+	g_free(&s);
 
-    PbSyntax *pb_syntax = (PbSyntax *) g_malloc(sizeof(PbSyntax));
-    pb_syntax->value = value;
-    pb_syntax->comments = NULL;
+	PbSyntax* pb_syntax = (PbSyntax*)g_malloc(sizeof(PbSyntax));
+	pb_syntax->value = value;
+	pb_syntax->comments = NULL;
 
-    return pb_syntax;
+	return pb_syntax;
 }

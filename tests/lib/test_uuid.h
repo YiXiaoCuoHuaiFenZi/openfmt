@@ -6,6 +6,7 @@
 ***********************************************************************************************************************/
 #ifndef OPENFMT_TEST_UUID_H
 #define OPENFMT_TEST_UUID_H
+
 #include "../macro.h"
 #include "../../lib/uuid.h"
 
@@ -13,6 +14,6 @@ int test_random_bytes();
 
 int test_uuid4();
 
-void free_uuid_array(UUID *uuid_list[], int len);
+void free_uuid_array(UUID* uuid_list[], int len);
 
 #endif //OPENFMT_TEST_UUID_H

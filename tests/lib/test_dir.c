@@ -10,26 +10,26 @@
 
 int test_is_file()
 {
-    if (!is_file("test_data/malformed/test_data_1.proto"))
-        return TEST_FAIL;
+	if (!is_file("test_data/malformed/test_data_1.proto"))
+		return TEST_FAIL;
 
-    if (is_file("test_data"))
-        return TEST_FAIL;
+	if (is_file("test_data"))
+		return TEST_FAIL;
 
-    return TEST_SUCCESS;
+	return TEST_SUCCESS;
 }
 
 int test_list_files()
 {
-    List file_list = create_linked_list();
-    list_files(".", file_list);
-    return TEST_SUCCESS;
+	List file_list = create_linked_list();
+	list_files(".", file_list);
+	return TEST_SUCCESS;
 }
 
 int test_print_files()
 {
-    List file_list = create_linked_list();
-    list_files(".", file_list);
-    print_files(file_list);
-    return TEST_SUCCESS;
+	List file_list = create_linked_list();
+	list_files(".", file_list);
+	print_files(file_list);
+	return TEST_SUCCESS;
 }

@@ -6,25 +6,25 @@
 ***********************************************************************************************************************/
 #include "memory.h"
 
-void *g_malloc(size_t size)
+void* g_malloc(size_t size)
 {
-    void *ptr = malloc(size);
-    if (ptr == NULL)
-    {
-        printf("%s\n", "Out of space!");
-        exit(-1);
-    }
+	void* ptr = malloc(size);
+	if (ptr == NULL)
+	{
+		printf("%s\n", "Out of space!");
+		exit(-1);
+	}
 
-    return ptr;
+	return ptr;
 }
 
-void *g_free(void **ptr)
+void* g_free(void** ptr)
 {
-    if (*ptr)
-    {
-        free(*ptr);
-        *ptr = NULL;
-    }
+	if (*ptr)
+	{
+		free(*ptr);
+		*ptr = NULL;
+	}
 
-    return NULL;
+	return NULL;
 }

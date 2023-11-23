@@ -197,8 +197,11 @@ int test_replace()
 		return TEST_FAIL;
 	}
 
-	char* s2 = replace("\n", "\n====","The fasdghjk adsfgh\nChronological work  legs\n\n\nsafdf\nChronological work  legs");
-	if (strcmp(s2, "The fasdghjk adsfgh\n====Chronological work  legs\n====\n====\n====safdf\n====Chronological work  legs") != 0)
+	char* s2 = replace("\n", "\n====",
+			"The fasdghjk adsfgh\nChronological work  legs\n\n\nsafdf\nChronological work  legs");
+	if (strcmp(s2,
+			"The fasdghjk adsfgh\n====Chronological work  legs\n====\n====\n====safdf\n====Chronological work  legs") !=
+		0)
 	{
 		g_free(&s2);
 		return TEST_FAIL;

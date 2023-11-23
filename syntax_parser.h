@@ -10,6 +10,6 @@
 #include "proto.h"
 #include "lib/queue.h"
 
-PbSyntax *parse_syntax(char *line);
+PbSyntax* parse_syntax(char* line);
 
 #endif //OPENFMT_SYNTAX_PARSER_H

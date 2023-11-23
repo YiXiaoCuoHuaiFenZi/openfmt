@@ -81,123 +81,6 @@ Protobuf* parse(const char* file_path)
 	char* content = read_file(file_path);
 	parse_proto_string(protobuf, content);
 	return protobuf;
-
-	exit(0);
-//	SQueue lines = read_line_to_str_queue(file_path);
-//	parse_string_queue(protobuf, lines);
-//	dispose_str_queue(lines);
-//	return protobuf;
-}
-
-void parse_string_queue(Protobuf* protobuf, SQueue line_queue)
-{
-	if (is_empty_str_queue(line_queue))
-		return;
-
-	PbCommentList* top_comments = make_top_comments(line_queue);
-
-	if (is_empty_str_queue(line_queue))
-	{
-		if (top_comments->next != NULL)
-		{
-			// convert all comments as bottom comments
-			PbCommentNode* cur = top_comments->next;
-			while (cur)
-			{
-				cur->data->pos = BOTTOM;
-				cur = cur->next;
-			}
-			protobuf->comments = top_comments;
-		}
-		else
-		{
-			dispose_list(PbCommentNode, top_comments, free_PbComment);
-		}
-		return;
-	}
-
-	char* line = line_queue->head->str;
-	PbType pb_type = get_pb_type(line);
-	switch (pb_type)
-	{
-	case Syntax:
-	{
-		PbSyntax* syntax = parse_syntax(line);
-		syntax->comments = top_comments;
-		protobuf->syntax = syntax;
-		PbComment* pb_comment = parse_comment(line);
-		if (pb_comment != NULL)
-		{
-			append_list(PbCommentNode, syntax->comments, pb_comment);
-		}
-		de_str_queue(line_queue);
-		break;
-	}
-	case Package:
-	{
-		PbPackage* pb_package = parse_package(line);
-		pb_package->comments = top_comments;
-		protobuf->package = pb_package;
-		PbComment* pb_comment = parse_comment(line);
-		if (pb_comment != NULL)
-		{
-			append_list(PbCommentNode, pb_package->comments, pb_comment);
-		}
-		de_str_queue(line_queue);
-		break;
-	}
-	case Option:
-	{
-		PbOption* pb_option = parse_option(line);
-		pb_option->comments = top_comments;
-		if (protobuf->options == NULL)
-		{
-			protobuf->options = create_list(PbOptionNode);
-		}
-		append_list(PbOptionNode, protobuf->options, pb_option);
-		PbComment* pb_comment = parse_comment(line);
-		if (pb_comment != NULL)
-		{
-			append_list(PbCommentNode, pb_option->comments, pb_comment);
-		}
-		de_str_queue(line_queue);
-		break;
-	}
-	case Import:
-	{
-		PbImport* pb_import = parse_import(line);
-		pb_import->comments = top_comments;
-		if (protobuf->imports == NULL)
-		{
-			protobuf->imports = create_list(PbImportNode);
-		}
-		append_list(PbImportNode, protobuf->imports, pb_import);
-		PbComment* pb_comment = parse_comment(line);
-		if (pb_comment != NULL)
-		{
-			append_list(PbCommentNode, pb_import->comments, pb_comment);
-		}
-		de_str_queue(line_queue);
-		break;
-	}
-	default:
-	{
-		State* state = NULL; // used to store current object
-		state = (State*)g_malloc(sizeof(State));
-		state->l_brace = 0;
-		state->r_brace = 0;
-		state->current_obj = NULL;
-		state->current_obj_type = NULL;
-		state->parent_obj = NULL;
-		state->parent_obj_type = NULL;
-		state->obj_dic = g_create_hashtable(G_CAPACITY);
-
-		parse_object(protobuf, line_queue, top_comments, state);
-		g_free_hashtable(state->obj_dic);
-		g_free(&state);
-	}
-	}
-	parse_string_queue(protobuf, line_queue);
 }
 
 bool is_new_line(const char c)
@@ -246,7 +129,6 @@ PbComment* pick_up_single_line_comment(const char* proto_str, unsigned long* ind
 	{
 		char* line_comment_processed = clean_comment_str(line_comment);
 		g_free(&line_comment);
-		printf("single_line_comment: %s\n", line_comment_processed);
 		PbComment* pb_comment = (PbComment*)g_malloc(sizeof(PbComment));
 		pb_comment->text = line_comment_processed;
 		pb_comment->pos = RIGHT;
@@ -273,34 +155,28 @@ char* pick_up_comment_str(const char* proto_str, unsigned long* index)
 			if (tokens[0][0] == proto_str[*index] &&
 				tokens[0][1] == proto_str[*index + 1])
 			{
-//				if (status != multiple_line_comment_start)
-//				{
-//					target_str_start_index = *index;
-//					*index = *index + 2;
-//					status = single_line_comment;
-//				}
-// example single line comment: // The price sdfgfhg API request message //asd /*asdfghj*/ AS
-				if (status != multiple_line_comment_start && status != single_line_comment)
+				// example single line comment: // The price sdfgfhg API request message //asd /*asdfghj*/ AS
+				if (status != block_comment_start && status != line_comment)
 				{
 					target_str_start_index = *index;
 					*index = *index + 2;
-					status = single_line_comment;
+					status = line_comment;
 				}
 			}
 			else if (tokens[1][0] == proto_str[*index] &&
 					 tokens[1][1] == proto_str[*index + 1])
 			{
-				if (status != single_line_comment)
+				if (status != line_comment)
 				{
 					target_str_start_index = *index;
 					*index = *index + 2;
-					status = multiple_line_comment_start;
+					status = block_comment_start;
 				}
 			}
 			else if (tokens[2][0] == proto_str[*index] &&
 					 tokens[2][1] == proto_str[*index + 1])
 			{
-				if (status == multiple_line_comment_start)
+				if (status == block_comment_start)
 				{
 					target_str_end_index = *index + 1;
 					unsigned long len = target_str_end_index - target_str_start_index + 1;
@@ -320,7 +196,7 @@ char* pick_up_comment_str(const char* proto_str, unsigned long* index)
 			case start:
 				status = start;
 				break;
-			case single_line_comment:
+			case line_comment:
 				target_str_end_index = *index;
 				unsigned long len = target_str_end_index - target_str_start_index + 1;
 				comment_str = (char*)malloc(len + 1);
@@ -341,8 +217,8 @@ char* pick_up_comment_str(const char* proto_str, unsigned long* index)
 		{
 			switch (status)
 			{
-			case single_line_comment:
-			case multiple_line_comment_start:
+			case line_comment:
+			case block_comment_start:
 				target_str_end_index = *index;
 				unsigned long len = target_str_end_index - target_str_start_index + 1;
 				comment_str = (char*)malloc(len + 1);
@@ -371,7 +247,6 @@ GCharList* pick_up_all_comments(const char* proto_str, unsigned long* index)
 		{
 			char* cleaned_comment = clean_comment_str(comment_str);
 			g_free(&comment_str);
-			printf("comment: %s\n", cleaned_comment);
 			//  TODO: find a elegant method to split the string to lines.
 			//   The strtok discard multiple empty lines if use it directly: strtok(cleaned_comment, "\n");
 			char* replaced_comment = replace("\n", "\n====", cleaned_comment);
@@ -380,7 +255,6 @@ GCharList* pick_up_all_comments(const char* proto_str, unsigned long* index)
 			// loop through the string to extract all other tokens
 			while (token != NULL)
 			{
-				printf(" %s\n", token); //printing each token
 				char* s = clean_comment_str(token);
 				append_list(GCharNode, comments, trim(s));
 				g_free(&s);
@@ -651,7 +525,7 @@ void parse_obj(const char* proto_str, unsigned long* index, Status* status, Stat
 			char* name = trim(message_str);
 			g_free(&message_str);
 
-			PbMessage* pb_message = new_parse_pb_message(name, top_comments);
+			PbMessage* pb_message = make_pb_message(name, top_comments);
 			g_free(&name);
 			if (state->current_obj != NULL)
 			{
@@ -687,7 +561,7 @@ void parse_obj(const char* proto_str, unsigned long* index, Status* status, Stat
 			char* name = trim(str);
 			g_free(&str);
 
-			PbService* pb_service = new_parse_pb_service(name, top_comments);
+			PbService* pb_service = make_pb_service(name, top_comments);
 			g_free(&name);
 			if (state->current_obj != NULL)
 			{
@@ -717,7 +591,7 @@ void parse_obj(const char* proto_str, unsigned long* index, Status* status, Stat
 	}
 	case extend:
 	{
-//		PbExtend* obj = new_parse_pb_oneof(line, line_queue, top_comments);
+//		PbExtend* obj = make_pb_oneof(line, line_queue, top_comments);
 //		if (state->current_obj != NULL)
 //		{
 //			obj->parent_id = get_parent_id(state);
@@ -742,7 +616,7 @@ void parse_obj(const char* proto_str, unsigned long* index, Status* status, Stat
 			char* name = trim(str);
 			g_free(&str);
 
-			PbOneOf* pb_one_of = new_parse_pb_oneof(name, top_comments);
+			PbOneOf* pb_one_of = make_pb_oneof(name, top_comments);
 			g_free(&name);
 			if (state->current_obj != NULL)
 			{
@@ -809,7 +683,7 @@ void parse_obj(const char* proto_str, unsigned long* index, Status* status, Stat
 	case message_element:
 	{
 		char* text = get_str_until(proto_str, index, ';', true);
-		PbMessageElement* pb_message_element = new_parse_pb_message_element(text, top_comments);
+		PbMessageElement* pb_message_element = make_pb_message_element(text, top_comments);
 		// 解析单行注释
 		PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
 		if (single_line_comment != NULL)
@@ -825,7 +699,7 @@ void parse_obj(const char* proto_str, unsigned long* index, Status* status, Stat
 	case enum_element:
 	{
 		char* text = get_str_until(proto_str, index, ';', true);
-		PbEnumElement* pb_enum_element = new_parse_pb_enum_element(text, top_comments);
+		PbEnumElement* pb_enum_element = make_pb_enum_element(text, top_comments);
 
 		// 解析单行注释
 		PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
@@ -842,7 +716,7 @@ void parse_obj(const char* proto_str, unsigned long* index, Status* status, Stat
 	case service_element:
 	{
 		char* text = get_str_until(proto_str, index, ';', true);
-		PbServiceElement* pb_service_element = new_parse_pb_service_element(text, top_comments);
+		PbServiceElement* pb_service_element = make_pb_service_element(text, top_comments);
 
 		// 解析单行注释
 		PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
@@ -861,11 +735,9 @@ void parse_obj(const char* proto_str, unsigned long* index, Status* status, Stat
 
 void parse_proto_string(Protobuf* protobuf, const char* proto_str)
 {
-	char c_tokens[] = { '{', '}', '\r', '\n' };
 	char* key_word_tokens[] = { "syntax", "package", "option", "import",
 								"message", "enum", "service", "oneof" };
 	unsigned int keywords_amount = 8;
-	char* tokens[] = { "//", "/*", "*/" };
 	Status status = start;
 	unsigned long* index_ptr = NULL;
 	unsigned long index = 0;
@@ -969,7 +841,6 @@ void parse_proto_string(Protobuf* protobuf, const char* proto_str)
 
 			if (match)
 			{
-				printf("key word: %s\n", key_word);
 				index = index + len + 1;
 				status = get_status_from_key_word(key_word);
 				parse_obj(proto_str, index_ptr, &status, state, protobuf, top_comments);

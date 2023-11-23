@@ -9,23 +9,23 @@
 #include "option_parser.h"
 #include "lib/memory.h"
 
-PbOption *parse_option(char *line)
+PbOption* parse_option(char* line)
 {
-    // get option name
-    char *s1 = sub_str_between_str(line, "option", "=");
-    char *name = trim(s1);
+	// get option name
+	char* s1 = sub_str_between_str(line, "option", "=");
+	char* name = trim(s1);
 
-    // get option value
-    char *s2 = sub_str_between_str(line, "=", ";");
-    char *value = trim(s2);
+	// get option value
+	char* s2 = sub_str_between_str(line, "=", ";");
+	char* value = trim(s2);
 
-    g_free(&s1);
-    g_free(&s2);
+	g_free(&s1);
+	g_free(&s2);
 
-    PbOption *pb_option = (PbOption *) g_malloc(sizeof(PbOption));
-    pb_option->name = name;
-    pb_option->value = value;
-    pb_option->comments = NULL;
+	PbOption* pb_option = (PbOption*)g_malloc(sizeof(PbOption));
+	pb_option->name = name;
+	pb_option->value = value;
+	pb_option->comments = NULL;
 
-    return pb_option;
+	return pb_option;
 }

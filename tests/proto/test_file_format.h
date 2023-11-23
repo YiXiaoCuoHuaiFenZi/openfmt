@@ -14,7 +14,7 @@
 #include "../../lib/file.h"
 #include "../../proto_parser.h"
 
-int test_format_directory(char *malformed_file_directory, char *formatted_file_directory);
+int test_format_directory(char* malformed_file_directory, char* formatted_file_directory);
 
 #endif //OPENFMT_TEST_FILE_FORMAT_H
 

@@ -10,85 +10,87 @@
 
 Queue create_queue()
 {
-    Queue queue = (struct QueueStruct *) g_malloc(sizeof(struct QueueStruct));
-    queue->head = NULL;
-    queue->rear = NULL;
-    return queue;
+	Queue queue = (struct QueueStruct*)g_malloc(sizeof(struct QueueStruct));
+	queue->head = NULL;
+	queue->rear = NULL;
+	return queue;
 }
 
-void dispose_queue(Queue queue, void (*free_data_callback)(PtrToQueueNode queueNode))
+void dispose_queue(Queue queue, void (* free_data_callback)(PtrToQueueNode queueNode))
 {
-    PtrToQueueNode cur = queue->head;
-    while (cur != NULL)
-    {
-        PtrToQueueNode nextNode = cur->next;
-        free_data_callback(cur);
-        g_free(&cur);
-        cur = nextNode;
-    }
-    queue->head = NULL;
-    queue->rear = NULL;
-    g_free(&queue);
+	PtrToQueueNode cur = queue->head;
+	while (cur != NULL)
+	{
+		PtrToQueueNode nextNode = cur->next;
+		free_data_callback(cur);
+		g_free(&cur);
+		cur = nextNode;
+	}
+	queue->head = NULL;
+	queue->rear = NULL;
+	g_free(&queue);
 }
 
 bool is_empty_queue(Queue queue)
 {
-    return queue->head == NULL;
+	return queue->head == NULL;
 }
 
-void en_queue(void *data, Queue queue)
+void en_queue(void* data, Queue queue)
 {
-    PtrToQueueNode new_node = (struct QueueNode *) g_malloc(sizeof(struct QueueNode));
-    new_node->data = data;
-    new_node->next = NULL;
-    if (is_empty_queue(queue))
-    {
-        queue->head = queue->rear = new_node;
-    } else
-    {
-        queue->rear->next = new_node;
-        queue->rear = new_node;
-    }
+	PtrToQueueNode new_node = (struct QueueNode*)g_malloc(sizeof(struct QueueNode));
+	new_node->data = data;
+	new_node->next = NULL;
+	if (is_empty_queue(queue))
+	{
+		queue->head = queue->rear = new_node;
+	}
+	else
+	{
+		queue->rear->next = new_node;
+		queue->rear = new_node;
+	}
 }
 
-void de_queue(Queue queue, void (*free_data_callback)(PtrToQueueNode queueNode))
+void de_queue(Queue queue, void (* free_data_callback)(PtrToQueueNode queueNode))
 {
-    if (is_empty_queue(queue))
-    {
-        printf("%s", "Queue is empty!");
-    } else
-    {
-        PtrToQueueNode front_node = queue->head;
-        queue->head = queue->head->next;
-        free_data_callback(front_node);
-        //g_free(&frontNode);
-    }
+	if (is_empty_queue(queue))
+	{
+		printf("%s", "Queue is empty!");
+	}
+	else
+	{
+		PtrToQueueNode front_node = queue->head;
+		queue->head = queue->head->next;
+		free_data_callback(front_node);
+		//g_free(&frontNode);
+	}
 }
 
-void *queue_front(Queue queue)
+void* queue_front(Queue queue)
 {
-    if (is_empty_queue(queue))
-    {
-        printf("%s", "Queue is empty!");
-        return NULL;
-    }
+	if (is_empty_queue(queue))
+	{
+		printf("%s", "Queue is empty!");
+		return NULL;
+	}
 
-    return queue->head->data;
+	return queue->head->data;
 }
 
 int queue_size(Queue queue)
 {
-    if (is_empty_queue(queue))
-    {
-        return 0;
-    }
+	if (is_empty_queue(queue))
+	{
+		return 0;
+	}
 
-    int size = 0;
-    PtrToQueueNode cur = queue->head;
-    while (cur->next != NULL)
-    {
-        size++;
-        cur = cur->next;
-    }
-    return size;
+	int size = 0;
+	PtrToQueueNode cur = queue->head;
+	while (cur->next != NULL)
+	{
+		size++;
+		cur = cur->next;
+	}
+	return size;
 }

@@ -10,8 +10,6 @@
 #include "proto.h"
 #include "lib/str_queue.h"
 
-PbMessage *parse_pb_message(char *line, SQueue line_queue, PbCommentList *comments);
-
-PbMessage *new_parse_pb_message(char *text, PbCommentList *comments);
+PbMessage* make_pb_message(char* text, PbCommentList* comments);
 
 #endif //OPENFMT_MESSAGE_PARSER_H
