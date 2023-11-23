@@ -12,4 +12,6 @@
 
 PbEnum *parse_pb_enum(char *line, SQueue line_queue, PbCommentList *comments);
 
+PbEnum *new_parse_pb_enum(char *name, PbCommentList *comments);
+
 #endif //OPENFMT_ENUM_PARSER_H

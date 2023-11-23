@@ -32,3 +32,17 @@ PbService *parse_pb_service(char *line, SQueue line_queue, PbCommentList *commen
     free_uuid4(uuid);
     return obj;
 }
+
+
+PbService *new_parse_pb_service(char *name,PbCommentList *comments)
+{
+	PbService *obj = (PbService *) g_malloc(sizeof(PbService));
+	UUID *uuid = uuid4();
+	obj->id = str_copy(uuid->hex);
+	obj->parent_id = NULL;
+	obj->name = str_copy(name);;
+	obj->comments = comments;
+	obj->elements = create_linked_list();
+	free_uuid4(uuid);
+	return obj;
+}

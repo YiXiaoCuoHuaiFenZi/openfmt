@@ -96,7 +96,6 @@ message DemoRequestB {
     /*
     **    map field comment a
     **    map field comment b
-    **
     **    map field comment c
     */
     map<string, Project> projects                = 3;  // map field comment d

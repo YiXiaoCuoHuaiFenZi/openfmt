@@ -12,4 +12,6 @@
 
 PbServiceElement *parse_pb_service_element(char *line, PbCommentList *top_comments, SQueue line_queue);
 
+PbServiceElement *new_parse_pb_service_element(char *text, PbCommentList *top_comments);
+
 #endif //OPENFMT_SERVICE_ELE_PARSER_H

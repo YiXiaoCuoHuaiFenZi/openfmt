@@ -211,6 +211,13 @@ int test_replace()
 		return TEST_FAIL;
 	}
 
+	char* s4 = replace("\n", "\n====", "\n    map field comment a\n    // map field comment b\n\n     ");
+	if (strcmp(s4, "\n====    map field comment a\n====    // map field comment b\n====\n====     ") != 0)
+	{
+		g_free(&s4);
+		return TEST_FAIL;
+	}
+
 	return TEST_SUCCESS;
 }
 

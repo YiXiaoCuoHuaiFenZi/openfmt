@@ -32,3 +32,26 @@ PbMessage *parse_pb_message(char *line, SQueue line_queue, PbCommentList *commen
     free_uuid4(uuid);
     return obj;
 }
+
+PbMessage *new_parse_pb_message(char *name, PbCommentList *comments)
+{
+//	char *s = sub_str_between_str(text, "message", "{");
+//	char *name = trim(s);
+//	g_free(&s);
+
+	PbMessage *obj = (PbMessage *) g_malloc(sizeof(PbMessage));
+	UUID *uuid = uuid4();
+	obj->id = str_copy(uuid->hex);
+	obj->parent_id = NULL;
+	obj->parent_type = NULL;
+	obj->name = str_copy(name);
+	obj->comments = comments;
+	obj->elements = create_linked_list();
+//	PbComment *pb_comment = parse_comment(text);
+//	if (pb_comment != NULL)
+//	{
+//		append_list(PbCommentNode, obj->comments, pb_comment);
+//	}
+	free_uuid4(uuid);
+	return obj;
+}

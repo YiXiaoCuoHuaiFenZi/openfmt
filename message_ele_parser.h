@@ -12,6 +12,8 @@
 
 PbMessageElement *parse_pb_message_element(char *line, PbCommentList *top_comments, SQueue line_queue);
 
+PbMessageElement *new_parse_pb_message_element(char *text, PbCommentList *top_comments);
+
 PbMessageElement *create_message_element(
         char *label,
         char *type,
@@ -24,6 +26,8 @@ PbMessageElement *create_message_element(
 PbMessageElement *create_map_message_element(char *line, PbCommentList *top_comments);
 
 PbMessageElement *create_common_message_element(char *line, PbCommentList *top_comments);
+
+PbMessageElement *new_create_common_message_element(char *line, PbCommentList *top_comments);
 
 #endif //OPENFMT_MESSAGE_ELE_PARSER_H
 

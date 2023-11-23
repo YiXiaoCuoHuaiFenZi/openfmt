@@ -87,3 +87,27 @@ void print_str_queue(SQueue line_queue)
         currentNode = currentNode->next;
     }
 }
+
+char *read_file(const char *file_path)
+{
+    FILE *fp;
+    long length;
+    char *content = NULL;
+
+    fp = fopen(file_path, "rb");
+    if (fp == NULL)
+    {
+        printf("could not open file: %s", file_path);
+        return NULL;
+    }
+
+    fseek(fp, 0, SEEK_END);
+    length = ftell(fp);
+    fseek(fp, 0, SEEK_SET);
+    content = g_malloc(length + 1);
+    fread(content, 1, length, fp);
+    content[length] = '\0';
+    fclose(fp);
+
+    return content;
+}

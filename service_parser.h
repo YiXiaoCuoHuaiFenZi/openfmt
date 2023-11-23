@@ -10,6 +10,8 @@
 #include "proto.h"
 #include "lib/str_queue.h"
 
-PbService *parse_pb_service(char *line, SQueue line_queue, PbCommentList *comments);
+PbService* parse_pb_service(char* line, SQueue line_queue, PbCommentList* comments);
+
+PbService* new_parse_pb_service(char* line, PbCommentList* comments);
 
 #endif //OPENFMT_SERVICE_PARSER_H

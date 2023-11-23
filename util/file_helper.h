@@ -18,4 +18,6 @@ SQueue read_line_to_str_queue(const char *file_path);
 
 void print_str_queue(SQueue line_queue);
 
+char *read_file(const char *file_path);
+
 #endif //OPENFMT_FILE_HELPER_H

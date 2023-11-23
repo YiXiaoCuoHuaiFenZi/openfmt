@@ -12,4 +12,6 @@
 
 PbOneOf *parse_pb_oneof(char *line, SQueue line_queue, PbCommentList *comments);
 
+PbOneOf *new_parse_pb_oneof(char *name,PbCommentList *comments);
+
 #endif //OPENFMT_ONEOF_PARSER_H

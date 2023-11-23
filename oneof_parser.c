@@ -32,3 +32,18 @@ PbOneOf *parse_pb_oneof(char *line, SQueue line_queue, PbCommentList *comments)
     free_uuid4(uuid);
     return obj;
 }
+
+
+PbOneOf *new_parse_pb_oneof(char *name,PbCommentList *comments)
+{
+
+	PbOneOf *obj = (PbOneOf *) g_malloc(sizeof(PbOneOf));
+	UUID *uuid = uuid4();
+	obj->id = str_copy(uuid->hex);
+	obj->parent_id = NULL;
+	obj->name = str_copy(name);
+	obj->comments = comments;
+	obj->elements = create_linked_list();
+	free_uuid4(uuid);
+	return obj;
+}

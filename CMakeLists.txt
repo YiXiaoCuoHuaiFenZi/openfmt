@@ -75,11 +75,19 @@ configure_file(tests/lib/test_data/malformed/test_data_1.proto ${CMAKE_CURRENT_B
 
 configure_file(tests/proto/test_data/malformed/test_data_1.proto ${CMAKE_CURRENT_BINARY_DIR}/tests/proto/test_data/malformed/test_data_1.proto COPYONLY)
 
-configure_file(tests/proto/test_data/malformed/test_new_lines.proto ${CMAKE_CURRENT_BINARY_DIR}/tests/proto/test_data/malformed/test_new_lines.proto COPYONLY)
+configure_file(tests/proto/test_data/malformed/test_data_2.proto ${CMAKE_CURRENT_BINARY_DIR}/tests/proto/test_data/malformed/test_data_2.proto COPYONLY)
+
+configure_file(tests/proto/test_data/malformed/test_data_3.proto ${CMAKE_CURRENT_BINARY_DIR}/tests/proto/test_data/malformed/test_data_3.proto COPYONLY)
+
+configure_file(tests/proto/test_data/malformed/test_data_4.proto ${CMAKE_CURRENT_BINARY_DIR}/tests/proto/test_data/malformed/test_new_lines.proto COPYONLY)
 
 configure_file(tests/proto/test_data/formatted/test_data_1.proto.txt ${CMAKE_CURRENT_BINARY_DIR}/tests/proto/test_data/formatted/test_data_1.proto.txt COPYONLY)
 
-configure_file(tests/proto/test_data/formatted/test_new_lines.proto.txt ${CMAKE_CURRENT_BINARY_DIR}/tests/proto/test_data/formatted/test_new_lines.proto.txt COPYONLY)
+configure_file(tests/proto/test_data/formatted/test_data_2.proto.txt ${CMAKE_CURRENT_BINARY_DIR}/tests/proto/test_data/formatted/test_data_2.proto.txt COPYONLY)
+
+configure_file(tests/proto/test_data/formatted/test_data_3.proto.txt ${CMAKE_CURRENT_BINARY_DIR}/tests/proto/test_data/formatted/test_data_3.proto.txt COPYONLY)
+
+configure_file(tests/proto/test_data/formatted/test_data_4.proto.txt ${CMAKE_CURRENT_BINARY_DIR}/tests/proto/test_data/formatted/test_new_lines.proto.txt COPYONLY)
 
 add_executable(openfmt-lib-tester
         tests/lib/main.c

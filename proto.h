@@ -79,6 +79,7 @@ typedef struct MessageStruct
 {
     char *id;
     char *parent_id;
+	char *parent_type;
     char *name;
     PbCommentList *comments;
     List elements;
@@ -98,6 +99,7 @@ typedef struct ExtendStruct
 {
     char *id;
     char *parent_id;
+	char *parent_type;
     char *name;
     PbCommentList *comments;
     List elements;
@@ -117,6 +119,7 @@ typedef struct OneOfStruct
 {
     char *id;
     char *parent_id;
+	char *parent_type;
     char *name;
     PbCommentList *comments;
     List elements;
@@ -134,6 +137,7 @@ typedef struct EnumStruct
 {
     char *id;
     char *parent_id;
+	char *parent_type;
     char *name;
     PbCommentList *comments;
     List elements;
@@ -152,6 +156,7 @@ typedef struct ServiceStruct
 {
     char *id;
     char *parent_id;
+	char *parent_type;
     char *name;
     PbCommentList *comments;
     List elements;

@@ -16,27 +16,38 @@ typedef struct StateStructure State;
 
 struct StateStructure
 {
-    unsigned short l_brace;
-    unsigned short r_brace;
-    void *current_obj;
-    char *current_obj_type;
-    void *parent_obj;
-    char *parent_obj_type;
-    GHashTable *obj_dic;
+	unsigned short l_brace;
+	unsigned short r_brace;
+	void* current_obj;
+	char* current_obj_type;
+	void* parent_obj;
+	char* parent_obj_type;
+	PbCommentList* comments;
+	GHashTable* obj_dic;
 };
 
-void parse_object(Protobuf *protobuf, SQueue line_queue, PbCommentList *top_comments, State *state);
+struct ObjectInfoStructure;
+typedef struct ObjectInfoStructure ObjectInfo;
+struct ObjectInfoStructure
+{
+	char* obj_id;
+	char* obj_type;
+};
 
-void append_as_bottom_comments(PbCommentList *comments, PbCommentList *bottom_comments);
+void parse_object(Protobuf* protobuf, SQueue line_queue, PbCommentList* top_comments, State* state);
 
-void update_current_obj_comments(State *state, PbCommentList *bottom_comments);
+void append_as_bottom_comments(PbCommentList* comments, PbCommentList* bottom_comments);
 
-void parent_obj_to_current_obj(State *state);
+void update_current_obj_comments(State* state, PbCommentList* bottom_comments);
 
-char *get_parent_id(State *state);
+void parent_obj_to_current_obj(State* state);
 
-List get_parent_elements(State *state);
+char* get_parent_id(State* state);
 
-void current_obj_to_parent_obj(State *state);
+List get_parent_elements(State* state);
+
+void current_obj_to_parent_obj(State* state);
+
+ObjectInfo* get_parent_object_info(char* object_id, char* obj_type, State* state);
 
 #endif //OPENFMT_OBJECT_PARSER_H

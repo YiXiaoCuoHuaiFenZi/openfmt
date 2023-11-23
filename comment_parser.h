@@ -12,16 +12,16 @@
 #include "lib/str_queue.h"
 #include "proto.h"
 
-GCharList *pickup_comments(SQueue line_queue);
+GCharList* pickup_comments(SQueue line_queue);
 
-PbCommentList *make_comments(GCharList *comments, PbPosition position);
+PbCommentList* make_comments(GCharList* comments, PbPosition position);
 
-PbCommentList *make_top_comments(SQueue line_queue);
+PbCommentList* make_top_comments(SQueue line_queue);
 
-PbComment *parse_comment(char *line);
+PbComment* parse_comment(char* line);
 
-void free_PbComment(PbCommentNode *ptr);
+void free_PbComment(PbCommentNode* ptr);
 
-void free_GChar(GCharNode *ptr);
+void free_GChar(GCharNode* ptr);
 
 #endif //OPENFMT_COMMENT_PARSER_H
