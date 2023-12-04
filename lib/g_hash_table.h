@@ -7,6 +7,7 @@
 #ifndef OPENFMT_G_HASH_TABLE_H
 #define OPENFMT_G_HASH_TABLE_H
 #define G_CAPACITY 50000 // Size of the Hash Table
+#define G_PRIME 4997     // Used in second hash function
 
 typedef struct GItem GItem;
 
@@ -29,7 +30,11 @@ struct GHashTable
 	int count;
 };
 
-unsigned long g_hash_func(const char* str);
+unsigned long g_sum_of_str(const char* str);
+
+unsigned long g_hash_func_one(unsigned long key);
+
+unsigned long g_hash_func_two(unsigned long key);
 
 GItem* g_create_item(const char* key, const char* data_type, void* data, void (* data_free_func)(void*));
 

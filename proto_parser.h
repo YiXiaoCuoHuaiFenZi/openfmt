@@ -62,8 +62,6 @@ char* get_str_until(const char* str, unsigned long* index, char ch, bool include
 
 char* pick_str_until(const char* str, unsigned long* index, char ch, bool include);
 
-void fail(const char* message);
-
 void skip_spaces(const char* str, unsigned long* index);
 
 void parse_obj(const char* proto_str, unsigned long* index, Status* status, State* state, Protobuf* protobuf,

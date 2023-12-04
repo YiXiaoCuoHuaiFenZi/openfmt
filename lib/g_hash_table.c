@@ -10,15 +10,26 @@
 #include "g_hash_table.h"
 #include "str.h"
 #include "memory.h"
+#include "os.h"
 
-unsigned long g_hash_func(const char* str)
+unsigned long g_sum_of_str(const char* str)
 {
 	unsigned long sum = 0;
 	for (int i = 0; str[i]; i++)
 	{
 		sum += str[i];
 	}
-	return sum % G_CAPACITY;
+	return sum;
+}
+
+unsigned long g_hash_func_one(unsigned long key)
+{
+	return key % G_CAPACITY;
+}
+
+unsigned long g_hash_func_two(unsigned long key)
+{
+	return G_PRIME - (key % G_PRIME);
 }
 
 GItem* g_create_item(const char* key, const char* data_type, void* data, void (* data_free_func)(void*))
@@ -37,9 +48,7 @@ void g_free_item(GItem* item)
 	g_free(&(item->key));
 	g_free(&(item->data_type));
 
-	/*
-	** if the date free function is not set, not call it.
-	*/
+	// if the date free function is not set, not call it.
 	if (item->data_free_func)
 	{
 		item->data_free_func(item->data);
@@ -79,43 +88,58 @@ void g_free_hashtable(GHashTable* table)
 void g_hashtable_put(char* key, const char* data_type, void* data, void (* data_free_func)(void*), GHashTable* table)
 {
 	GItem* item = g_create_item(key, data_type, data, data_free_func);
-	unsigned long index = g_hash_func((key));
-	GItem* current_item = table->items[index];
+	unsigned long str_sum = g_sum_of_str((key));
+	unsigned long probe = g_hash_func_one(str_sum);
+	unsigned long offset = g_hash_func_two(str_sum);
+	GItem* current_item = table->items[probe];
+
+	// if no item existing, save the item directly.
 	if (current_item == NULL)
 	{
 		if (table->count == table->size)
 		{
-			printf("Insert Error: Hash Table is full\n");
+			fail("Insert Error: Hash Table is full\n");
 			g_free_item(item);
 			return;
 		}
-		table->items[index] = item;
+		table->items[probe] = item;
 		table->count++;
+		return;
 	}
-	else
+
+	// replace item when the key is the same as existing item.
+	if (strcmp(key, current_item->key) == 0)
 	{
-		if (strcmp(key, current_item->key) == 0)
-		{
-			table->items[index]->data = data;
-			g_free_item(item);
-		}
-		else
-		{
-			// TODO: handle collision.
-		}
+
+		table->items[probe]->data = data;
+		g_free_item(item);
+		return;
 	}
+
+	// handle key collision.
+	while (table->items[probe] != NULL)
+	{
+		probe = (probe + offset) % table->size;
+	}
+	table->items[probe] = item;
+	table->count++;
 }
 
 void* g_hashtable_get(char* key, GHashTable* table)
 {
-	unsigned long index = g_hash_func((key));
-	GItem* item = table->items[index];
-	if (item != NULL)
+	unsigned long str_sum = g_sum_of_str((key));
+	unsigned long probe = g_hash_func_one(str_sum);
+	unsigned long offset = g_hash_func_two(str_sum);
+
+	GItem* item = table->items[probe];
+	if (item != NULL && strcmp(item->key, key) == 0)
+		return item->data;
+
+	while (1)
 	{
-		if (strcmp(item->key, key) == 0)
-		{
+		probe = (probe + offset) % table->size;
+		item = table->items[probe];
+		if (item != NULL && strcmp(item->key, key) == 0)
 			return item->data;
-		}
 	}
-	return NULL;
 }

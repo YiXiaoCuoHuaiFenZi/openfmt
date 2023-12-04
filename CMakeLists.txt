@@ -69,7 +69,9 @@ add_executable(openfmt
         lib/memory.c
         lib/memory.h
         lib/type.c
-        lib/type.h)
+        lib/type.h
+        lib/os.c
+        lib/os.h)
 
 configure_file(tests/lib/test_data/malformed/test_data_1.proto ${CMAKE_CURRENT_BINARY_DIR}/tests/lib/test_data/malformed/test_data_1.proto COPYONLY)
 
@@ -118,7 +120,9 @@ add_executable(openfmt-lib-tester
         lib/memory.c
         lib/memory.h
         lib/type.c
-        lib/type.h)
+        lib/type.h
+        lib/os.c
+        lib/os.h)
 
 add_executable(openfmt-tester
         tests/proto/main.c
@@ -190,7 +194,9 @@ add_executable(openfmt-tester
         lib/memory.c
         lib/memory.h
         lib/type.c
-        lib/type.h)
+        lib/type.h
+        lib/os.c
+        lib/os.h)
 
 enable_testing()
 add_subdirectory(tests/lib)

@@ -12,6 +12,7 @@
 #include "lib/memory.h"
 #include "lib/str.h"
 #include "lib/str_queue.h"
+#include "lib/os.h"
 #include "object_parser.h"
 #include "option_parser.h"
 #include "package_parser.h"
@@ -91,6 +92,15 @@ bool is_new_line(const char c)
 char* clean_comment_str(const char* comment)
 {
 	char* trimmed_comment = trim(comment);
+
+	if (starts_with("**", trimmed_comment))
+	{
+		char* s_1 = trim_prefix(trimmed_comment, "**");
+		char* s_2 = trim(s_1);
+		g_free(&s_1);
+		g_free(&trimmed_comment);
+		return s_2;
+	}
 
 	bool is_line_comment = starts_with("//", trimmed_comment);
 	if (is_line_comment)
@@ -390,12 +400,6 @@ char* pick_str_until(const char* str, unsigned long* index, char ch, bool includ
 	}
 	fail("target char not found.");
 	return NULL;
-}
-
-void fail(const char* message)
-{
-	printf("%s", message);
-	exit(-1);
 }
 
 void parse_obj(const char* proto_str, unsigned long* index, Status* status, State* state, Protobuf* protobuf,
