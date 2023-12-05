@@ -25,6 +25,7 @@
 #include "service_ele_parser.h"
 #include "service_parser.h"
 #include "oneof_parser.h"
+#include "extend_parser.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -296,6 +297,10 @@ Status get_status_from_key_word(const char* key_word)
 	if (strcmp(key_word, "import") == 0)
 	{
 		return import;
+	}
+	if (strcmp(key_word, "extend") == 0)
+	{
+		return extend;
 	}
 	if (strcmp(key_word, "message") == 0)
 	{
@@ -595,21 +600,38 @@ void parse_obj(const char* proto_str, unsigned long* index, Status* status, Stat
 	}
 	case extend:
 	{
-//		PbExtend* obj = make_pb_oneof(line, line_queue, top_comments);
-//		if (state->current_obj != NULL)
-//		{
-//			obj->parent_id = get_parent_id(state);
-//			append_linked_list(obj, "PbExtend", get_parent_elements(state));
-//			current_obj_to_parent_obj(state);
-//		}
-//		else
-//		{
-//			append_linked_list(obj, "PbExtend", protobuf->objects);
-//		}
-//		state->l_brace++;
-//		state->current_obj = obj;
-//		state->current_obj_type = "PbExtend";
-//		g_hashtable_put(obj->id, state->current_obj_type, obj, NULL, state->obj_dic);
+		char* extend_str = get_str_until(proto_str, index, '{', false);
+		if (extend_str != NULL)
+		{
+			char* name = trim(extend_str);
+			g_free(&extend_str);
+
+			PbExtend* pb_extend = make_pb_extend(name, top_comments);
+			g_free(&name);
+			if (state->current_obj != NULL)
+			{
+				pb_extend->parent_id = get_parent_id(state);
+				pb_extend->parent_type = state->current_obj_type;
+				append_linked_list(pb_extend, "PbExtend", get_parent_elements(state));
+				current_obj_to_parent_obj(state);
+			}
+			else
+			{
+				append_linked_list(pb_extend, "PbExtend", protobuf->objects);
+			}
+
+			// 解析单行注释
+			PbComment* line_comment = pick_up_single_line_comment(proto_str, index);
+			if (line_comment != NULL)
+			{
+				append_list(PbCommentNode, pb_extend->comments, line_comment);
+			}
+
+			state->l_brace++;
+			state->current_obj = pb_extend;
+			state->current_obj_type = "PbExtend";
+			g_hashtable_put(pb_extend->id, state->current_obj_type, pb_extend, NULL, state->obj_dic);
+		}
 		break;
 	}
 	case one_of:
@@ -685,6 +707,7 @@ void parse_obj(const char* proto_str, unsigned long* index, Status* status, Stat
 		break;
 	}
 	case message_element:
+	case extend_element:
 	{
 		char* text = get_str_until(proto_str, index, ';', true);
 		PbMessageElement* pb_message_element = make_pb_message_element(text, top_comments);
@@ -739,9 +762,9 @@ void parse_obj(const char* proto_str, unsigned long* index, Status* status, Stat
 
 void parse_proto_string(Protobuf* protobuf, const char* proto_str)
 {
-	char* key_word_tokens[] = { "syntax", "package", "option", "import",
-								"message", "enum", "service", "oneof" };
-	unsigned int keywords_amount = 8;
+	char* key_word_tokens[] = { "syntax", "package", "option", "import", "extend", "message",
+								"enum", "service", "oneof" };
+	unsigned int keywords_amount = 9;
 	Status status = start;
 	unsigned long* index_ptr = NULL;
 	unsigned long index = 0;
@@ -857,9 +880,8 @@ void parse_proto_string(Protobuf* protobuf, const char* proto_str)
 			continue;
 		}
 
-		if (status == message || status == one_of || status == proto_enum || status == service ||
-			status == message_element ||
-			status == enum_element || status == service_element)
+		if (status == message || status == one_of || status == proto_enum || status == service || status == extend ||
+			status == message_element || status == enum_element || status == service_element)
 		{
 
 			char* text = pick_str_until(proto_str, index_ptr, ';', true);

@@ -31,13 +31,14 @@ typedef enum
 	package,
 	option,
 	import,
+	extend,
 	message,
 	message_element,
+	extend_element,
 	proto_enum,
 	enum_element,
 	service,
 	service_element,
-	extend,
 	one_of,
 	invalid_key_word
 } Status;

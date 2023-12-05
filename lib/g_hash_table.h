@@ -6,8 +6,8 @@
 ***********************************************************************************************************************/
 #ifndef OPENFMT_G_HASH_TABLE_H
 #define OPENFMT_G_HASH_TABLE_H
-#define G_CAPACITY 50000 // Size of the Hash Table
-#define G_PRIME 4997     // Used in second hash function
+#define G_CAPACITY 991 // Size of the Hash Table
+#define G_PRIME 7     // Used in second hash function
 
 typedef struct GItem GItem;
 
