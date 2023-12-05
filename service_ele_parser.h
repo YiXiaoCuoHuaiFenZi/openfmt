@@ -9,7 +9,16 @@
 
 #include "proto.h"
 #include "lib/str_queue.h"
+#include "proto_parser.h"
 
 PbServiceElement* make_pb_service_element(char* text, PbCommentList* top_comments);
+
+void parse_pb_service_element(
+		const char* proto_str,
+		unsigned long* index,
+		PbCommentList* comments,
+		State* state,
+		Protobuf* protobuf
+);
 
 #endif //OPENFMT_SERVICE_ELE_PARSER_H

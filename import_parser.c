@@ -9,12 +9,31 @@
 #include <string.h>
 #include "lib/str.h"
 #include "lib/memory.h"
+#include "proto_parser.h"
 
-PbImport* make_import(char* value, PbCommentList* comments)
+void parse_import(const char* proto_str, unsigned long* index, PbCommentList* comments, Protobuf* protobuf)
 {
-	PbImport* pb_import = (PbImport*)g_malloc(sizeof(PbImport));
-	pb_import->value = value;
-	pb_import->comments = comments;
+	char* import_str = get_str_until(proto_str, index, ';', false);
+	if (import_str != NULL)
+	{
+		char* value = trim(import_str);
+		g_free(&import_str);
 
-	return pb_import;
+		PbImport* pb_import = (PbImport*)g_malloc(sizeof(PbImport));
+		pb_import->value = value;
+		pb_import->comments = comments;
+
+		// 解析单行注释
+		PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
+		if (single_line_comment != NULL)
+		{
+			append_list(PbCommentNode, pb_import->comments, single_line_comment);
+		}
+
+		if (protobuf->imports == NULL)
+		{
+			protobuf->imports = create_list(PbImportNode);
+		}
+		append_list(PbImportNode, protobuf->imports, pb_import);
+	}
 }

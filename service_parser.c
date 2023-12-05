@@ -10,7 +10,6 @@
 #include "service_parser.h"
 #include "lib/memory.h"
 
-
 PbService* make_pb_service(char* name, PbCommentList* comments)
 {
 	PbService* obj = (PbService*)g_malloc(sizeof(PbService));
@@ -22,4 +21,46 @@ PbService* make_pb_service(char* name, PbCommentList* comments)
 	obj->elements = create_linked_list();
 	free_uuid4(uuid);
 	return obj;
+}
+
+void parse_service(
+		const char* proto_str,
+		unsigned long* index,
+		PbCommentList* comments,
+		State* state,
+		Protobuf* protobuf
+)
+{
+	char* str = get_str_until(proto_str, index, '{', false);
+	if (str != NULL)
+	{
+		char* name = trim(str);
+		g_free(&str);
+
+		PbService* pb_service = make_pb_service(name, comments);
+		g_free(&name);
+		if (state->current_obj != NULL)
+		{
+			pb_service->parent_id = get_parent_id(state);
+			pb_service->parent_type = state->current_obj_type;
+			append_linked_list(pb_service, "PbService", get_parent_elements(state));
+			current_obj_to_parent_obj(state);
+		}
+		else
+		{
+			append_linked_list(pb_service, "PbService", protobuf->objects);
+		}
+
+		// 解析单行注释
+		PbComment* line_comment = pick_up_single_line_comment(proto_str, index);
+		if (line_comment != NULL)
+		{
+			append_list(PbCommentNode, pb_service->comments, line_comment);
+		}
+
+		state->l_brace++;
+		state->current_obj = pb_service;
+		state->current_obj_type = "PbService";
+		g_hashtable_put(pb_service->id, state->current_obj_type, pb_service, NULL, state->obj_dic);
+	}
 }

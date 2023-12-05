@@ -22,3 +22,45 @@ PbEnum* make_pb_enum(char* name, PbCommentList* comments)
 	free_uuid4(uuid);
 	return obj;
 }
+
+void parse_pb_enum(
+		const char* proto_str,
+		unsigned long* index,
+		PbCommentList* comments,
+		State* state,
+		Protobuf* protobuf
+)
+{
+	char* str = get_str_until(proto_str, index, '{', false);
+	if (str != NULL)
+	{
+		char* name = trim(str);
+		g_free(&str);
+
+		PbEnum* pb_enum = make_pb_enum(name, comments);
+		g_free(&name);
+		if (state->current_obj != NULL)
+		{
+			pb_enum->parent_id = get_parent_id(state);
+			pb_enum->parent_type = state->current_obj_type;
+			append_linked_list(pb_enum, "PbEnum", get_parent_elements(state));
+			current_obj_to_parent_obj(state);
+		}
+		else
+		{
+			append_linked_list(pb_enum, "PbEnum", protobuf->objects);
+		}
+
+		// 解析单行注释
+		PbComment* line_comment = pick_up_single_line_comment(proto_str, index);
+		if (line_comment != NULL)
+		{
+			append_list(PbCommentNode, pb_enum->comments, line_comment);
+		}
+
+		state->l_brace++;
+		state->current_obj = pb_enum;
+		state->current_obj_type = "PbEnum";
+		g_hashtable_put(pb_enum->id, state->current_obj_type, pb_enum, NULL, state->obj_dic);
+	}
+}

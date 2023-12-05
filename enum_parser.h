@@ -9,7 +9,16 @@
 
 #include "proto.h"
 #include "lib/str_queue.h"
+#include "proto_parser.h"
 
 PbEnum* make_pb_enum(char* name, PbCommentList* comments);
+
+void parse_pb_enum(
+		const char* proto_str,
+		unsigned long* index,
+		PbCommentList* comments,
+		State* state,
+		Protobuf* protobuf
+);
 
 #endif //OPENFMT_ENUM_PARSER_H

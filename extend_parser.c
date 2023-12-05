@@ -24,3 +24,45 @@ PbMessage* make_pb_extend(char* name, PbCommentList* comments)
 	free_uuid4(uuid);
 	return obj;
 }
+
+void parse_extend(
+		const char* proto_str,
+		unsigned long* index,
+		PbCommentList* comments,
+		State* state,
+		Protobuf* protobuf
+)
+{
+	char* extend_str = get_str_until(proto_str, index, '{', false);
+	if (extend_str != NULL)
+	{
+		char* name = trim(extend_str);
+		g_free(&extend_str);
+
+		PbExtend* pb_extend = make_pb_extend(name, comments);
+		g_free(&name);
+		if (state->current_obj != NULL)
+		{
+			pb_extend->parent_id = get_parent_id(state);
+			pb_extend->parent_type = state->current_obj_type;
+			append_linked_list(pb_extend, "PbExtend", get_parent_elements(state));
+			current_obj_to_parent_obj(state);
+		}
+		else
+		{
+			append_linked_list(pb_extend, "PbExtend", protobuf->objects);
+		}
+
+		// 解析单行注释
+		PbComment* line_comment = pick_up_single_line_comment(proto_str, index);
+		if (line_comment != NULL)
+		{
+			append_list(PbCommentNode, pb_extend->comments, line_comment);
+		}
+
+		state->l_brace++;
+		state->current_obj = pb_extend;
+		state->current_obj_type = "PbExtend";
+		g_hashtable_put(pb_extend->id, state->current_obj_type, pb_extend, NULL, state->obj_dic);
+	}
+}

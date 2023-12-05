@@ -57,3 +57,26 @@ PbEnumElement* make_pb_enum_element(char* text, PbCommentList* top_comments)
 
 	return ele;
 }
+
+void parse_pb_enum_element(
+		const char* proto_str,
+		unsigned long* index,
+		PbCommentList* comments,
+		State* state,
+		Protobuf* protobuf
+)
+{
+	char* text = get_str_until(proto_str, index, ';', true);
+	PbEnumElement* pb_enum_element = make_pb_enum_element(text, comments);
+
+	// 解析单行注释
+	PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
+	if (single_line_comment != NULL)
+	{
+		append_list(PbCommentNode, pb_enum_element->comments, single_line_comment);
+	}
+	PbEnum* obj = (PbEnum*)(state->current_obj);
+	append_linked_list(pb_enum_element, "PbEnumElement", obj->elements);
+
+	g_free(&text);
+}

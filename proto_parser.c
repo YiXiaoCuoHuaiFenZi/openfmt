@@ -423,260 +423,35 @@ void parse_obj(const char* proto_str, unsigned long* index, Status* status, Stat
 		parse_option(proto_str, index, top_comments, protobuf);
 		break;
 	case import:
-	{
-		char* import_str = get_str_until(proto_str, index, ';', false);
-		if (import_str != NULL)
-		{
-			char* value = trim(import_str);
-			g_free(&import_str);
-
-			PbImport* pb_import = make_import(value, top_comments);
-			// 解析单行注释
-			PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
-			if (single_line_comment != NULL)
-			{
-				append_list(PbCommentNode, pb_import->comments, single_line_comment);
-			}
-
-			if (protobuf->imports == NULL)
-			{
-				protobuf->imports = create_list(PbImportNode);
-			}
-			append_list(PbImportNode, protobuf->imports, pb_import);
-		}
-	}
+		parse_import(proto_str, index, top_comments, protobuf);
 		break;
 	case message:
-	{
-		char* message_str = get_str_until(proto_str, index, '{', false);
-		if (message_str != NULL)
-		{
-			char* name = trim(message_str);
-			g_free(&message_str);
-
-			PbMessage* pb_message = make_pb_message(name, top_comments);
-			g_free(&name);
-			if (state->current_obj != NULL)
-			{
-				pb_message->parent_id = get_parent_id(state);
-				pb_message->parent_type = state->current_obj_type;
-				append_linked_list(pb_message, "PbMessage", get_parent_elements(state));
-				current_obj_to_parent_obj(state);
-			}
-			else
-			{
-				append_linked_list(pb_message, "PbMessage", protobuf->objects);
-			}
-
-			// 解析单行注释
-			PbComment* line_comment = pick_up_single_line_comment(proto_str, index);
-			if (line_comment != NULL)
-			{
-				append_list(PbCommentNode, pb_message->comments, line_comment);
-			}
-
-			state->l_brace++;
-			state->current_obj = pb_message;
-			state->current_obj_type = "PbMessage";
-			g_hashtable_put(pb_message->id, state->current_obj_type, pb_message, NULL, state->obj_dic);
-		}
+		parse_message(proto_str, index, top_comments, state, protobuf);
 		break;
-	}
 	case service:
-	{
-		char* str = get_str_until(proto_str, index, '{', false);
-		if (str != NULL)
-		{
-			char* name = trim(str);
-			g_free(&str);
-
-			PbService* pb_service = make_pb_service(name, top_comments);
-			g_free(&name);
-			if (state->current_obj != NULL)
-			{
-				pb_service->parent_id = get_parent_id(state);
-				pb_service->parent_type = state->current_obj_type;
-				append_linked_list(pb_service, "PbService", get_parent_elements(state));
-				current_obj_to_parent_obj(state);
-			}
-			else
-			{
-				append_linked_list(pb_service, "PbService", protobuf->objects);
-			}
-
-			// 解析单行注释
-			PbComment* line_comment = pick_up_single_line_comment(proto_str, index);
-			if (line_comment != NULL)
-			{
-				append_list(PbCommentNode, pb_service->comments, line_comment);
-			}
-
-			state->l_brace++;
-			state->current_obj = pb_service;
-			state->current_obj_type = "PbService";
-			g_hashtable_put(pb_service->id, state->current_obj_type, pb_service, NULL, state->obj_dic);
-		}
+		parse_service(proto_str, index, top_comments, state, protobuf);
 		break;
-	}
 	case extend:
-	{
-		char* extend_str = get_str_until(proto_str, index, '{', false);
-		if (extend_str != NULL)
-		{
-			char* name = trim(extend_str);
-			g_free(&extend_str);
-
-			PbExtend* pb_extend = make_pb_extend(name, top_comments);
-			g_free(&name);
-			if (state->current_obj != NULL)
-			{
-				pb_extend->parent_id = get_parent_id(state);
-				pb_extend->parent_type = state->current_obj_type;
-				append_linked_list(pb_extend, "PbExtend", get_parent_elements(state));
-				current_obj_to_parent_obj(state);
-			}
-			else
-			{
-				append_linked_list(pb_extend, "PbExtend", protobuf->objects);
-			}
-
-			// 解析单行注释
-			PbComment* line_comment = pick_up_single_line_comment(proto_str, index);
-			if (line_comment != NULL)
-			{
-				append_list(PbCommentNode, pb_extend->comments, line_comment);
-			}
-
-			state->l_brace++;
-			state->current_obj = pb_extend;
-			state->current_obj_type = "PbExtend";
-			g_hashtable_put(pb_extend->id, state->current_obj_type, pb_extend, NULL, state->obj_dic);
-		}
+		parse_extend(proto_str, index, top_comments, state, protobuf);
 		break;
-	}
 	case one_of:
-	{
-		char* str = get_str_until(proto_str, index, '{', false);
-		if (str != NULL)
-		{
-			char* name = trim(str);
-			g_free(&str);
-
-			PbOneOf* pb_one_of = make_pb_oneof(name, top_comments);
-			g_free(&name);
-			if (state->current_obj != NULL)
-			{
-				pb_one_of->parent_id = get_parent_id(state);
-				pb_one_of->parent_type = state->current_obj_type;
-				append_linked_list(pb_one_of, "PbOneOf", get_parent_elements(state));
-				current_obj_to_parent_obj(state);
-			}
-			else
-			{
-				append_linked_list(pb_one_of, "PbOneOf", protobuf->objects);
-			}
-
-			// 解析单行注释
-			PbComment* line_comment = pick_up_single_line_comment(proto_str, index);
-			if (line_comment != NULL)
-			{
-				append_list(PbCommentNode, pb_one_of->comments, line_comment);
-			}
-
-			state->l_brace++;
-			state->current_obj = pb_one_of;
-			state->current_obj_type = "PbOneOf";
-			g_hashtable_put(pb_one_of->id, state->current_obj_type, pb_one_of, NULL, state->obj_dic);
-		}
+		parse_oneof(proto_str, index, top_comments, state, protobuf);
 		break;
-	}
 	case proto_enum:
-	{
-		char* str = get_str_until(proto_str, index, '{', false);
-		if (str != NULL)
-		{
-			char* name = trim(str);
-			g_free(&str);
-
-			PbEnum* pb_enum = make_pb_enum(name, top_comments);
-			g_free(&name);
-			if (state->current_obj != NULL)
-			{
-				pb_enum->parent_id = get_parent_id(state);
-				pb_enum->parent_type = state->current_obj_type;
-				append_linked_list(pb_enum, "PbEnum", get_parent_elements(state));
-				current_obj_to_parent_obj(state);
-			}
-			else
-			{
-				append_linked_list(pb_enum, "PbEnum", protobuf->objects);
-			}
-
-			// 解析单行注释
-			PbComment* line_comment = pick_up_single_line_comment(proto_str, index);
-			if (line_comment != NULL)
-			{
-				append_list(PbCommentNode, pb_enum->comments, line_comment);
-			}
-
-			state->l_brace++;
-			state->current_obj = pb_enum;
-			state->current_obj_type = "PbEnum";
-			g_hashtable_put(pb_enum->id, state->current_obj_type, pb_enum, NULL, state->obj_dic);
-		}
+		parse_pb_enum(proto_str, index, top_comments, state, protobuf);
 		break;
-	}
 	case message_element:
 	case extend_element:
-	{
-		char* text = get_str_until(proto_str, index, ';', true);
-		PbMessageElement* pb_message_element = make_pb_message_element(text, top_comments);
-		// 解析单行注释
-		PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
-		if (single_line_comment != NULL)
-		{
-			append_list(PbCommentNode, pb_message_element->comments, single_line_comment);
-		}
-		PbMessage* obj = (PbMessage*)(state->current_obj);
-		append_linked_list(pb_message_element, "PbMessageElement", obj->elements);
-
-		g_free(&text);
+		parse_message_element(proto_str, index, top_comments, state, protobuf);
 		break;
-	}
 	case enum_element:
-	{
-		char* text = get_str_until(proto_str, index, ';', true);
-		PbEnumElement* pb_enum_element = make_pb_enum_element(text, top_comments);
-
-		// 解析单行注释
-		PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
-		if (single_line_comment != NULL)
-		{
-			append_list(PbCommentNode, pb_enum_element->comments, single_line_comment);
-		}
-		PbEnum* obj = (PbEnum*)(state->current_obj);
-		append_linked_list(pb_enum_element, "PbEnumElement", obj->elements);
-
-		g_free(&text);
+		parse_pb_enum_element(proto_str, index, top_comments, state, protobuf);
 		break;
-	}
 	case service_element:
-	{
-		char* text = get_str_until(proto_str, index, ';', true);
-		PbServiceElement* pb_service_element = make_pb_service_element(text, top_comments);
-
-		// 解析单行注释
-		PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
-		if (single_line_comment != NULL)
-		{
-			append_list(PbCommentNode, pb_service_element->comments, single_line_comment);
-		}
-		PbService* obj = (PbService*)(state->current_obj);
-		append_linked_list(pb_service_element, "PbServiceElement", obj->elements);
-
-		g_free(&text);
+		parse_pb_service_element(proto_str, index, top_comments, state, protobuf);
 		break;
-	}
+	default:
+		fail("unknown status.");
 	}
 }
 

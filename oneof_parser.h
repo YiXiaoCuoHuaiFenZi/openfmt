@@ -9,7 +9,13 @@
 
 #include "proto.h"
 #include "lib/str_queue.h"
-
+#include "proto_parser.h"
 PbOneOf* make_pb_oneof(char* name, PbCommentList* comments);
-
+void parse_oneof(
+		const char* proto_str,
+		unsigned long* index,
+		PbCommentList* comments,
+		State* state,
+		Protobuf* protobuf
+);
 #endif //OPENFMT_ONEOF_PARSER_H

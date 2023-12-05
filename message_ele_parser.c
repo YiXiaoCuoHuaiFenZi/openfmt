@@ -161,3 +161,26 @@ PbMessageElement* make_common_message_element(char* text, PbCommentList* top_com
 
 	return pb_message_element;
 }
+
+void parse_message_element(
+		const char* proto_str,
+		unsigned long* index,
+		PbCommentList* comments,
+		State* state,
+		Protobuf* protobuf
+)
+{
+	char* text = get_str_until(proto_str, index, ';', true);
+	PbMessageElement* pb_message_element = make_pb_message_element(text, comments);
+	// 解析单行注释
+	PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
+	if (single_line_comment != NULL)
+	{
+		append_list(PbCommentNode, pb_message_element->comments, single_line_comment);
+	}
+	PbMessage* obj = (PbMessage*)(state->current_obj);
+	append_linked_list(pb_message_element, "PbMessageElement", obj->elements);
+
+	g_free(&text);
+
+}

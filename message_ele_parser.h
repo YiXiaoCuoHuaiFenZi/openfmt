@@ -9,6 +9,7 @@
 
 #include "proto.h"
 #include "lib/str_queue.h"
+#include "proto_parser.h"
 
 PbMessageElement* make_pb_message_element(char* text, PbCommentList* top_comments);
 
@@ -24,6 +25,14 @@ PbMessageElement* make_message_element(
 PbMessageElement* make_map_message_element(char* line, PbCommentList* top_comments);
 
 PbMessageElement* make_common_message_element(char* line, PbCommentList* top_comments);
+
+void parse_message_element(
+		const char* proto_str,
+		unsigned long* index,
+		PbCommentList* comments,
+		State* state,
+		Protobuf* protobuf
+);
 
 #endif //OPENFMT_MESSAGE_ELE_PARSER_H
 
