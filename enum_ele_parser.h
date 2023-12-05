@@ -10,7 +10,6 @@
 #include "proto.h"
 #include "lib/str_queue.h"
 
-
 PbEnumElement* make_pb_enum_element(char* line, PbCommentList* top_comments);
 
 #endif //OPENFMT_ENUM_ELE_PARSER_H

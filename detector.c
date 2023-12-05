@@ -10,9 +10,9 @@
 #include "lib/str.h"
 #include "lib/memory.h"
 
-bool is_syntax(char* line)
+bool is_syntax(char* str)
 {
-	char* t = trim(line);
+	char* t = trim(str);
 	char* r = replace(" ", "", t);
 	bool is = starts_with("syntax=", r);
 	g_free(&t);
@@ -20,70 +20,11 @@ bool is_syntax(char* line)
 	return is;
 }
 
-bool is_package(char* line)
-{
-	char* t = trim(line);
-	bool is = starts_with("package ", t);
-	g_free(&t);
-	return is;
-}
 
-bool is_option(char* line)
-{
-	char* t = trim(line);
-	bool is = starts_with("option ", t);
-	g_free(&t);
-	return is;
-}
-
-bool is_import(char* line)
-{
-	char* t = trim(line);
-	bool is = starts_with("import ", t);
-	g_free(&t);
-	return is;
-}
-
-bool is_message(char* line)
-{
-	char* t = trim(line);
-	bool is = starts_with("message ", t);
-	char* has_brace = strstr(t, "{");
-	g_free(&t);
-	return is && has_brace;
-}
-
-bool is_enum(char* line)
-{
-	char* t = trim(line);
-	bool is = starts_with("enum ", t);
-	char* has_brace = strstr(t, "{");
-	g_free(&t);
-	return is && has_brace;
-}
-
-bool is_service(char* line)
-{
-	char* t = trim(line);
-	bool is = starts_with("service ", t);
-	char* has_brace = strstr(t, "{");
-	g_free(&t);
-	return is && has_brace;
-}
-
-bool is_extend(char* line)
-{
-	char* t = trim(line);
-	bool is = starts_with("extend ", t);
-	char* has_brace = strstr(t, "{");
-	g_free(&t);
-	return is && has_brace;
-}
-
-bool is_map_element(char* line)
+bool is_map_element(char* str)
 {
 	// the map element looks like: map<string, Project> projects = 3;
-	char* t = trim(line);
+	char* t = trim(str);
 	char* r = replace(" ", "", t);
 	bool is = starts_with("map<", r);
 	g_free(&t);
@@ -91,12 +32,12 @@ bool is_map_element(char* line)
 	return is;
 }
 
-bool is_element(char* line)
+bool is_element(char* str)
 {
-	char* semicolon = strstr(line, ";");
-	char* double_slash = strstr(line, "//");
-	char* slash_star = strstr(line, "/*");
-	char* equal_sign = strstr(line, "=");
+	char* semicolon = strstr(str, ";");
+	char* double_slash = strstr(str, "//");
+	char* slash_star = strstr(str, "/*");
+	char* equal_sign = strstr(str, "=");
 	if (semicolon == NULL)
 		return false;
 
@@ -106,10 +47,10 @@ bool is_element(char* line)
 	if (slash_star && semicolon > slash_star)
 		return false;
 
-	if (is_service_element(line))
+	if (is_service_element(str))
 		return true;
 
-	if (is_map_element(line))
+	if (is_map_element(str))
 		return true;
 
 	if (equal_sign)
@@ -118,30 +59,30 @@ bool is_element(char* line)
 	return false;
 }
 
-bool is_message_element(char* line)
+bool is_message_element(char* str)
 {
 	// Example: repeated common.Tiger work_legs = 3;               // Chronological work  legs
-	if (!is_element(line))
+	if (!is_element(str))
 		return false;
 
-	if (is_syntax(line))
+	if (is_syntax(str))
 		return false;
 
-	if (is_service_element(line))
+	if (is_service_element(str))
 		return false;
 
-	if (is_map_element(line))
+	if (is_map_element(str))
 		return true;
 
 	// copy original string (char *) to char [], so it can use strtok to detect substrings(split).
-	unsigned int len = strlen(line);
-	char str[len];
+	unsigned int len = strlen(str);
+	char temp_str[len];
 	for (int index = 0; index < len; index++)
 	{
-		str[index] = line[index];
+		temp_str[index] = str[index];
 	}
 
-	char* token = strtok(str, "=");
+	char* token = strtok(temp_str, "=");
 	if (token == NULL)
 	{
 		return false; // no equal sign, return false.
@@ -159,20 +100,20 @@ bool is_message_element(char* line)
 	return space_amount >= 2;
 }
 
-bool is_enum_element(char* line)
+bool is_enum_element(char* str)
 {
-	if (!is_element(line))
+	if (!is_element(str))
 		return false;
 
 	// copy original string (char *) to char [], so it can use strtok to detect substrings(split).
-	unsigned int len = strlen(line);
-	char str[len];
+	unsigned int len = strlen(str);
+	char temp_str[len];
 	for (int index = 0; index < len; index++)
 	{
-		str[index] = line[index];
+		temp_str[index] = str[index];
 	}
 
-	char* token = strtok(str, "=");
+	char* token = strtok(temp_str, "=");
 	if (token == NULL)
 	{
 		return false; // no equal sign, return false.
@@ -190,55 +131,10 @@ bool is_enum_element(char* line)
 	return space_amount == 1;
 }
 
-bool is_service_element(char* line)
+bool is_service_element(char* str)
 {
-	char* t = trim(line);
+	char* t = trim(str);
 	bool is = starts_with("rpc ", t);
 	g_free(&t);
 	return is;
-}
-
-bool is_extend_element(char* line)
-{
-	return NULL;
-}
-
-bool is_oneof(char* line)
-{
-	char* t = trim(line);
-	bool is = starts_with("oneof ", t);
-	char* has_brace = strstr(t, "{");
-	g_free(&t);
-	return is && has_brace;
-}
-
-PbType get_pb_type(char* line)
-{
-	if (is_syntax(line))
-		return Syntax;
-	if (is_package(line))
-		return Package;
-	if (is_option(line))
-		return Option;
-	if (is_import(line))
-		return Import;
-	if (is_message(line))
-		return Message;
-	if (is_enum(line))
-		return Enum;
-	if (is_service(line))
-		return Service;
-	if (is_extend(line))
-		return Extend;
-	if (is_message_element(line))
-		return MessageElement;
-	if (is_extend_element(line))
-		return ExtendElement;
-	if (is_enum_element(line))
-		return EnumElement;
-	if (is_service_element(line))
-		return ServiceElement;
-	if (is_oneof(line))
-		return OneOf;
-	return Unknown;
 }

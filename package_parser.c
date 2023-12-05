@@ -8,16 +8,26 @@
 #include <stdlib.h>
 #include "lib/str.h"
 #include "lib/memory.h"
+#include "proto_parser.h"
 
-PbPackage* parse_package(char* line)
+void parse_package(const char* proto_str, unsigned long* index, PbCommentList* comments, Protobuf* protobuf)
 {
-	char* s = sub_str_between_str(line, "package", ";");
-	char* value = trim(s);
-	g_free(&s);
+	char* ss = get_str_until(proto_str, index, ';', false);
+	if (ss != NULL)
+	{
+		char* value = trim(ss);
+		g_free(&ss);
 
-	PbPackage* pb_package = (PbPackage*)g_malloc(sizeof(PbPackage));
-	pb_package->value = value;
-	pb_package->comments = NULL;
+		PbPackage* pb_package = (PbPackage*)g_malloc(sizeof(PbPackage));
+		pb_package->value = value;
+		pb_package->comments = comments;
 
-	return pb_package;
+		// 解析单行注释
+		PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
+		if (single_line_comment != NULL)
+		{
+			append_list(PbCommentNode, pb_package->comments, single_line_comment);
+		}
+		protobuf->package = pb_package;
+	}
 }

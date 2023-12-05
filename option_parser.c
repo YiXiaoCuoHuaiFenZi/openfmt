@@ -8,24 +8,37 @@
 #include "lib/str.h"
 #include "option_parser.h"
 #include "lib/memory.h"
+#include "proto_parser.h"
 
-PbOption* parse_option(char* line)
+void parse_option(const char* proto_str, unsigned long* index, PbCommentList* comments, Protobuf* protobuf)
 {
-	// get option name
-	char* s1 = sub_str_between_str(line, "option", "=");
-	char* name = trim(s1);
-
-	// get option value
-	char* s2 = sub_str_between_str(line, "=", ";");
-	char* value = trim(s2);
-
-	g_free(&s1);
-	g_free(&s2);
-
 	PbOption* pb_option = (PbOption*)g_malloc(sizeof(PbOption));
-	pb_option->name = name;
-	pb_option->value = value;
-	pb_option->comments = NULL;
+	char* sss = get_str_until(proto_str, index, '=', false);
+	if (sss != NULL)
+	{
+		char* name = trim(sss);
+		g_free(&sss);
+		pb_option->name = name;
+	}
+	char* ssss = get_str_until(proto_str, index, ';', false);
+	if (ssss != NULL)
+	{
+		char* value = trim(ssss);
+		g_free(&ssss);
+		pb_option->value = value;
+	}
 
-	return pb_option;
+	pb_option->comments = comments;
+	// 解析单行注释
+	PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
+	if (single_line_comment != NULL)
+	{
+		append_list(PbCommentNode, pb_option->comments, single_line_comment);
+	}
+
+	if (protobuf->options == NULL)
+	{
+		protobuf->options = create_list(PbOptionNode);
+	}
+	append_list(PbOptionNode, protobuf->options, pb_option);
 }

@@ -260,8 +260,8 @@ GCharList* pick_up_all_comments(const char* proto_str, unsigned long* index)
 			g_free(&comment_str);
 			//  TODO: find a elegant method to split the string to lines.
 			//   The strtok discard multiple empty lines if use it directly: strtok(cleaned_comment, "\n");
-			char* replaced_comment = replace("\n", "\n|-|-|-|-|", cleaned_comment);
-			char* token = strtok(replaced_comment, "|-|-|-|-|");
+			char* replaced_comment = replace("\n", "\n~~", cleaned_comment);
+			char* token = strtok(replaced_comment, "~~");
 
 			// loop through the string to extract all other tokens
 			while (token != NULL)
@@ -269,7 +269,7 @@ GCharList* pick_up_all_comments(const char* proto_str, unsigned long* index)
 				char* s = clean_comment_str(token);
 				append_list(GCharNode, comments, trim(s));
 				g_free(&s);
-				token = strtok(NULL, "|-|-|-|-|");
+				token = strtok(NULL, "~~");
 			}
 		}
 		else
@@ -414,91 +414,13 @@ void parse_obj(const char* proto_str, unsigned long* index, Status* status, Stat
 	switch (*status)
 	{
 	case syntax:
-		if (proto_str[*index] != '=')
-		{
-			char message[100];
-			char num_str[15];
-			sprintf(num_str, "%d", *index);
-			strcat(message, "invalid symbol at ");
-			strcat(message, num_str);
-			strcat(message, " when parse syntax.\n");
-			fail(message);
-		}
-		*index = *index + 1;
-		char* s = get_str_until(proto_str, index, ';', false);
-		if (s != NULL)
-		{
-			char* value = trim(s);
-			g_free(&s);
-
-			PbSyntax* pb_syntax = (PbSyntax*)g_malloc(sizeof(PbSyntax));
-			pb_syntax->value = value;
-			pb_syntax->comments = top_comments;
-
-			// 解析单行注释
-			PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
-			if (single_line_comment != NULL)
-			{
-				append_list(PbCommentNode, pb_syntax->comments, single_line_comment);
-			}
-			protobuf->syntax = pb_syntax;
-		}
+		parse_syntax(proto_str, index, top_comments, protobuf);
 		break;
 	case package:
-	{
-		char* ss = get_str_until(proto_str, index, ';', false);
-		if (ss != NULL)
-		{
-			char* value = trim(ss);
-			g_free(&ss);
-
-			PbPackage* pb_package = (PbPackage*)g_malloc(sizeof(PbPackage));
-			pb_package->value = value;
-			pb_package->comments = top_comments;
-
-			// 解析单行注释
-			PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
-			if (single_line_comment != NULL)
-			{
-				append_list(PbCommentNode, pb_package->comments, single_line_comment);
-			}
-			protobuf->package = pb_package;
-		}
-	}
+		parse_package(proto_str, index, top_comments, protobuf);
 		break;
 	case option:
-	{
-		PbOption* pb_option = (PbOption*)g_malloc(sizeof(PbOption));
-		char* sss = get_str_until(proto_str, index, '=', false);
-		if (sss != NULL)
-		{
-			char* name = trim(sss);
-			g_free(&sss);
-			pb_option->name = name;
-		}
-		char* ssss = get_str_until(proto_str, index, ';', false);
-		if (ssss != NULL)
-		{
-			char* value = trim(ssss);
-			g_free(&ssss);
-			pb_option->value = value;
-		}
-
-		pb_option->comments = top_comments;
-		// 解析单行注释
-		PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
-		if (single_line_comment != NULL)
-		{
-			append_list(PbCommentNode, pb_option->comments, single_line_comment);
-		}
-
-		if (protobuf->options == NULL)
-		{
-			protobuf->options = create_list(PbOptionNode);
-		}
-		append_list(PbOptionNode, protobuf->options, pb_option);
-	}
-
+		parse_option(proto_str, index, top_comments, protobuf);
 		break;
 	case import:
 	{
@@ -508,9 +430,7 @@ void parse_obj(const char* proto_str, unsigned long* index, Status* status, Stat
 			char* value = trim(import_str);
 			g_free(&import_str);
 
-			PbImport* pb_import = (PbImport*)g_malloc(sizeof(PbImport));
-			pb_import->value = value;
-			pb_import->comments = top_comments;
+			PbImport* pb_import = make_import(value, top_comments);
 			// 解析单行注释
 			PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
 			if (single_line_comment != NULL)
@@ -678,7 +598,7 @@ void parse_obj(const char* proto_str, unsigned long* index, Status* status, Stat
 			char* name = trim(str);
 			g_free(&str);
 
-			PbEnum* pb_enum = new_parse_pb_enum(name, top_comments);
+			PbEnum* pb_enum = make_pb_enum(name, top_comments);
 			g_free(&name);
 			if (state->current_obj != NULL)
 			{

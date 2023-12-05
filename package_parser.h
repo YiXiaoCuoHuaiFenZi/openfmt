@@ -12,4 +12,4 @@
 #include "proto.h"
 #include "lib/str_queue.h"
 
-PbPackage* parse_package(char* line);
+void parse_package(const char* proto_str, unsigned long* index, PbCommentList* comments, Protobuf* protobuf);

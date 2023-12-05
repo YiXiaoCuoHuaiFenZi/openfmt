@@ -10,15 +10,11 @@
 #include "lib/str.h"
 #include "lib/memory.h"
 
-PbImport* parse_import(char* line)
+PbImport* make_import(char* value, PbCommentList* comments)
 {
-	char* s = sub_str_between_str(line, "import", ";");
-	char* v = trim(s);
-	g_free(&s);
-
 	PbImport* pb_import = (PbImport*)g_malloc(sizeof(PbImport));
-	pb_import->value = v;
-	pb_import->comments = NULL;
+	pb_import->value = value;
+	pb_import->comments = comments;
 
 	return pb_import;
 }

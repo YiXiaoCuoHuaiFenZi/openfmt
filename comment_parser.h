@@ -12,11 +12,7 @@
 #include "lib/str_queue.h"
 #include "proto.h"
 
-GCharList* pickup_comments(SQueue line_queue);
-
 PbCommentList* make_comments(GCharList* comments, PbPosition position);
-
-PbComment* parse_comment(char* line);
 
 void free_PbComment(PbCommentNode* ptr);
 

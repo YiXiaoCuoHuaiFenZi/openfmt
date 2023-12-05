@@ -9,7 +9,7 @@
 
 #include "proto.h"
 
-PbImport* parse_import(char* line);
+PbImport* make_import(char* line, PbCommentList* comments);
 
 #endif //OPENFMT_IMPORT_PARSER_H
 
