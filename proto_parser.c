@@ -260,8 +260,8 @@ GCharList* pick_up_all_comments(const char* proto_str, unsigned long* index)
 			g_free(&comment_str);
 			//  TODO: find a elegant method to split the string to lines.
 			//   The strtok discard multiple empty lines if use it directly: strtok(cleaned_comment, "\n");
-			char* replaced_comment = replace("\n", "\n====", cleaned_comment);
-			char* token = strtok(replaced_comment, "====");
+			char* replaced_comment = replace("\n", "\n|-|-|-|-|", cleaned_comment);
+			char* token = strtok(replaced_comment, "|-|-|-|-|");
 
 			// loop through the string to extract all other tokens
 			while (token != NULL)
@@ -269,7 +269,7 @@ GCharList* pick_up_all_comments(const char* proto_str, unsigned long* index)
 				char* s = clean_comment_str(token);
 				append_list(GCharNode, comments, trim(s));
 				g_free(&s);
-				token = strtok(NULL, "====");
+				token = strtok(NULL, "|-|-|-|-|");
 			}
 		}
 		else

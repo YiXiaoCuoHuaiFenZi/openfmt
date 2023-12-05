@@ -5,8 +5,17 @@ package dasdsadsd;
 option java_package = "ba.la.ba.la";
 option objc_class_prefix = "dasdas";
 
+    /*
+    **    The RFIC (Reason for Issuance Code) is the group of services the EMD belongs to.
+     **    Examples: A => Air Transportation, C => Baggage and G => In-flight services.
+    **    All fare baggage these 2 passengers can take is 2  2 = 4
+    **    <PaymentCardCharacteristics xmlns="http://ndc.skyscanner.net">
+    **    This is a single character code indicating the reason for issuance.
+    **    Examples: A => Air Transportation, C => Baggage and G => In-flight services.
+    */
 import "base.proto";
 
+//Linear measurement = length + width + height
 // TestOuter
 message TestOuter {string header = 1;message TestInner {string header = 1;// TestInner header
   string market = 2; // TestInner market
