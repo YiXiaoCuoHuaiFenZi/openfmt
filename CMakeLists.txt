@@ -198,7 +198,9 @@ add_executable(openfmt-tester
         lib/type.c
         lib/type.h
         lib/os.c
-        lib/os.h)
+        lib/os.h
+        common.c
+        common.h)
 
 enable_testing()
 add_subdirectory(tests/lib)
