@@ -133,7 +133,7 @@ char* trim_pre_suf(const char* str, const char* substr)
 {
 	char* s = trim_prefix(str, substr);
 	char* r = trim_suffix(s, substr);
-	g_free(&s);
+	g_free(to_void_ptr(&s));
 	return r;
 }
 
@@ -198,7 +198,7 @@ char* sub_str_between_str(const char* str, const char* start, const char* end)
 	char* v = (char*)g_malloc(size);
 	memcpy(v, start_s, end_s - start_s);
 	v[end_s - start_s] = '\0'; // must ends with '\0'
-	g_free(&s);
+	g_free(to_void_ptr(&s));
 
 	return v;
 }
@@ -225,7 +225,7 @@ char* int_to_binary_str(int value)
 	{
 		for (int j = 7; j >= 0; --j)
 		{
-			r[index] = (pointer[i] & (1 << j)) ? '1' : '0';;
+			r[index] = (pointer[i] & (1 << j)) ? '1' : '0';
 			index++;
 		}
 	}
@@ -246,7 +246,7 @@ char* char_to_binary_str_with_space(const char* str)
 	{
 		for (int j = 7; j >= 0; --j)
 		{
-			r[index] = (str[i] & (1 << j)) ? '1' : '0';;
+			r[index] = (str[i] & (1 << j)) ? '1' : '0';
 			index++;
 		}
 		if (index < (str_len) * 8)

@@ -15,8 +15,8 @@ bool is_syntax(char* str)
 	char* t = trim(str);
 	char* r = replace(" ", "", t);
 	bool is = starts_with("syntax=", r);
-	g_free(&t);
-	g_free(&r);
+	g_free(to_void_ptr(&t));
+	g_free(to_void_ptr(&r));
 	return is;
 }
 
@@ -27,8 +27,8 @@ bool is_map_element(char* str)
 	char* t = trim(str);
 	char* r = replace(" ", "", t);
 	bool is = starts_with("map<", r);
-	g_free(&t);
-	g_free(&r);
+	g_free(to_void_ptr(&t));
+	g_free(to_void_ptr(&r));
 	return is;
 }
 
@@ -135,6 +135,6 @@ bool is_service_element(char* str)
 {
 	char* t = trim(str);
 	bool is = starts_with("rpc ", t);
-	g_free(&t);
+	g_free(to_void_ptr(&t));
 	return is;
 }

@@ -38,10 +38,10 @@ void parse_message(
 	if (message_str != NULL)
 	{
 		char* name = trim(message_str);
-		g_free(&message_str);
+		g_free(to_void_ptr(&message_str));
 
 		PbMessage* pb_message = make_pb_message(name, comments);
-		g_free(&name);
+		g_free(to_void_ptr(&name));
 		if (state->current_obj != NULL)
 		{
 			pb_message->parent_id = get_parent_id(state);

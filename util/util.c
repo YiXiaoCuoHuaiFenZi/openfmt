@@ -6,7 +6,6 @@
 ***********************************************************************************************************************/
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 #include "util.h"
 #include "../lib/memory.h"
 
@@ -80,6 +79,6 @@ void print_text_with_color(const char* message, int color_code, bool print_code)
 
 	printf(ANSI_COLOR_RESET);
 
-	g_free(&colorCodeStr);
-	g_free(&anciColorStr);
+	g_free(to_void_ptr(&colorCodeStr));
+	g_free(to_void_ptr(&anciColorStr));
 }

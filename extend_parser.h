@@ -11,7 +11,7 @@
 #include "lib/str_queue.h"
 #include "proto_parser.h"
 
-PbMessage* make_pb_extend(char* name, PbCommentList* comments);
+PbExtend* make_pb_extend(char* name, PbCommentList* comments);
 
 void parse_extend(
 		const char* proto_str,

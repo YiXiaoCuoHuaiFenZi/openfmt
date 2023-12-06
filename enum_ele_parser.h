@@ -13,12 +13,6 @@
 
 PbEnumElement* make_pb_enum_element(char* line, PbCommentList* top_comments);
 
-void parse_pb_enum_element(
-		const char* proto_str,
-		unsigned long* index,
-		PbCommentList* comments,
-		State* state,
-		Protobuf* protobuf
-);
+void parse_pb_enum_element(const char* proto_str, unsigned long* index, PbCommentList* comments, State* state);
 
 #endif //OPENFMT_ENUM_ELE_PARSER_H

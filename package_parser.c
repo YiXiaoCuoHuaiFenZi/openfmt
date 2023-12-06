@@ -17,7 +17,7 @@ void parse_package(const char* proto_str, unsigned long* index, PbCommentList* c
 	if (ss != NULL)
 	{
 		char* value = trim(ss);
-		g_free(&ss);
+		g_free(to_void_ptr(&ss));
 
 		PbPackage* pb_package = (PbPackage*)g_malloc(sizeof(PbPackage));
 		pb_package->value = value;

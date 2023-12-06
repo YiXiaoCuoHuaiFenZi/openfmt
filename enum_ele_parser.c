@@ -18,12 +18,12 @@ PbEnumElement* make_pb_enum_element(char* text, PbCommentList* top_comments)
 	char* s2 = strtok(s1, "=");
 	char* s3 = str_copy(s2);
 	char* name = trim(s3);
-	g_free(&s1);
-	g_free(&s3);
+	g_free(to_void_ptr(&s1));
+	g_free(to_void_ptr(&s3));
 
 	char* s4 = sub_str_between_str(text, "=", ";");
 	char* number = trim(s4);
-	g_free(&s4);
+	g_free(to_void_ptr(&s4));
 
 	PbEnumElement* ele = (PbEnumElement*)g_malloc(sizeof(PbEnumElement));
 	ele->name = name;
@@ -38,9 +38,9 @@ PbEnumElement* make_pb_enum_element(char* text, PbCommentList* top_comments)
 	{
 		// get the number value.
 		char* ns = sub_str_between_str(text, "=", "[");
-		g_free(&number);
+		g_free(to_void_ptr(&number));
 		ele->number = trim(ns);
-		g_free(&ns);
+		g_free(to_void_ptr(&ns));
 
 		// get the annotation value.
 		char* s5 = sub_str_between_str(text, "[", "]");
@@ -52,8 +52,8 @@ PbEnumElement* make_pb_enum_element(char* text, PbCommentList* top_comments)
 		strcat(annotation, "]");
 		annotation[size - 1] = '\0';
 		ele->annotation = annotation;
-		g_free(&s5);
-		g_free(&s6);
+		g_free(to_void_ptr(&s5));
+		g_free(to_void_ptr(&s6));
 	}
 
 	return ele;
@@ -63,8 +63,7 @@ void parse_pb_enum_element(
 		const char* proto_str,
 		unsigned long* index,
 		PbCommentList* comments,
-		State* state,
-		Protobuf* protobuf
+		State* state
 )
 {
 	char* text = get_str_until(proto_str, index, ';', true);
@@ -79,5 +78,5 @@ void parse_pb_enum_element(
 	PbEnum* obj = (PbEnum*)(state->current_obj);
 	append_linked_list(pb_enum_element, "PbEnumElement", obj->elements);
 
-	g_free(&text);
+	g_free(to_void_ptr(&text));
 }

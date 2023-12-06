@@ -18,7 +18,7 @@ void parse_syntax(const char* proto_str, unsigned long* index, PbCommentList* co
 	{
 		char message[100];
 		char num_str[15];
-		sprintf(num_str, "%d", *index);
+		sprintf(num_str, "%lu", *index);
 		strcat(message, "invalid symbol at ");
 		strcat(message, num_str);
 		strcat(message, " when parse syntax.\n");
@@ -29,7 +29,7 @@ void parse_syntax(const char* proto_str, unsigned long* index, PbCommentList* co
 	if (s != NULL)
 	{
 		char* value = trim(s);
-		g_free(&s);
+		g_free(to_void_ptr(&s));
 
 		PbSyntax* pb_syntax = (PbSyntax*)g_malloc(sizeof(PbSyntax));
 		pb_syntax->value = value;

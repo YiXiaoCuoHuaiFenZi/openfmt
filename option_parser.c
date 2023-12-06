@@ -18,14 +18,14 @@ void parse_option(const char* proto_str, unsigned long* index, PbCommentList* co
 	if (sss != NULL)
 	{
 		char* name = trim(sss);
-		g_free(&sss);
+		g_free(to_void_ptr(&sss));
 		pb_option->name = name;
 	}
 	char* ssss = get_str_until(proto_str, index, ';', false);
 	if (ssss != NULL)
 	{
 		char* value = trim(ssss);
-		g_free(&ssss);
+		g_free(to_void_ptr(&ssss));
 		pb_option->value = value;
 	}
 

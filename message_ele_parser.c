@@ -73,12 +73,12 @@ PbMessageElement* make_map_message_element(char* text, PbCommentList* top_commen
 
 	PbMessageElement* pb_message_element = make_message_element(NULL, type, name, number, NULL, top_comments);
 
-	g_free(&s1);
-	g_free(&map_type);
-	g_free(&s2);
-	g_free(&map_value);
-	g_free(&s3);
-	g_free(&s4);
+	g_free(to_void_ptr(&s1));
+	g_free(to_void_ptr(&map_type));
+	g_free(to_void_ptr(&s2));
+	g_free(to_void_ptr(&map_value));
+	g_free(to_void_ptr(&s3));
+	g_free(to_void_ptr(&s4));
 
 	return pb_message_element;
 }
@@ -100,7 +100,7 @@ PbMessageElement* make_common_message_element(char* text, PbCommentList* top_com
 		index++;
 		token = strtok(NULL, " ");
 	}
-	g_free(&line_copy);
+	g_free(to_void_ptr(&line_copy));
 
 	int valid_value_count = 0;
 	for (int i = 0; i < 5; i++)
@@ -131,7 +131,7 @@ PbMessageElement* make_common_message_element(char* text, PbCommentList* top_com
 
 	char* s3 = sub_str_between_str(text, "=", ";");
 	number = trim(s3);
-	g_free(&s3);
+	g_free(to_void_ptr(&s3));
 
 	// string market = 1 [(validate.rules).string.len = 2]; // The traveller
 	char* has_left_square_bracket = strstr(text, "[");
@@ -140,9 +140,9 @@ PbMessageElement* make_common_message_element(char* text, PbCommentList* top_com
 	{
 		// get the number value.
 		char* s4 = sub_str_between_str(text, "=", "[");
-		g_free(&number);
+		g_free(to_void_ptr(&number));
 		number = trim(s4);
-		g_free(&s4);
+		g_free(to_void_ptr(&s4));
 
 		// get the annotation value.
 		char* s5 = sub_str_between_str(text, "[",
@@ -154,8 +154,8 @@ PbMessageElement* make_common_message_element(char* text, PbCommentList* top_com
 		strcat(annotation, s6);
 		// strcat(annotation, "]");
 		annotation[size - 1] = '\0';
-		g_free(&s5);
-		g_free(&s6);
+		g_free(to_void_ptr(&s5));
+		g_free(to_void_ptr(&s6));
 	}
 
 	PbMessageElement* pb_message_element = make_message_element(label, type, name, number, annotation, top_comments);
@@ -163,13 +163,7 @@ PbMessageElement* make_common_message_element(char* text, PbCommentList* top_com
 	return pb_message_element;
 }
 
-void parse_message_element(
-		const char* proto_str,
-		unsigned long* index,
-		PbCommentList* comments,
-		State* state,
-		Protobuf* protobuf
-)
+void parse_message_element(const char* proto_str, unsigned long* index, PbCommentList* comments, State* state)
 {
 	char* text = get_str_until(proto_str, index, ';', true);
 	PbMessageElement* pb_message_element = make_pb_message_element(text, comments);
@@ -182,6 +176,6 @@ void parse_message_element(
 	PbMessage* obj = (PbMessage*)(state->current_obj);
 	append_linked_list(pb_message_element, "PbMessageElement", obj->elements);
 
-	g_free(&text);
+	g_free(to_void_ptr(&text));
 
 }

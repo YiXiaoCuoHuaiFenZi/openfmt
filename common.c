@@ -11,7 +11,7 @@
 #include "lib/memory.h"
 #include "lib/os.h"
 
-bool is_new_line(const char c)
+bool is_new_line(char c)
 {
 	return (c == '\r' || c == '\n');
 }

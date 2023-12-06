@@ -17,7 +17,7 @@ PbEnum* make_pb_enum(char* name, PbCommentList* comments)
 	UUID* uuid = uuid4();
 	obj->id = str_copy(uuid->hex);
 	obj->parent_id = NULL;
-	obj->name = str_copy(name);;
+	obj->name = str_copy(name);
 	obj->comments = comments;
 	obj->elements = create_linked_list();
 	free_uuid4(uuid);
@@ -36,10 +36,10 @@ void parse_pb_enum(
 	if (str != NULL)
 	{
 		char* name = trim(str);
-		g_free(&str);
+		g_free(to_void_ptr(&str));
 
 		PbEnum* pb_enum = make_pb_enum(name, comments);
-		g_free(&name);
+		g_free(to_void_ptr(&name));
 		if (state->current_obj != NULL)
 		{
 			pb_enum->parent_id = get_parent_id(state);

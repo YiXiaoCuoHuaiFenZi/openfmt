@@ -278,8 +278,8 @@ void parse_commands(int argc, char* argv[], Config* config)
 					printf("Unrecognized option: %s, type -h or --help to get help information.\n", option);
 					exit(EXIT_FAILURE);
 				}
-				g_free(&option);
-				g_free(&value);
+				g_free(to_void_ptr(&option));
+				g_free(to_void_ptr(&value));
 			}
 		}
 		else
@@ -306,7 +306,7 @@ const char* get_version()
 
 void free_char(char* data)
 {
-	g_free(&data);
+	g_free(to_void_ptr(&data));
 }
 
 void run(Config* config)
@@ -353,5 +353,5 @@ void run(Config* config)
 		free_protobuf(proto);
 		file_cur = file_cur->next;
 	}
-	dispose_linked_list(proto_files, free_char);
+	dispose_linked_list(proto_files, (void (*)(void*))free_char);
 }

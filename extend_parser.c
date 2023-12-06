@@ -11,7 +11,7 @@
 #include "extend_parser.h"
 #include "lib/memory.h"
 
-PbMessage* make_pb_extend(char* name, PbCommentList* comments)
+PbExtend* make_pb_extend(char* name, PbCommentList* comments)
 {
 	PbExtend* obj = (PbExtend*)g_malloc(sizeof(PbExtend));
 	UUID* uuid = uuid4();
@@ -38,10 +38,10 @@ void parse_extend(
 	if (extend_str != NULL)
 	{
 		char* name = trim(extend_str);
-		g_free(&extend_str);
+		g_free(to_void_ptr(&extend_str));
 
 		PbExtend* pb_extend = make_pb_extend(name, comments);
-		g_free(&name);
+		g_free(to_void_ptr(&name));
 		if (state->current_obj != NULL)
 		{
 			pb_extend->parent_id = get_parent_id(state);

@@ -32,7 +32,7 @@ void pop_stack(Stack stack, void (* free_data_callback)(PtrToNode ptr_node))
 		PtrToNode first_node = stack->next;
 		stack->next = stack->next->next;
 		free_data_callback(first_node->data);
-		g_free(&first_node);
+		g_free(to_void_ptr(&first_node));
 	}
 }
 

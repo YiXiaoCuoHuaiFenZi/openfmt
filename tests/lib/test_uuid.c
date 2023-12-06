@@ -33,7 +33,7 @@ int test_random_bytes()
 
 int test_uuid4()
 {
-	int const size = 1000;
+#define size 1000
 	UUID* uuid_list[size] = { NULL };
 	for (int i = 0; i < size; i++)
 	{

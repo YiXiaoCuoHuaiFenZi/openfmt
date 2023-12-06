@@ -37,10 +37,10 @@ void parse_oneof(
 	if (str != NULL)
 	{
 		char* name = trim(str);
-		g_free(&str);
+		g_free(to_void_ptr(&str));
 
 		PbOneOf* pb_one_of = make_pb_oneof(name, comments);
-		g_free(&name);
+		g_free(to_void_ptr(&name));
 		if (state->current_obj != NULL)
 		{
 			pb_one_of->parent_id = get_parent_id(state);

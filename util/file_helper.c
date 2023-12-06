@@ -5,11 +5,9 @@
 **    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include "file_helper.h"
 #include "../lib/memory.h"
-
 
 List read_line_to_list(const char* file_path)
 {
@@ -34,7 +32,7 @@ List read_line_to_list(const char* file_path)
 	}
 
 	fclose(fp);
-	g_free(&des_line);
+	g_free(to_void_ptr(&des_line));
 
 	return list;
 }
@@ -73,7 +71,7 @@ SQueue read_line_to_str_queue(const char* file_path)
 	}
 
 	fclose(fp);
-	g_free(&des_line);
+	g_free(to_void_ptr(&des_line));
 
 	return lines;
 }

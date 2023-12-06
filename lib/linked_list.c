@@ -61,9 +61,9 @@ void dispose_linked_list(List list, void (* free_data_callback)(void* data))
 		struct Node* temp_node = list;
 		list = list->next;
 		free_data_callback(temp_node->data);
-		g_free(&(temp_node->data_type));
-		g_free(&temp_node);
+		g_free(to_void_ptr(&(temp_node->data_type)));
+		g_free(to_void_ptr(&temp_node));
 	}
 
-	g_free(&head);
+	g_free(to_void_ptr(&head));
 }

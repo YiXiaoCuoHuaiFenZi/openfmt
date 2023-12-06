@@ -171,7 +171,7 @@ void build_top_comment(
 	{
 		char* spaces = repeat(" ", indents);
 		create_add_pb_text(spaces, color, text_list); // add indents
-		g_free(&spaces);
+		g_free(to_void_ptr(&spaces));
 		create_add_pb_text("/*\n", color, text_list);
 	}
 	else
@@ -180,7 +180,7 @@ void build_top_comment(
 		{
 			char* spaces = repeat(" ", indents);
 			create_add_pb_text(spaces, color, text_list); // add indents
-			g_free(&spaces);
+			g_free(to_void_ptr(&spaces));
 			create_add_pb_text("/*\n", color, text_list);
 		}
 	}
@@ -191,7 +191,7 @@ void build_top_comment(
 		{
 			char* spaces = repeat(" ", indents);
 			create_add_pb_text(spaces, color, text_list); // add indents
-			g_free(&spaces);
+			g_free(to_void_ptr(&spaces));
 			if (strcmp(cur->data->text, "") == 0)
 			{
 				create_add_pb_text("**", color, text_list);
@@ -212,7 +212,7 @@ void build_top_comment(
 		{
 			char* spaces = repeat(" ", indents);
 			create_add_pb_text(spaces, color, text_list); // add indents
-			g_free(&spaces);
+			g_free(to_void_ptr(&spaces));
 			create_add_pb_text("*/\n", color, text_list);
 			return;
 		}
@@ -226,7 +226,7 @@ void build_top_comment(
 		{
 			char* spaces = repeat(" ", indents);
 			create_add_pb_text(spaces, color, text_list); // add indents
-			g_free(&spaces);
+			g_free(to_void_ptr(&spaces));
 			if (strcmp(cur->data->text, "") == 0)
 			{
 				create_add_pb_text("**", color, text_list);
@@ -243,7 +243,7 @@ void build_top_comment(
 	}
 	char* spaces = repeat(" ", indents);
 	create_add_pb_text(spaces, color, text_list); // add indents
-	g_free(&spaces);
+	g_free(to_void_ptr(&spaces));
 	create_add_pb_text("*/\n", color, text_list);
 }
 
@@ -271,7 +271,7 @@ void format_bottom_comment(PbCommentList* comment_list, int color, unsigned int 
 
 	char* spaces = repeat(" ", indents);
 	create_add_pb_text(spaces, color, text_list); // add indents
-	g_free(&spaces);
+	g_free(to_void_ptr(&spaces));
 	create_add_pb_text("/*\n", color, text_list);
 
 	PbCommentNode* cur = comment_list->next;
@@ -279,9 +279,9 @@ void format_bottom_comment(PbCommentList* comment_list, int color, unsigned int 
 	{
 		if (cur->data->pos == BOTTOM)
 		{
-			char* spaces = repeat(" ", indents);
-			create_add_pb_text(spaces, color, text_list); // add indents
-			g_free(&spaces);
+			char* spacess = repeat(" ", indents);
+			create_add_pb_text(spacess, color, text_list); // add indents
+			g_free(to_void_ptr(&spacess));
 			if (strcmp(cur->data->text, "") == 0)
 			{
 				create_add_pb_text("**", color, text_list);
@@ -298,7 +298,7 @@ void format_bottom_comment(PbCommentList* comment_list, int color, unsigned int 
 	}
 	char* spaces_end = repeat(" ", indents);
 	create_add_pb_text(spaces_end, color, text_list); // add indents
-	g_free(&spaces_end);
+	g_free(to_void_ptr(&spaces_end));
 	create_add_pb_text("*/\n", color, text_list);
 }
 
@@ -373,7 +373,7 @@ void format_option(
 		unsigned int fill_space_amount = max_option_name_len - option_name_len;
 		char* spaces = repeat(" ", fill_space_amount);
 		create_add_pb_text(spaces, color_config.default_color, text_list);
-		g_free(&spaces);
+		g_free(to_void_ptr(&spaces));
 	}
 	create_add_pb_text(" = ", color_config.default_color, text_list);
 	create_add_pb_text(pb_option->value, color_config.option_value, text_list);
@@ -390,7 +390,7 @@ void format_option(
 			unsigned int fill_space_amount = max_option_value_len - option_value_len;
 			char* spaces = repeat(" ", fill_space_amount);
 			create_add_pb_text(spaces, color_config.default_color, text_list);
-			g_free(&spaces);
+			g_free(to_void_ptr(&spaces));
 		}
 
 		create_add_pb_text("  ", color_config.default_color, text_list);
@@ -480,7 +480,7 @@ void format_import(Protobuf* protobuf, PbImport* pb_import, unsigned int max_imp
 		unsigned int fill_space_amount = max_import_value_len - import_value_len;
 		char* spaces = repeat(" ", fill_space_amount);
 		create_add_pb_text(spaces, color_config.default_color, text_list);
-		g_free(&spaces);
+		g_free(to_void_ptr(&spaces));
 		create_add_pb_text("  ", color_config.default_color, text_list);
 		format_right_comment(pb_import->comments, color_config.comment, text_list);
 	}
@@ -555,7 +555,7 @@ void format_message_element(
 
 	char* spaces = repeat(" ", indents);
 	create_add_pb_text(spaces, color_config.default_color, text_list); // add indents
-	g_free(&spaces);
+	g_free(to_void_ptr(&spaces));
 	unsigned int cmlbes = strlen(ele->type) + strlen(ele->name); // max_len_before_equal_sign of current element.
 	if (ele->label)
 	{
@@ -575,9 +575,9 @@ void format_message_element(
 	if (config.align_by_equal_sign)
 	{
 		unsigned int fill_space_amount = meli.max_len_before_equal_sign - cmlbes;
-		char* spaces = repeat(" ", fill_space_amount);
-		create_add_pb_text(spaces, color_config.default_color, text_list);
-		g_free(&spaces);
+		char* spacess = repeat(" ", fill_space_amount);
+		create_add_pb_text(spacess, color_config.default_color, text_list);
+		g_free(to_void_ptr(&spacess));
 	}
 
 	create_add_pb_text(" = ", color_config.default_color, text_list);
@@ -603,9 +603,9 @@ void format_message_element(
 	{
 		unsigned int space_amount = meli.max_len_between_equal_sign_and_semicolon - cmlbesas;
 		space_amount = space_amount + 2; // make sure there are two spaces between semicolon and single line comment
-		char* spaces = repeat(" ", space_amount);
-		create_add_pb_text(spaces, color_config.default_color, text_list);
-		g_free(&spaces);
+		char* spacess = repeat(" ", space_amount);
+		create_add_pb_text(spacess, color_config.default_color, text_list);
+		g_free(to_void_ptr(&spacess));
 		format_right_comment(ele->comments, color_config.comment, text_list);
 	}
 
@@ -679,7 +679,7 @@ void format_enum_element(
 
 	char* spaces = repeat(" ", indents);
 	create_add_pb_text(spaces, color_config.default_color, text_list); // add indents
-	g_free(&spaces);
+	g_free(to_void_ptr(&spaces));
 	create_add_pb_text(ele->name, color_config.enum_element_name, text_list);
 
 	/*
@@ -687,9 +687,9 @@ void format_enum_element(
 	*/
 	if (config.align_by_equal_sign)
 	{
-		char* spaces = repeat(" ", eeli.maxLengthOfName - strlen(ele->name));
-		create_add_pb_text(spaces, color_config.default_color, text_list);
-		g_free(&spaces);
+		char* spacess = repeat(" ", eeli.maxLengthOfName - strlen(ele->name));
+		create_add_pb_text(spacess, color_config.default_color, text_list);
+		g_free(to_void_ptr(&spacess));
 	}
 
 	create_add_pb_text(" = ", color_config.default_color, text_list);
@@ -716,9 +716,9 @@ void format_enum_element(
 	{
 		unsigned int space_amount = eeli.max_len_between_equal_sign_and_semicolon - cmlbesas;
 		space_amount = space_amount + 2; // make sure there are two spaces between semicolon and single line comment
-		char* spaces = repeat(" ", space_amount);
-		create_add_pb_text(spaces, color_config.default_color, text_list);
-		g_free(&spaces);
+		char* spacess = repeat(" ", space_amount);
+		create_add_pb_text(spacess, color_config.default_color, text_list);
+		g_free(to_void_ptr(&spacess));
 		format_right_comment(ele->comments, color_config.comment, text_list);
 	}
 
@@ -756,7 +756,7 @@ void format_service_element(
 	build_top_comment(ele->comments, color_config.comment, indents, text_list, config.top_comment);
 	char* spaces = repeat(" ", indents);
 	create_add_pb_text(spaces, color_config.default_color, text_list); // add indents
-	g_free(&spaces);
+	g_free(to_void_ptr(&spaces));
 	create_add_pb_text(ele->label, color_config.service_element_label, text_list);
 	create_add_pb_text(" ", color_config.default_color, text_list);
 	create_add_pb_text(ele->name, color_config.service_element_name, text_list);
@@ -806,7 +806,7 @@ void create_object_text(
 	build_top_comment(object_comments, color_config.comment, indents, text_list, config.top_comment);
 	char* spaces = repeat(" ", indents);
 	create_add_pb_text(spaces, color_config.default_color, text_list); // add indents
-	g_free(&spaces);
+	g_free(to_void_ptr(&spaces));
 	create_add_pb_text(object_type, color_config.obj_key, text_list);
 	create_add_pb_text(" ", color_config.default_color, text_list);
 	create_add_pb_text(object_name, color_config.obj_name, text_list);
@@ -823,7 +823,7 @@ void create_object_text(
 	format_bottom_comment(object_comments, color_config.comment, indents + config.indents_unit, text_list);
 	char* spaces_bottom = repeat(" ", indents);
 	create_add_pb_text(spaces_bottom, color_config.default_color, text_list); // add indents
-	g_free(&spaces_bottom);
+	g_free(to_void_ptr(&spaces_bottom));
 	create_add_pb_text("}\n", color_config.default_color, text_list);
 }
 
@@ -946,7 +946,7 @@ void format_comments(Protobuf* protobuf, PbTextList* text_list)
 			create_add_pb_text("**", color_config.comment, text_list);
 			char* spaces = repeat(" ", indents);
 			create_add_pb_text(spaces, color_config.default_color, text_list); // add indents
-			g_free(&spaces);
+			g_free(to_void_ptr(&spaces));
 			create_add_pb_text(cur->data->text, color_config.comment, text_list);
 			create_add_pb_text("\n", color_config.default_color, text_list);
 		}
@@ -964,85 +964,85 @@ void free_comment_list(PbCommentList** comments)
 void free_PbText(PbTextNode* ptr)
 {
 	PbText* t = (PbText*)(ptr->data);
-	g_free(&t->text);
-	g_free(&t);
+	g_free(to_void_ptr(&t->text));
+	g_free(to_void_ptr(&t));
 }
 
 void free_pb_message(PbMessage* obj)
 {
-	g_free(&obj->id);
-	g_free(&obj->parent_id);
-	g_free(&obj->name);
+	g_free(to_void_ptr(&obj->id));
+	g_free(to_void_ptr(&obj->parent_id));
+	g_free(to_void_ptr(&obj->name));
 	free_comment_list(&obj->comments);
 	free_objects(&obj->elements);
-	g_free(&obj);
+	g_free(to_void_ptr(&obj));
 }
 
 void free_pb_enum(PbEnum* obj)
 {
-	g_free(&obj->id);
-	g_free(&obj->name);
+	g_free(to_void_ptr(&obj->id));
+	g_free(to_void_ptr(&obj->name));
 	free_comment_list(&obj->comments);
 	free_objects(&obj->elements);
-	g_free(&obj);
+	g_free(to_void_ptr(&obj));
 }
 
 void free_pb_service(PbService* obj)
 {
-	g_free(&obj->id);
-	g_free(&obj->name);
+	g_free(to_void_ptr(&obj->id));
+	g_free(to_void_ptr(&obj->name));
 	free_comment_list(&obj->comments);
 	free_objects(&obj->elements);
-	g_free(&obj);
+	g_free(to_void_ptr(&obj));
 }
 
 void free_pb_extend(PbExtend* obj)
 {
-	g_free(&obj->id);
-	g_free(&obj->name);
+	g_free(to_void_ptr(&obj->id));
+	g_free(to_void_ptr(&obj->name));
 	free_comment_list(&obj->comments);
 	free_objects(&obj->elements);
-	g_free(&obj);
+	g_free(to_void_ptr(&obj));
 }
 
 void free_pb_oneof(PbOneOf* obj)
 {
-	g_free(&obj->id);
-	g_free(&obj->name);
-	g_free(&obj->parent_id);
+	g_free(to_void_ptr(&obj->id));
+	g_free(to_void_ptr(&obj->name));
+	g_free(to_void_ptr(&obj->parent_id));
 	free_comment_list(&obj->comments);
 	free_objects(&obj->elements);
-	g_free(&obj);
+	g_free(to_void_ptr(&obj));
 }
 
 void free_pb_message_element(PbMessageElement* obj)
 {
-	g_free(&obj->label);
-	g_free(&obj->type);
-	g_free(&obj->name);
-	g_free(&obj->number);
-	g_free(&obj->annotation);
+	g_free(to_void_ptr(&obj->label));
+	g_free(to_void_ptr(&obj->type));
+	g_free(to_void_ptr(&obj->name));
+	g_free(to_void_ptr(&obj->number));
+	g_free(to_void_ptr(&obj->annotation));
 	free_comment_list(&obj->comments);
-	g_free(&obj);
+	g_free(to_void_ptr(&obj));
 }
 
 void free_pb_enum_element(PbEnumElement* obj)
 {
-	g_free(&obj->name);
-	g_free(&obj->number);
-	g_free(&obj->annotation);
+	g_free(to_void_ptr(&obj->name));
+	g_free(to_void_ptr(&obj->number));
+	g_free(to_void_ptr(&obj->annotation));
 	free_comment_list(&obj->comments);
-	g_free(&obj);
+	g_free(to_void_ptr(&obj));
 }
 
 void free_pb_service_element(PbServiceElement* obj)
 {
-	g_free(&obj->label);
-	g_free(&obj->name);
-	g_free(&obj->request);
-	g_free(&obj->response);
+	g_free(to_void_ptr(&obj->label));
+	g_free(to_void_ptr(&obj->name));
+	g_free(to_void_ptr(&obj->request));
+	g_free(to_void_ptr(&obj->response));
 	free_comment_list(&obj->comments);
-	g_free(&obj);
+	g_free(to_void_ptr(&obj));
 }
 
 void free_objects(List* object_list)
@@ -1106,26 +1106,26 @@ void free_objects(List* object_list)
 			free_pb_service_element(obj);
 		}
 
-		g_free(&temp_node->data_type);
-		g_free(&temp_node);
+		g_free(to_void_ptr(&temp_node->data_type));
+		g_free(to_void_ptr(&temp_node));
 	}
-	g_free(&head);
+	g_free(to_void_ptr(&head));
 }
 
 void free_protobuf(Protobuf* protobuf)
 {
 	if (protobuf->syntax != NULL)
 	{
-		g_free(&protobuf->syntax->value);
+		g_free(to_void_ptr(&protobuf->syntax->value));
 		free_comment_list(&protobuf->syntax->comments);
-		g_free(&protobuf->syntax);
+		g_free(to_void_ptr(&protobuf->syntax));
 	}
 
 	if (protobuf->package != NULL)
 	{
-		g_free(&protobuf->package->value);
+		g_free(to_void_ptr(&protobuf->package->value));
 		free_comment_list(&protobuf->package->comments);
-		g_free(&protobuf->package);
+		g_free(to_void_ptr(&protobuf->package));
 	}
 
 	if (protobuf->options)
@@ -1136,13 +1136,13 @@ void free_protobuf(Protobuf* protobuf)
 		{
 			PbOptionNode* t_node = cur;
 			cur = cur->next;
-			g_free(&t_node->data->name);
-			g_free(&t_node->data->value);
+			g_free(to_void_ptr(&t_node->data->name));
+			g_free(to_void_ptr(&t_node->data->value));
 			free_comment_list(&t_node->data->comments);
-			g_free(&t_node->data);
-			g_free(&t_node);
+			g_free(to_void_ptr(&t_node->data));
+			g_free(to_void_ptr(&t_node));
 		}
-		g_free(&head);
+		g_free(to_void_ptr(&head));
 	}
 
 	if (protobuf->imports != NULL)
@@ -1153,17 +1153,17 @@ void free_protobuf(Protobuf* protobuf)
 		{
 			PbImportNode* t_node = cur;
 			cur = cur->next;
-			g_free(&t_node->data->value);
+			g_free(to_void_ptr(&t_node->data->value));
 			free_comment_list(&t_node->data->comments);
-			g_free(&t_node->data);
-			g_free(&t_node);
+			g_free(to_void_ptr(&t_node->data));
+			g_free(to_void_ptr(&t_node));
 		}
-		g_free(&head);
+		g_free(to_void_ptr(&head));
 	}
 	free_objects(&protobuf->objects);
 	if (protobuf->comments != NULL)
 	{
 		free_comment_list(&protobuf->comments);
 	}
-	g_free(&protobuf);
+	g_free(to_void_ptr(&protobuf));
 }

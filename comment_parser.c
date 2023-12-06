@@ -31,14 +31,14 @@ PbCommentList* make_comments(GCharList* commentLines, PbPosition position)
 void free_PbComment(PbCommentNode* ptr)
 {
 	PbComment* pb_comment = (PbComment*)ptr->data;
-	g_free(&pb_comment->text);
-	g_free(&pb_comment);
+	g_free(to_void_ptr(&pb_comment->text));
+	g_free(to_void_ptr(&pb_comment));
 }
 
 void free_GChar(GCharNode* ptr)
 {
 	char* t = ptr->data;
-	g_free(&t);
+	g_free(to_void_ptr(&t));
 }
 
 char* clean_comment_str(const char* comment)
@@ -49,8 +49,8 @@ char* clean_comment_str(const char* comment)
 	{
 		char* s_1 = trim_prefix(trimmed_comment, "**");
 		char* s_2 = trim(s_1);
-		g_free(&s_1);
-		g_free(&trimmed_comment);
+		g_free(to_void_ptr(&s_1));
+		g_free(to_void_ptr(&trimmed_comment));
 		return s_2;
 	}
 
@@ -59,8 +59,8 @@ char* clean_comment_str(const char* comment)
 	{
 		char* s_1 = trim_prefix(trimmed_comment, "//");
 		char* s_2 = trim(s_1);
-		g_free(&s_1);
-		g_free(&trimmed_comment);
+		g_free(to_void_ptr(&s_1));
+		g_free(to_void_ptr(&trimmed_comment));
 		return s_2;
 	}
 
@@ -70,9 +70,9 @@ char* clean_comment_str(const char* comment)
 		char* s_1 = trim_prefix(trimmed_comment, "/*");
 		char* s_2 = trim_suffix(s_1, "*/");
 		char* s_3 = trim(s_2);
-		g_free(&s_1);
-		g_free(&s_2);
-		g_free(&trimmed_comment);
+		g_free(to_void_ptr(&s_1));
+		g_free(to_void_ptr(&s_2));
+		g_free(to_void_ptr(&trimmed_comment));
 		return s_3;
 	}
 
@@ -89,7 +89,7 @@ PbComment* pick_up_single_line_comment(const char* proto_str, unsigned long* ind
 	if (line_comment != NULL)
 	{
 		char* line_comment_processed = clean_comment_str(line_comment);
-		g_free(&line_comment);
+		g_free(to_void_ptr(&line_comment));
 		PbComment* pb_comment = (PbComment*)g_malloc(sizeof(PbComment));
 		pb_comment->text = line_comment_processed;
 		pb_comment->pos = RIGHT;
@@ -207,7 +207,7 @@ GCharList* pick_up_all_comments(const char* proto_str, unsigned long* index)
 		if (comment_str != NULL)
 		{
 			char* cleaned_comment = clean_comment_str(comment_str);
-			g_free(&comment_str);
+			g_free(to_void_ptr(&comment_str));
 			//  TODO: find a elegant method to split the string to lines.
 			//   The strtok discard multiple empty lines if use it directly: strtok(cleaned_comment, "\n");
 			char* replaced_comment = replace("\n", "\n~~", cleaned_comment);
@@ -218,7 +218,7 @@ GCharList* pick_up_all_comments(const char* proto_str, unsigned long* index)
 			{
 				char* s = clean_comment_str(token);
 				append_list(GCharNode, comments, trim(s));
-				g_free(&s);
+				g_free(to_void_ptr(&s));
 				token = strtok(NULL, "~~");
 			}
 		}

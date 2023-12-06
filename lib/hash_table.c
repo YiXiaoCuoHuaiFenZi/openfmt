@@ -49,9 +49,9 @@ HashTable* create_table(int size)
 void free_item(Item* item)
 {
 	// Frees an item
-	g_free(&(item->key));
-	g_free(&(item->value));
-	g_free(&item);
+	g_free(to_void_ptr(&(item->key)));
+	g_free(to_void_ptr(&(item->value)));
+	g_free(to_void_ptr(&item));
 }
 
 void free_table(HashTable* table)
@@ -66,8 +66,8 @@ void free_table(HashTable* table)
 		}
 	}
 
-	g_free(&(table->items));
-	g_free(&table);
+	g_free(to_void_ptr(&(table->items)));
+	g_free(to_void_ptr(&table));
 }
 
 void handle_collision(HashTable* table, unsigned long index, Item* item)
@@ -155,7 +155,7 @@ void print_table(HashTable* table)
 	{
 		if (table->items[i])
 		{
-			printf("Index:%d, Key:%s, Value:%s\n", i, table->items[i]->key, table->items[i]->value);
+			printf("Index:%d, Key:%s, Value:%s\n", i, table->items[i]->key, (char*)(table->items[i]->value));
 		}
 	}
 	printf("-------------------\n\n");

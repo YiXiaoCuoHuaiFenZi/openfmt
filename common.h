@@ -16,19 +16,9 @@
 typedef enum
 {
 	start,
-	idle,
 	line_comment,   // '/'
 	block_comment_start,
-	in_multiple_line_comment,
-	multiple_line_comment_end,
 	comment,
-	multiple_line_comment,
-	single_slash,
-	star, // *
-	object,
-	word,
-	symbol,
-	space,
 	syntax,
 	package,
 	option,
@@ -69,7 +59,7 @@ struct ObjectInfoStructure
 	char* obj_type;
 };
 
-bool is_new_line(const char c);
+bool is_new_line(char c);
 
 void skip_spaces(const char* str, unsigned long* index);
 

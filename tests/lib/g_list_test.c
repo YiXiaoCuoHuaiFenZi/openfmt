@@ -104,5 +104,5 @@ int test_dispose_list()
 void free_char_test(GCharNode* ptr)
 {
 	char* t = ptr->data;
-	g_free(&t);
+	g_free(to_void_ptr(&t));
 }

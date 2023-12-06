@@ -22,13 +22,13 @@ void dispose_str_queue(SQueue queue)
 	while (cur != NULL)
 	{
 		PtrToSQueueNode next = cur->next;
-		g_free(&(cur->str));
-		g_free(&cur);
+		g_free(to_void_ptr(&(cur->str)));
+		g_free(to_void_ptr(&cur));
 		cur = next;
 	}
 	queue->head = NULL;
 	queue->rear = NULL;
-	g_free(&queue);
+	g_free(to_void_ptr(&queue));
 }
 
 bool is_empty_str_queue(SQueue queue)
@@ -66,8 +66,8 @@ void de_str_queue(SQueue queue)
 		{
 			queue->rear = NULL;
 		}
-		g_free(&(front_node->str));
-		g_free(&front_node);
+		g_free(to_void_ptr(&(front_node->str)));
+		g_free(to_void_ptr(&front_node));
 	}
 }
 

@@ -45,8 +45,8 @@ GItem* g_create_item(const char* key, const char* data_type, void* data, void (*
 
 void g_free_item(GItem* item)
 {
-	g_free(&(item->key));
-	g_free(&(item->data_type));
+	g_free(to_void_ptr(&(item->key)));
+	g_free(to_void_ptr(&(item->data_type)));
 
 	// if the date free function is not set, not call it.
 	if (item->data_free_func)
@@ -54,7 +54,7 @@ void g_free_item(GItem* item)
 		item->data_free_func(item->data);
 	}
 
-	g_free(&item);
+	g_free(to_void_ptr(&item));
 }
 
 GHashTable* g_create_hashtable(int size)
@@ -81,8 +81,8 @@ void g_free_hashtable(GHashTable* table)
 			g_free_item(item);
 		}
 	}
-	g_free(&(table->items));
-	g_free(&table);
+	g_free(to_void_ptr(&(table->items)));
+	g_free(to_void_ptr(&table));
 }
 
 void g_hashtable_put(char* key, const char* data_type, void* data, void (* data_free_func)(void*), GHashTable* table)

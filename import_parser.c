@@ -18,7 +18,7 @@ void parse_import(const char* proto_str, unsigned long* index, PbCommentList* co
 	if (import_str != NULL)
 	{
 		char* value = trim(import_str);
-		g_free(&import_str);
+		g_free(to_void_ptr(&import_str));
 
 		PbImport* pb_import = (PbImport*)g_malloc(sizeof(PbImport));
 		pb_import->value = value;

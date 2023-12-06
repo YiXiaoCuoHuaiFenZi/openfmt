@@ -49,15 +49,15 @@ int test_format_directory(char* malformed_file_directory, char* formatted_file_d
 
 		if (strcmp(actual_text, expected_text) != 0)
 		{
-			g_free(&actual_text);
-			g_free(&expected_text);
+			g_free(to_void_ptr(&actual_text));
+			g_free(to_void_ptr(&expected_text));
 			return TEST_FAIL;
 		}
 
 		free_protobuf(proto);
-		g_free(&actual_file_path);
-		g_free(&expected_file_path_old);
-		g_free(&expected_file_path);
+		g_free(to_void_ptr(&actual_file_path));
+		g_free(to_void_ptr(&expected_file_path_old));
+		g_free(to_void_ptr(&expected_file_path));
 		file_cur = file_cur->next;
 	}
 

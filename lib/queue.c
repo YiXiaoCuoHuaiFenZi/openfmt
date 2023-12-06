@@ -23,12 +23,12 @@ void dispose_queue(Queue queue, void (* free_data_callback)(PtrToQueueNode queue
 	{
 		PtrToQueueNode nextNode = cur->next;
 		free_data_callback(cur);
-		g_free(&cur);
+		g_free(to_void_ptr(&cur));
 		cur = nextNode;
 	}
 	queue->head = NULL;
 	queue->rear = NULL;
-	g_free(&queue);
+	g_free(to_void_ptr(&queue));
 }
 
 bool is_empty_queue(Queue queue)

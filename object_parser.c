@@ -6,7 +6,6 @@
 ***********************************************************************************************************************/
 #include <string.h>
 #include "package_parser.h"
-#include "option_parser.h"
 #include "import_parser.h"
 #include "message_parser.h"
 #include "object_parser.h"
@@ -16,10 +15,10 @@
 
 void append_as_bottom_comments(PbCommentList* comments, PbCommentList* bottom_comments)
 {
-	PbCommentNode* cur = bottom_comments->next;
-	while (cur)
+	PbCommentNode* curr = bottom_comments->next;
+	while (curr)
 	{
-		PbComment* pb_comment = cur->data;
+		PbComment* pb_comment = curr->data;
 		pb_comment->pos = BOTTOM;
 		/*
 		** create a total new comment data, and append it to the target comments list, so we can release bottom_comments
@@ -30,7 +29,7 @@ void append_as_bottom_comments(PbCommentList* comments, PbCommentList* bottom_co
 		new_comment->text = str_copy(pb_comment->text);
 		// append the new comment data to the comments list.
 		append_list(PbCommentNode, comments, new_comment);
-		cur = cur->next;
+		curr = curr->next;
 	}
 }
 
@@ -131,7 +130,7 @@ ObjectInfo* get_parent_object_info(char* current_object_id, char* obj_type, Stat
 	}
 	if (strcmp(obj_type, "PbEnum") == 0)
 	{
-		PbEnum* current_obj = (PbMessage*)obj;
+		PbEnum* current_obj = (PbEnum*)obj;
 		r->obj_id = current_obj->parent_id;
 		r->obj_type = current_obj->parent_type;
 
@@ -139,7 +138,7 @@ ObjectInfo* get_parent_object_info(char* current_object_id, char* obj_type, Stat
 	}
 	if (strcmp(obj_type, "PbOneOf") == 0)
 	{
-		PbOneOf* current_obj = (PbMessage*)obj;
+		PbOneOf* current_obj = (PbOneOf*)obj;
 		r->obj_id = current_obj->parent_id;
 		r->obj_type = current_obj->parent_type;
 
@@ -149,7 +148,7 @@ ObjectInfo* get_parent_object_info(char* current_object_id, char* obj_type, Stat
 	}
 	if (strcmp(obj_type, "PbExtend") == 0)
 	{
-		PbExtend* current_obj = (PbMessage*)obj;
+		PbExtend* current_obj = (PbExtend*)obj;
 		r->obj_id = current_obj->parent_id;
 		r->obj_type = current_obj->parent_type;
 

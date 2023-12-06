@@ -79,7 +79,7 @@ UUID* uuid4()
 	uuid->node[4] = bytes[14];
 	uuid->node[5] = bytes[15];
 
-	g_free(&bytes);
+	g_free(to_void_ptr(&bytes));
 
 	uuid->int_time_low = uuid->time_low[0] | uuid->time_low[1] << 8 | uuid->time_low[2] << 16 | uuid->time_low[3] << 24;
 	uuid->int_time_mid = uuid->time_mid[0] | uuid->time_mid[1] << 8;
@@ -100,7 +100,7 @@ UUID* uuid4()
 	char* buff_int_clk_seq_hi_reserved = (char*)g_malloc(3);
 	sprintf(buff_int_clk_seq_hi_reserved, "%02x", uuid->int_clk_seq_hi_reserved);
 
-	char* buff_int_clk_seq_low = (char*)g_malloc(3);;
+	char* buff_int_clk_seq_low = (char*)g_malloc(3);
 	sprintf(buff_int_clk_seq_low, "%02x", uuid->int_clk_seq_low);
 
 	char* node = bytes_to_hex_str(uuid->node, 6);
@@ -130,20 +130,20 @@ UUID* uuid4()
 	uuid->hex = hex;
 	uuid->version = 4;
 
-	g_free(&buff_int_time_low);
-	g_free(&buff_int_time_mid);
-	g_free(&buff_int_time_hi_and_version);
-	g_free(&buff_int_clk_seq_hi_reserved);
-	g_free(&buff_int_clk_seq_low);
-	g_free(&node);
+	g_free(to_void_ptr(&buff_int_time_low));
+	g_free(to_void_ptr(&buff_int_time_mid));
+	g_free(to_void_ptr(&buff_int_time_hi_and_version));
+	g_free(to_void_ptr(&buff_int_clk_seq_hi_reserved));
+	g_free(to_void_ptr(&buff_int_clk_seq_low));
+	g_free(to_void_ptr(&node));
 
 	return uuid;
 }
 
 void free_uuid4(UUID* uuid)
 {
-	g_free(&(uuid->value));
-	g_free(&(uuid->hex));
-	g_free(&(uuid->urn));
-	g_free(&uuid);
+	g_free(to_void_ptr(&(uuid->value)));
+	g_free(to_void_ptr(&(uuid->hex)));
+	g_free(to_void_ptr(&(uuid->urn)));
+	g_free(to_void_ptr(&uuid));
 }
