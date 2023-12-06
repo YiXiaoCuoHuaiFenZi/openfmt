@@ -71,7 +71,9 @@ add_executable(openfmt
         lib/type.c
         lib/type.h
         lib/os.c
-        lib/os.h)
+        lib/os.h
+        common.c
+        common.h)
 
 configure_file(tests/lib/test_data/malformed/test_data_1.proto ${CMAKE_CURRENT_BINARY_DIR}/tests/lib/test_data/malformed/test_data_1.proto COPYONLY)
 

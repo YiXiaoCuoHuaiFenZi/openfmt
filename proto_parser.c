@@ -5,7 +5,11 @@
 **    创建日期：    2022-09-30
 **    更新日期：    2023-06-28
 ***********************************************************************************************************************/
+#include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
 #include "proto_parser.h"
+#include "common.h"
 #include "comment_parser.h"
 #include "detector.h"
 #include "import_parser.h"
@@ -25,9 +29,6 @@
 #include "service_parser.h"
 #include "oneof_parser.h"
 #include "extend_parser.h"
-#include <ctype.h>
-#include <stdlib.h>
-#include <string.h>
 
 Protobuf* parse(const char* file_path)
 {

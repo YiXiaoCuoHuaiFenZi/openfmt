@@ -6,6 +6,7 @@
 ***********************************************************************************************************************/
 #include "lib/str.h"
 #include "lib/uuid.h"
+#include "common.h"
 #include "comment_parser.h"
 #include "message_parser.h"
 #include "lib/memory.h"

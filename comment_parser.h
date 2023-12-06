@@ -18,14 +18,6 @@ void free_PbComment(PbCommentNode* ptr);
 
 void free_GChar(GCharNode* ptr);
 
-bool is_new_line(const char c);
-
-void skip_spaces(const char* str, unsigned long* index);
-
-char* get_str_until(const char* str, unsigned long* index, char ch, bool include);
-
-char* pick_str_until(const char* str, unsigned long* index, char ch, bool include);
-
 char* clean_comment_str(const char* comment);
 
 PbComment* pick_up_single_line_comment(const char* proto_str, unsigned long* index);

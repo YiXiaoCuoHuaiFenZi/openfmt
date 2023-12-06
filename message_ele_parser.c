@@ -5,8 +5,9 @@
 **    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include <string.h>
-#include "message_ele_parser.h"
+#include "common.h"
 #include "comment_parser.h"
+#include "message_ele_parser.h"
 #include "lib/str.h"
 #include "lib/memory.h"
 

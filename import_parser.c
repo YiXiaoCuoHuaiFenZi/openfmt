@@ -9,6 +9,7 @@
 #include <string.h>
 #include "lib/str.h"
 #include "lib/memory.h"
+#include "common.h"
 #include "comment_parser.h"
 
 void parse_import(const char* proto_str, unsigned long* index, PbCommentList* comments, Protobuf* protobuf)
