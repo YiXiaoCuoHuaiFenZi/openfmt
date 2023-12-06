@@ -9,7 +9,7 @@
 #include "lib/str.h"
 #include "lib/memory.h"
 #include "lib/os.h"
-#include "proto_parser.h"
+#include "comment_parser.h"
 
 void parse_syntax(const char* proto_str, unsigned long* index, PbCommentList* comments, Protobuf* protobuf)
 {

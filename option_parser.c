@@ -8,7 +8,7 @@
 #include "lib/str.h"
 #include "option_parser.h"
 #include "lib/memory.h"
-#include "proto_parser.h"
+#include "comment_parser.h"
 
 void parse_option(const char* proto_str, unsigned long* index, PbCommentList* comments, Protobuf* protobuf)
 {
