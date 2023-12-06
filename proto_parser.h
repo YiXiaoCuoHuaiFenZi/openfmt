@@ -7,41 +7,10 @@
 #ifndef OPENFMT_PROTO_PARSER_H
 #define OPENFMT_PROTO_PARSER_H
 
+#include "common.h"
 #include "proto.h"
 #include "lib/str_queue.h"
 #include "object_parser.h"
-
-typedef enum
-{
-	start,
-	idle,
-	line_comment,   // '/'
-	block_comment_start,
-	in_multiple_line_comment,
-	multiple_line_comment_end,
-	comment,
-	multiple_line_comment,
-	single_slash,
-	star, // *
-	object,
-	word,
-	symbol,
-	space,
-	syntax,
-	package,
-	option,
-	import,
-	extend,
-	message,
-	message_element,
-	extend_element,
-	proto_enum,
-	enum_element,
-	service,
-	service_element,
-	one_of,
-	invalid_key_word
-} Status;
 
 Protobuf* parse(const char* file_path);
 

@@ -9,6 +9,65 @@
 
 #include <string.h>
 #include "lib/str.h"
+#include "lib/str_queue.h"
+#include "lib/g_hash_table.h"
+#include "proto.h"
+
+typedef enum
+{
+	start,
+	idle,
+	line_comment,   // '/'
+	block_comment_start,
+	in_multiple_line_comment,
+	multiple_line_comment_end,
+	comment,
+	multiple_line_comment,
+	single_slash,
+	star, // *
+	object,
+	word,
+	symbol,
+	space,
+	syntax,
+	package,
+	option,
+	import,
+	extend,
+	message,
+	message_element,
+	extend_element,
+	proto_enum,
+	enum_element,
+	service,
+	service_element,
+	one_of,
+	invalid_key_word
+} Status;
+
+
+struct StateStructure;
+typedef struct StateStructure State;
+
+struct StateStructure
+{
+	unsigned short l_brace;
+	unsigned short r_brace;
+	void* current_obj;
+	char* current_obj_type;
+	void* parent_obj;
+	char* parent_obj_type;
+	PbCommentList* comments;
+	GHashTable* obj_dic;
+};
+
+struct ObjectInfoStructure;
+typedef struct ObjectInfoStructure ObjectInfo;
+struct ObjectInfoStructure
+{
+	char* obj_id;
+	char* obj_type;
+};
 
 bool is_new_line(const char c);
 

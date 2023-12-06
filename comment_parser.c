@@ -7,12 +7,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "common.h"
 #include "comment_parser.h"
 #include "lib/str.h"
 #include "proto.h"
 #include "lib/memory.h"
-#include "proto_parser.h"
-#include "common.h"
 
 PbCommentList* make_comments(GCharList* commentLines, PbPosition position)
 {

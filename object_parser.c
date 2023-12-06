@@ -5,21 +5,11 @@
 **    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include <string.h>
-#include "comment_parser.h"
-#include "detector.h"
 #include "package_parser.h"
 #include "option_parser.h"
-#include "lib/str_queue.h"
 #include "import_parser.h"
 #include "message_parser.h"
-#include "message_ele_parser.h"
 #include "object_parser.h"
-#include "enum_parser.h"
-#include "service_parser.h"
-#include "extend_parser.h"
-#include "oneof_parser.h"
-#include "enum_ele_parser.h"
-#include "service_ele_parser.h"
 #include "lib/g_hash_table.h"
 #include "lib/str.h"
 #include "lib/memory.h"
