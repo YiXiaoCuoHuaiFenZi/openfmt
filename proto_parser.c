@@ -166,7 +166,7 @@ void parse_obj(const char* proto_str, unsigned long* index, Status* status, Stat
 		parse_pb_enum_element(proto_str, index, top_comments, state, protobuf);
 		break;
 	case service_element:
-		parse_pb_service_element(proto_str, index, top_comments, state, protobuf);
+		parse_pb_service_element(proto_str, index, top_comments, state);
 		break;
 	default:
 		fail("unknown status.");

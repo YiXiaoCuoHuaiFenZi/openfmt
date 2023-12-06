@@ -13,12 +13,6 @@
 
 PbServiceElement* make_pb_service_element(char* text, PbCommentList* top_comments);
 
-void parse_pb_service_element(
-		const char* proto_str,
-		unsigned long* index,
-		PbCommentList* comments,
-		State* state,
-		Protobuf* protobuf
-);
+void parse_pb_service_element(const char* proto_str, unsigned long* index, PbCommentList* comments, State* state);
 
 #endif //OPENFMT_SERVICE_ELE_PARSER_H

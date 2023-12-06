@@ -16,9 +16,9 @@ PbServiceElement* make_pb_service_element(char* text, PbCommentList* top_comment
 	char* s1 = sub_str_between_str(s0, "rpc ", ";");
 	char* s2 = replace("(", "", s1);
 	char* s3 = replace(")", "", s2);
-	g_free(&s0);
-	g_free(&s1);
-	g_free(&s2);
+	g_free(to_void_ptr(&s0));
+	g_free(to_void_ptr(&s1));
+	g_free(to_void_ptr(&s2));
 
 	char* parts[4] = { NULL };
 	int index = 0;
@@ -29,7 +29,7 @@ PbServiceElement* make_pb_service_element(char* text, PbCommentList* top_comment
 		index++;
 		token = strtok(NULL, " ");
 	}
-	g_free(&s3);
+	g_free(to_void_ptr(&s3));
 
 	PbServiceElement* ele = (PbServiceElement*)g_malloc(sizeof(PbServiceElement));
 
@@ -40,18 +40,12 @@ PbServiceElement* make_pb_service_element(char* text, PbCommentList* top_comment
 	ele->request = parts[1];
 	ele->response = parts[3];
 	ele->comments = top_comments;
-	g_free(&(parts[2])); // release resource of string "returns"
+	g_free(to_void_ptr(&(parts[2]))); // release resource of string "returns"
 
 	return ele;
 }
 
-void parse_pb_service_element(
-		const char* proto_str,
-		unsigned long* index,
-		PbCommentList* comments,
-		State* state,
-		Protobuf* protobuf
-)
+void parse_pb_service_element(const char* proto_str, unsigned long* index, PbCommentList* comments, State* state)
 {
 	char* text = get_str_until(proto_str, index, ';', true);
 	PbServiceElement* pb_service_element = make_pb_service_element(text, comments);
@@ -65,5 +59,5 @@ void parse_pb_service_element(
 	PbService* obj = (PbService*)(state->current_obj);
 	append_linked_list(pb_service_element, "PbServiceElement", obj->elements);
 
-	g_free(&text);
+	g_free(to_void_ptr(&text));
 }
