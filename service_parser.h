@@ -18,7 +18,8 @@ void parse_service(
 		unsigned long* index,
 		PbCommentList* comments,
 		State* state,
-		Protobuf* protobuf
+		Protobuf* protobuf,
+		Stack object_stack
 );
 
 #endif //OPENFMT_SERVICE_PARSER_H

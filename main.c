@@ -334,7 +334,7 @@ void run(Config* config)
 		list_type_files(config->proto_directory, "proto", proto_files);
 	}
 
-	PtrToNode file_cur = proto_files->next;
+	PtrToLinkedListNode file_cur = proto_files->next;
 
 	while (file_cur)
 	{

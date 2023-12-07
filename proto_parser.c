@@ -126,7 +126,7 @@ Status get_status_from_key_word(const char* key_word)
 }
 
 void parse_obj(const char* proto_str, unsigned long* index, Status* status, State* state, Protobuf* protobuf,
-		PbCommentList* top_comments)
+		PbCommentList* top_comments, Stack object_stack)
 {
 	skip_spaces(proto_str, index);
 	switch (*status)
@@ -144,19 +144,19 @@ void parse_obj(const char* proto_str, unsigned long* index, Status* status, Stat
 		parse_import(proto_str, index, top_comments, protobuf);
 		break;
 	case message:
-		parse_message(proto_str, index, top_comments, state, protobuf);
+		parse_message(proto_str, index, top_comments, state, protobuf, object_stack);
 		break;
 	case service:
-		parse_service(proto_str, index, top_comments, state, protobuf);
+		parse_service(proto_str, index, top_comments, state, protobuf, object_stack);
 		break;
 	case extend:
-		parse_extend(proto_str, index, top_comments, state, protobuf);
+		parse_extend(proto_str, index, top_comments, state, protobuf, object_stack);
 		break;
 	case one_of:
-		parse_oneof(proto_str, index, top_comments, state, protobuf);
+		parse_oneof(proto_str, index, top_comments, state, protobuf, object_stack);
 		break;
 	case proto_enum:
-		parse_pb_enum(proto_str, index, top_comments, state, protobuf);
+		parse_pb_enum(proto_str, index, top_comments, state, protobuf, object_stack);
 		break;
 	case message_element:
 	case extend_element:
@@ -175,6 +175,8 @@ void parse_obj(const char* proto_str, unsigned long* index, Status* status, Stat
 
 void parse_proto_string(Protobuf* protobuf, const char* proto_str)
 {
+	Stack object_stack = create_stack();
+
 	char* key_word_tokens[] = { "syntax", "package", "option", "import", "extend", "message",
 								"enum", "service", "oneof" };
 	unsigned int keywords_amount = 9;
@@ -283,7 +285,7 @@ void parse_proto_string(Protobuf* protobuf, const char* proto_str)
 			{
 				index = index + len + 1;
 				status = get_status_from_key_word(key_word);
-				parse_obj(proto_str, index_ptr, &status, state, protobuf, top_comments);
+				parse_obj(proto_str, index_ptr, &status, state, protobuf, top_comments, object_stack);
 				is_obj = true;
 				break;
 			}
@@ -301,19 +303,19 @@ void parse_proto_string(Protobuf* protobuf, const char* proto_str)
 			if (is_message_element(text))
 			{
 				status = message_element;
-				parse_obj(proto_str, index_ptr, &status, state, protobuf, top_comments);
+				parse_obj(proto_str, index_ptr, &status, state, protobuf, top_comments, object_stack);
 			}
 
 			if (is_enum_element(text))
 			{
 				status = enum_element;
-				parse_obj(proto_str, index_ptr, &status, state, protobuf, top_comments);
+				parse_obj(proto_str, index_ptr, &status, state, protobuf, top_comments, object_stack);
 			}
 
 			if (is_service_element(text))
 			{
 				status = service_element;
-				parse_obj(proto_str, index_ptr, &status, state, protobuf, top_comments);
+				parse_obj(proto_str, index_ptr, &status, state, protobuf, top_comments, object_stack);
 			}
 		}
 	}

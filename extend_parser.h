@@ -18,7 +18,8 @@ void parse_extend(
 		unsigned long* index,
 		PbCommentList* comments,
 		State* state,
-		Protobuf* protobuf
+		Protobuf* protobuf,
+		Stack object_stack
 );
 
 #endif //OPENFMT_EXTEND_PARSER_H

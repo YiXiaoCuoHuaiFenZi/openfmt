@@ -9,9 +9,9 @@
 
 #include <stdbool.h>
 
-struct Node;
-typedef struct Node* DoublyLinkedList;
-typedef struct Node* Position;
+struct DoublyLinkedListNode;
+typedef struct DoublyLinkedListNode* DoublyLinkedList;
+typedef struct DoublyLinkedListNode* Position;
 
 DoublyLinkedList create_doubly_linked_list();
 
@@ -29,7 +29,7 @@ void append_doubly_linked_list(void* data, DoublyLinkedList list);
 
 void dispose_doubly_linked_list(DoublyLinkedList list, void (* free_data_callback)(void* data));
 
-struct Node
+struct DoublyLinkedListNode
 {
 	/*
 	** 万能指针，以便存储任何类型的数据，实现泛型。
@@ -38,10 +38,10 @@ struct Node
 	/*
 	**  上一个节点的指针
 	*/
-	struct Node* previous;
+	struct DoublyLinkedListNode* previous;
 	/*
 	**  下一个节点的指针
 	*/
-	struct Node* next;
+	struct DoublyLinkedListNode* next;
 };
 #endif //OPENFMT_DOUBLY_LINKED_LIST_H

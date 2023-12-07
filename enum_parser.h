@@ -18,7 +18,8 @@ void parse_pb_enum(
 		unsigned long* index,
 		PbCommentList* comments,
 		State* state,
-		Protobuf* protobuf
+		Protobuf* protobuf,
+		Stack object_stack
 );
 
 #endif //OPENFMT_ENUM_PARSER_H

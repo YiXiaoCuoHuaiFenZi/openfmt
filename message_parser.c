@@ -31,7 +31,8 @@ void parse_message(
 		unsigned long* index,
 		PbCommentList* comments,
 		State* state,
-		Protobuf* protobuf
+		Protobuf* protobuf,
+		Stack object_stack
 )
 {
 	char* message_str = get_str_until(proto_str, index, '{', false);

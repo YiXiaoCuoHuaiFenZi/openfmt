@@ -123,7 +123,7 @@ void list_type_files(const char* base_path, const char* extension, List list)
 ***********************************************************************************************************************/
 void print_files(List list)
 {
-	PtrToNode p_node = list->next;
+	PtrToLinkedListNode p_node = list->next;
 	while (p_node)
 	{
 		char* path = (char*)p_node->data;

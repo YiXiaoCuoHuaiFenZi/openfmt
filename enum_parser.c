@@ -29,7 +29,8 @@ void parse_pb_enum(
 		unsigned long* index,
 		PbCommentList* comments,
 		State* state,
-		Protobuf* protobuf
+		Protobuf* protobuf,
+		Stack object_stack
 )
 {
 	char* str = get_str_until(proto_str, index, '{', false);

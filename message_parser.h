@@ -19,7 +19,8 @@ void parse_message(
 		unsigned long* index,
 		PbCommentList* comments,
 		State* state,
-		Protobuf* protobuf
+		Protobuf* protobuf,
+		Stack object_stack
 );
 
 #endif //OPENFMT_MESSAGE_PARSER_H

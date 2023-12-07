@@ -9,10 +9,10 @@
 
 #include <stdbool.h>
 
-struct Node;
-typedef struct Node* PtrToNode;
-typedef struct Node* List;
-typedef struct Node* Position;
+struct LinkedListNode;
+typedef struct LinkedListNode* PtrToLinkedListNode;
+typedef struct LinkedListNode* List;
+typedef struct LinkedListNode* Position;
 
 List create_linked_list();
 
@@ -30,7 +30,7 @@ void append_linked_list(void* data, const char* data_type, List list);
 
 void dispose_linked_list(List list, void (* free_data_callback)(void* data));
 
-struct Node
+struct LinkedListNode
 {
 	/*
 	** 万能指针，以便存储任何类型的数据，实现泛型。
@@ -43,6 +43,6 @@ struct Node
 	/*
 	**  下一个节点的指针
 	*/
-	struct Node* next;
+	struct LinkedListNode* next;
 };
 #endif //OPENFMT_LINKED_LIST_H

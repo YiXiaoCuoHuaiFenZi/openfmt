@@ -1053,7 +1053,7 @@ void free_objects(List* object_list)
 
 	while (cur != NULL)
 	{
-		PtrToNode temp_node = cur;
+		PtrToLinkedListNode temp_node = cur;
 		cur = cur->next;
 
 		char* data_type = temp_node->data_type;

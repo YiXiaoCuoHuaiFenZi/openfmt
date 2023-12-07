@@ -11,6 +11,7 @@
 #include "proto.h"
 #include "lib/str_queue.h"
 #include "object_parser.h"
+#include "lib/stack.h"
 
 Protobuf* parse(const char* file_path);
 
@@ -18,7 +19,14 @@ void parse_proto_string(Protobuf* protobuf, const char* proto_str);
 
 Status get_status_from_key_word(const char* key_word);
 
-void parse_obj(const char* proto_str, unsigned long* index, Status* status, State* state, Protobuf* protobuf,
-		PbCommentList* comments);
+void parse_obj(
+		const char* proto_str,
+		unsigned long* index,
+		Status* status,
+		State* state,
+		Protobuf* protobuf,
+		PbCommentList* comments,
+		Stack object_stack
+);
 
 #endif //OPENFMT_PROTO_PARSER_H

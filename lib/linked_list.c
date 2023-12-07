@@ -11,7 +11,7 @@
 
 List create_linked_list()
 {
-	List list = (struct Node*)g_malloc(sizeof(struct Node));
+	List list = (struct LinkedListNode*)g_malloc(sizeof(struct LinkedListNode));
 	list->next = NULL;
 	return list;
 }
@@ -30,7 +30,7 @@ void insert_linked_list(void* data, Position position, List list)
 {
 	Position temp_node;
 
-	temp_node = g_malloc(sizeof(struct Node));
+	temp_node = g_malloc(sizeof(struct LinkedListNode));
 	temp_node->data = data;
 	temp_node->next = position->next;
 	position->next = temp_node;
@@ -38,7 +38,7 @@ void insert_linked_list(void* data, Position position, List list)
 
 void append_linked_list(void* data, const char* data_type, List list)
 {
-	struct Node* temp_node = (struct Node*)g_malloc(sizeof(struct Node));
+	struct LinkedListNode* temp_node = (struct LinkedListNode*)g_malloc(sizeof(struct LinkedListNode));
 	Position CurrentPosition = list;
 	while (CurrentPosition->next != NULL)
 	{
@@ -58,7 +58,7 @@ void dispose_linked_list(List list, void (* free_data_callback)(void* data))
 	list = list->next; // 跳过list head;
 	while (list != NULL)
 	{
-		struct Node* temp_node = list;
+		struct LinkedListNode* temp_node = list;
 		list = list->next;
 		free_data_callback(temp_node->data);
 		g_free(to_void_ptr(&(temp_node->data_type)));

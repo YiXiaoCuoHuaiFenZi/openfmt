@@ -13,7 +13,7 @@ int test_format_directory(char* malformed_file_directory, char* formatted_file_d
 	List proto_files = create_linked_list();
 	list_type_files(malformed_file_directory, "proto", proto_files);
 
-	PtrToNode file_cur = proto_files->next;
+	PtrToLinkedListNode file_cur = proto_files->next;
 
 	while (file_cur)
 	{

@@ -39,7 +39,7 @@ List read_line_to_list(const char* file_path)
 
 void print_line_list(List lines)
 {
-	PtrToNode ptr_node = lines->next;
+	PtrToLinkedListNode ptr_node = lines->next;
 	while (ptr_node)
 	{
 		char* line = (char*)ptr_node->data;
