@@ -4,41 +4,41 @@ project(openfmt C)
 set(CMAKE_C_STANDARD 99)
 
 add_executable(openfmt
-        main.c
-        proto.c
-        proto.h
-        proto_parser.c
-        proto_parser.h
-        comment_parser.c
-        comment_parser.h
-        syntax_parser.c
-        syntax_parser.h
-        detector.c
-        detector.h
-        package_parser.c
-        package_parser.h
-        option_parser.c
-        option_parser.h
-        import_parser.c
-        import_parser.h
-        message_parser.c
-        message_parser.h
-        message_ele_parser.c
-        message_ele_parser.h
-        object_parser.c
-        object_parser.h
-        enum_parser.c
-        enum_parser.h
-        service_parser.c
-        service_parser.h
-        extend_parser.c
-        extend_parser.h
-        oneof_parser.c
-        oneof_parser.h
-        enum_ele_parser.c
-        enum_ele_parser.h
-        service_ele_parser.c
-        service_ele_parser.h
+        proto/main.c
+        proto/proto.c
+        proto/proto.h
+        proto/proto_parser.c
+        proto/proto_parser.h
+        proto/comment_parser.c
+        proto/comment_parser.h
+        proto/syntax_parser.c
+        proto/syntax_parser.h
+        proto/detector.c
+        proto/detector.h
+        proto/package_parser.c
+        proto/package_parser.h
+        proto/option_parser.c
+        proto/option_parser.h
+        proto/import_parser.c
+        proto/import_parser.h
+        proto/message_parser.c
+        proto/message_parser.h
+        proto/message_ele_parser.c
+        proto/message_ele_parser.h
+        proto/object_parser.c
+        proto/object_parser.h
+        proto/enum_parser.c
+        proto/enum_parser.h
+        proto/service_parser.c
+        proto/service_parser.h
+        proto/extend_parser.c
+        proto/extend_parser.h
+        proto/oneof_parser.c
+        proto/oneof_parser.h
+        proto/enum_ele_parser.c
+        proto/enum_ele_parser.h
+        proto/service_ele_parser.c
+        proto/service_ele_parser.h
         lib/linked_list.c
         lib/linked_list.h
         lib/dir.c
@@ -72,8 +72,8 @@ add_executable(openfmt
         lib/type.h
         lib/os.c
         lib/os.h
-        common.c
-        common.h)
+        proto/common.c
+        proto/common.h)
 
 configure_file(tests/lib/test_data/malformed/test_data_1.proto ${CMAKE_CURRENT_BINARY_DIR}/tests/lib/test_data/malformed/test_data_1.proto COPYONLY)
 
@@ -132,40 +132,40 @@ add_executable(openfmt-tester
         tests/proto/test_file_format.h
         tests/macro.c
         tests/macro.h
-        proto.c
-        proto.h
-        proto_parser.c
-        proto_parser.h
-        comment_parser.c
-        comment_parser.h
-        syntax_parser.c
-        syntax_parser.h
-        detector.c
-        detector.h
-        package_parser.c
-        package_parser.h
-        option_parser.c
-        option_parser.h
-        import_parser.c
-        import_parser.h
-        message_parser.c
-        message_parser.h
-        message_ele_parser.c
-        message_ele_parser.h
-        object_parser.c
-        object_parser.h
-        enum_parser.c
-        enum_parser.h
-        service_parser.c
-        service_parser.h
-        extend_parser.c
-        extend_parser.h
-        oneof_parser.c
-        oneof_parser.h
-        enum_ele_parser.c
-        enum_ele_parser.h
-        service_ele_parser.c
-        service_ele_parser.h
+        proto/proto.c
+        proto/proto.h
+        proto/proto_parser.c
+        proto/proto_parser.h
+        proto/comment_parser.c
+        proto/comment_parser.h
+        proto/syntax_parser.c
+        proto/syntax_parser.h
+        proto/detector.c
+        proto/detector.h
+        proto/package_parser.c
+        proto/package_parser.h
+        proto/option_parser.c
+        proto/option_parser.h
+        proto/import_parser.c
+        proto/import_parser.h
+        proto/message_parser.c
+        proto/message_parser.h
+        proto/message_ele_parser.c
+        proto/message_ele_parser.h
+        proto/object_parser.c
+        proto/object_parser.h
+        proto/enum_parser.c
+        proto/enum_parser.h
+        proto/service_parser.c
+        proto/service_parser.h
+        proto/extend_parser.c
+        proto/extend_parser.h
+        proto/oneof_parser.c
+        proto/oneof_parser.h
+        proto/enum_ele_parser.c
+        proto/enum_ele_parser.h
+        proto/service_ele_parser.c
+        proto/service_ele_parser.h
         lib/linked_list.c
         lib/linked_list.h
         lib/dir.c
@@ -199,8 +199,8 @@ add_executable(openfmt-tester
         lib/type.h
         lib/os.c
         lib/os.h
-        common.c
-        common.h)
+        proto/common.c
+        proto/common.h)
 
 enable_testing()
 add_subdirectory(tests/lib)

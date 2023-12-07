@@ -12,7 +12,7 @@
 #include "../../lib/dir.h"
 #include "../../lib/str.h"
 #include "../../lib/file.h"
-#include "../../proto_parser.h"
+#include "../../proto/proto_parser.h"
 
 int test_format_directory(char* malformed_file_directory, char* formatted_file_directory);
 
