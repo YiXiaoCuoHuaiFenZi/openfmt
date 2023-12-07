@@ -57,6 +57,6 @@ void parse_service(
 			append_list(PbCommentNode, pb_service->comments, line_comment);
 		}
 
-		push_stack(pb_service,"PbService", object_stack);
+		push_stack(pb_service, "PbService", object_stack);
 	}
 }

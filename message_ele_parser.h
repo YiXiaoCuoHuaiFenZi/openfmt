@@ -26,7 +26,7 @@ PbMessageElement* make_map_message_element(char* line, PbCommentList* top_commen
 
 PbMessageElement* make_common_message_element(char* line, PbCommentList* top_comments);
 
-void parse_message_element(const char* proto_str, unsigned long* index, PbCommentList* comments,Stack object_stack);
+void parse_message_element(const char* proto_str, unsigned long* index, PbCommentList* comments, Stack object_stack);
 
 #endif //OPENFMT_MESSAGE_ELE_PARSER_H
 

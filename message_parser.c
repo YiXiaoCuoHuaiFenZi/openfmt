@@ -60,6 +60,5 @@ void parse_message(
 		}
 
 		push_stack(pb_message, "PbMessage", object_stack);
-		int debug = 0;
 	}
 }

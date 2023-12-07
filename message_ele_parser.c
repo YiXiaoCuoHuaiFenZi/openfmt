@@ -163,7 +163,7 @@ PbMessageElement* make_common_message_element(char* text, PbCommentList* top_com
 	return pb_message_element;
 }
 
-void parse_message_element(const char* proto_str, unsigned long* index, PbCommentList* comments,Stack object_stack)
+void parse_message_element(const char* proto_str, unsigned long* index, PbCommentList* comments, Stack object_stack)
 {
 	char* text = get_str_until(proto_str, index, ';', true);
 	PbMessageElement* pb_message_element = make_pb_message_element(text, comments);

@@ -59,7 +59,7 @@ PbEnumElement* make_pb_enum_element(char* text, PbCommentList* top_comments)
 	return ele;
 }
 
-void parse_pb_enum_element(const char* proto_str,unsigned long* index,PbCommentList* comments,Stack object_stack)
+void parse_pb_enum_element(const char* proto_str, unsigned long* index, PbCommentList* comments, Stack object_stack)
 {
 	char* text = get_str_until(proto_str, index, ';', true);
 	PbEnumElement* pb_enum_element = make_pb_enum_element(text, comments);
