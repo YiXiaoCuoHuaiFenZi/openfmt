@@ -163,7 +163,7 @@ PbMessageElement* make_common_message_element(char* text, PbCommentList* top_com
 	return pb_message_element;
 }
 
-void parse_message_element(const char* proto_str, unsigned long* index, PbCommentList* comments, State* state)
+void parse_message_element(const char* proto_str, unsigned long* index, PbCommentList* comments,Stack object_stack)
 {
 	char* text = get_str_until(proto_str, index, ';', true);
 	PbMessageElement* pb_message_element = make_pb_message_element(text, comments);
@@ -173,9 +173,8 @@ void parse_message_element(const char* proto_str, unsigned long* index, PbCommen
 	{
 		append_list(PbCommentNode, pb_message_element->comments, single_line_comment);
 	}
-	PbMessage* obj = (PbMessage*)(state->current_obj);
+	PbMessage* obj = (PbMessage*)(top_stack(object_stack, NULL)->data);
 	append_linked_list(pb_message_element, "PbMessageElement", obj->elements);
 
 	g_free(to_void_ptr(&text));
-
 }

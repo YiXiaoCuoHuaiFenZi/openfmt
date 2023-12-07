@@ -45,7 +45,7 @@ PbServiceElement* make_pb_service_element(char* text, PbCommentList* top_comment
 	return ele;
 }
 
-void parse_pb_service_element(const char* proto_str, unsigned long* index, PbCommentList* comments, State* state)
+void parse_pb_service_element(const char* proto_str, unsigned long* index, PbCommentList* comments, Stack object_stack)
 {
 	char* text = get_str_until(proto_str, index, ';', true);
 	PbServiceElement* pb_service_element = make_pb_service_element(text, comments);
@@ -56,7 +56,7 @@ void parse_pb_service_element(const char* proto_str, unsigned long* index, PbCom
 	{
 		append_list(PbCommentNode, pb_service_element->comments, single_line_comment);
 	}
-	PbService* obj = (PbService*)(state->current_obj);
+	PbService* obj = (PbService*)(top_stack(object_stack, NULL)->data);
 	append_linked_list(pb_service_element, "PbServiceElement", obj->elements);
 
 	g_free(to_void_ptr(&text));

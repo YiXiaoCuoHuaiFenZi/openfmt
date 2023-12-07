@@ -30,7 +30,6 @@ void parse_extend(
 		const char* proto_str,
 		unsigned long* index,
 		PbCommentList* comments,
-		State* state,
 		Protobuf* protobuf,
 		Stack object_stack
 )
@@ -43,16 +42,14 @@ void parse_extend(
 
 		PbExtend* pb_extend = make_pb_extend(name, comments);
 		g_free(to_void_ptr(&name));
-		if (state->current_obj != NULL)
+
+		if (is_empty_stack(object_stack))
 		{
-			pb_extend->parent_id = get_parent_id(state);
-			pb_extend->parent_type = state->current_obj_type;
-			append_linked_list(pb_extend, "PbExtend", get_parent_elements(state));
-			current_obj_to_parent_obj(state);
+			append_linked_list(pb_extend, "PbExtend", protobuf->objects);
 		}
 		else
 		{
-			append_linked_list(pb_extend, "PbExtend", protobuf->objects);
+			append_linked_list(pb_extend, "PbExtend", get_parent_elements(object_stack));
 		}
 
 		// 解析单行注释
@@ -62,9 +59,6 @@ void parse_extend(
 			append_list(PbCommentNode, pb_extend->comments, line_comment);
 		}
 
-		state->l_brace++;
-		state->current_obj = pb_extend;
-		state->current_obj_type = "PbExtend";
-		g_hashtable_put(pb_extend->id, state->current_obj_type, pb_extend, NULL, state->obj_dic);
+		push_stack(pb_extend, "PbExtend", object_stack);
 	}
 }

@@ -29,7 +29,6 @@ void parse_oneof(
 		const char* proto_str,
 		unsigned long* index,
 		PbCommentList* comments,
-		State* state,
 		Protobuf* protobuf,
 		Stack object_stack
 )
@@ -42,16 +41,14 @@ void parse_oneof(
 
 		PbOneOf* pb_one_of = make_pb_oneof(name, comments);
 		g_free(to_void_ptr(&name));
-		if (state->current_obj != NULL)
+
+		if (is_empty_stack(object_stack))
 		{
-			pb_one_of->parent_id = get_parent_id(state);
-			pb_one_of->parent_type = state->current_obj_type;
-			append_linked_list(pb_one_of, "PbOneOf", get_parent_elements(state));
-			current_obj_to_parent_obj(state);
+			append_linked_list(pb_one_of, "PbOneOf", protobuf->objects);
 		}
 		else
 		{
-			append_linked_list(pb_one_of, "PbOneOf", protobuf->objects);
+			append_linked_list(pb_one_of, "PbOneOf", get_parent_elements(object_stack));
 		}
 
 		// 解析单行注释
@@ -61,9 +58,6 @@ void parse_oneof(
 			append_list(PbCommentNode, pb_one_of->comments, line_comment);
 		}
 
-		state->l_brace++;
-		state->current_obj = pb_one_of;
-		state->current_obj_type = "PbOneOf";
-		g_hashtable_put(pb_one_of->id, state->current_obj_type, pb_one_of, NULL, state->obj_dic);
+		push_stack(pb_one_of, "PbOneOf", object_stack);
 	}
 }

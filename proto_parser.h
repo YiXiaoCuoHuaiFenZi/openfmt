@@ -23,7 +23,6 @@ void parse_obj(
 		const char* proto_str,
 		unsigned long* index,
 		Status* status,
-		State* state,
 		Protobuf* protobuf,
 		PbCommentList* comments,
 		Stack object_stack

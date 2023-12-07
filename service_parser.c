@@ -28,7 +28,6 @@ void parse_service(
 		const char* proto_str,
 		unsigned long* index,
 		PbCommentList* comments,
-		State* state,
 		Protobuf* protobuf,
 		Stack object_stack
 )
@@ -41,16 +40,14 @@ void parse_service(
 
 		PbService* pb_service = make_pb_service(name, comments);
 		g_free(to_void_ptr(&name));
-		if (state->current_obj != NULL)
+
+		if (is_empty_stack(object_stack))
 		{
-			pb_service->parent_id = get_parent_id(state);
-			pb_service->parent_type = state->current_obj_type;
-			append_linked_list(pb_service, "PbService", get_parent_elements(state));
-			current_obj_to_parent_obj(state);
+			append_linked_list(pb_service, "PbService", protobuf->objects);
 		}
 		else
 		{
-			append_linked_list(pb_service, "PbService", protobuf->objects);
+			append_linked_list(pb_service, "PbService", get_parent_elements(object_stack));
 		}
 
 		// 解析单行注释
@@ -60,9 +57,6 @@ void parse_service(
 			append_list(PbCommentNode, pb_service->comments, line_comment);
 		}
 
-		state->l_brace++;
-		state->current_obj = pb_service;
-		state->current_obj_type = "PbService";
-		g_hashtable_put(pb_service->id, state->current_obj_type, pb_service, NULL, state->obj_dic);
+		push_stack(pb_service,"PbService", object_stack);
 	}
 }

@@ -30,7 +30,6 @@ void parse_message(
 		const char* proto_str,
 		unsigned long* index,
 		PbCommentList* comments,
-		State* state,
 		Protobuf* protobuf,
 		Stack object_stack
 )
@@ -43,16 +42,14 @@ void parse_message(
 
 		PbMessage* pb_message = make_pb_message(name, comments);
 		g_free(to_void_ptr(&name));
-		if (state->current_obj != NULL)
+
+		if (is_empty_stack(object_stack))
 		{
-			pb_message->parent_id = get_parent_id(state);
-			pb_message->parent_type = state->current_obj_type;
-			append_linked_list(pb_message, "PbMessage", get_parent_elements(state));
-			current_obj_to_parent_obj(state);
+			append_linked_list(pb_message, "PbMessage", protobuf->objects);
 		}
 		else
 		{
-			append_linked_list(pb_message, "PbMessage", protobuf->objects);
+			append_linked_list(pb_message, "PbMessage", get_parent_elements(object_stack));
 		}
 
 		// 解析单行注释
@@ -62,9 +59,7 @@ void parse_message(
 			append_list(PbCommentNode, pb_message->comments, line_comment);
 		}
 
-		state->l_brace++;
-		state->current_obj = pb_message;
-		state->current_obj_type = "PbMessage";
-		g_hashtable_put(pb_message->id, state->current_obj_type, pb_message, NULL, state->obj_dic);
+		push_stack(pb_message, "PbMessage", object_stack);
+		int debug = 0;
 	}
 }

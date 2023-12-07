@@ -28,7 +28,6 @@ void parse_pb_enum(
 		const char* proto_str,
 		unsigned long* index,
 		PbCommentList* comments,
-		State* state,
 		Protobuf* protobuf,
 		Stack object_stack
 )
@@ -41,16 +40,14 @@ void parse_pb_enum(
 
 		PbEnum* pb_enum = make_pb_enum(name, comments);
 		g_free(to_void_ptr(&name));
-		if (state->current_obj != NULL)
+
+		if (is_empty_stack(object_stack))
 		{
-			pb_enum->parent_id = get_parent_id(state);
-			pb_enum->parent_type = state->current_obj_type;
-			append_linked_list(pb_enum, "PbEnum", get_parent_elements(state));
-			current_obj_to_parent_obj(state);
+			append_linked_list(pb_enum, "PbEnum", protobuf->objects);
 		}
 		else
 		{
-			append_linked_list(pb_enum, "PbEnum", protobuf->objects);
+			append_linked_list(pb_enum, "PbEnum", get_parent_elements(object_stack));
 		}
 
 		// 解析单行注释
@@ -60,9 +57,6 @@ void parse_pb_enum(
 			append_list(PbCommentNode, pb_enum->comments, line_comment);
 		}
 
-		state->l_brace++;
-		state->current_obj = pb_enum;
-		state->current_obj_type = "PbEnum";
-		g_hashtable_put(pb_enum->id, state->current_obj_type, pb_enum, NULL, state->obj_dic);
+		push_stack(pb_enum, "PbEnum", object_stack);
 	}
 }

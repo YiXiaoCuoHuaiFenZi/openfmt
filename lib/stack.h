@@ -16,6 +16,7 @@ typedef PtrToStackNode Stack;
 struct StackNode
 {
 	void* data;
+	char* data_type;
 	struct StackNode* next;
 };
 
@@ -27,9 +28,9 @@ Stack empty_stack(Stack stack);
 
 bool is_empty_stack(Stack stack);
 
-void push_stack(void* data, Stack stack);
+void push_stack(void* data, char* data_type, Stack stack);
 
-void* top_stack(Stack stack, void (* free_data_callback)(PtrToStackNode ptr_node));
+PtrToStackNode top_stack(Stack stack, void (* free_data_callback)(PtrToStackNode ptr_node));
 
 void pop_stack(Stack stack, void (* free_data_callback)(PtrToStackNode ptr_node));
 

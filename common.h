@@ -16,7 +16,7 @@
 typedef enum
 {
 	start,
-	line_comment,   // '/'
+	line_comment,
 	block_comment_start,
 	comment,
 	syntax,
@@ -34,30 +34,6 @@ typedef enum
 	one_of,
 	invalid_key_word
 } Status;
-
-
-struct StateStructure;
-typedef struct StateStructure State;
-
-struct StateStructure
-{
-	unsigned short l_brace;
-	unsigned short r_brace;
-	void* current_obj;
-	char* current_obj_type;
-	void* parent_obj;
-	char* parent_obj_type;
-	PbCommentList* comments;
-	GHashTable* obj_dic;
-};
-
-struct ObjectInfoStructure;
-typedef struct ObjectInfoStructure ObjectInfo;
-struct ObjectInfoStructure
-{
-	char* obj_id;
-	char* obj_type;
-};
 
 bool is_new_line(char c);
 

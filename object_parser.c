@@ -33,236 +33,58 @@ void append_as_bottom_comments(PbCommentList* comments, PbCommentList* bottom_co
 	}
 }
 
-void update_current_obj_comments(State* state, PbCommentList* bottom_comments)
+void update_current_obj_comments(PtrToStackNode node, PbCommentList* bottom_comments)
 {
-	if (strcmp(state->current_obj_type, "PbMessage") == 0)
+	if (strcmp(node->data_type, "PbMessage") == 0)
 	{
-		PbMessage* current_obj = (PbMessage*)(state->current_obj);
+		PbMessage* current_obj = (PbMessage*)(node->data);
 		append_as_bottom_comments(current_obj->comments, bottom_comments);
 		return;
 	}
-	if (strcmp(state->current_obj_type, "PbEnum") == 0)
+	if (strcmp(node->data_type, "PbEnum") == 0)
 	{
-		PbEnum* current_obj = (PbEnum*)(state->current_obj);
+		PbEnum* current_obj = (PbEnum*)(node->data);
 		append_as_bottom_comments(current_obj->comments, bottom_comments);
 		return;
 	}
-	if (strcmp(state->current_obj_type, "PbOneOf") == 0)
+	if (strcmp(node->data_type, "PbOneOf") == 0)
 	{
-		PbOneOf* current_obj = (PbOneOf*)(state->current_obj);
+		PbOneOf* current_obj = (PbOneOf*)(node->data);
 		append_as_bottom_comments(current_obj->comments, bottom_comments);
 		return;
 	}
-	if (strcmp(state->current_obj_type, "PbExtend") == 0)
+	if (strcmp(node->data_type, "PbExtend") == 0)
 	{
-		PbExtend* current_obj = (PbExtend*)(state->current_obj);
+		PbExtend* current_obj = (PbExtend*)(node->data);
 		append_as_bottom_comments(current_obj->comments, bottom_comments);
 		return;
 	}
 }
 
-char* get_parent_id(State* state)
+List get_parent_elements(Stack object_stack)
 {
-	if (strcmp(state->current_obj_type, "PbMessage") == 0)
-	{
-		PbMessage* parent = (PbMessage*)(state->current_obj);
-		return str_copy(parent->id);
-	}
-	if (strcmp(state->current_obj_type, "PbEnum") == 0)
-	{
-		PbEnum* parent = (PbEnum*)(state->current_obj);
-		return str_copy(parent->id);
-	}
-	if (strcmp(state->current_obj_type, "PbOneOf") == 0)
-	{
-		PbOneOf* parent = (PbOneOf*)(state->current_obj);
-		return str_copy(parent->id);
-	}
-	if (strcmp(state->current_obj_type, "PbExtend") == 0)
-	{
-		PbExtend* parent = (PbExtend*)(state->current_obj);
-		return str_copy(parent->id);
-	}
+	PtrToStackNode node = (PtrToStackNode)top_stack(object_stack, NULL);
 
-	return NULL;
-}
-
-List get_parent_elements(State* state)
-{
-	if (strcmp(state->current_obj_type, "PbMessage") == 0)
+	if (strcmp(node->data_type, "PbMessage") == 0)
 	{
-		PbMessage* parent = (PbMessage*)(state->current_obj);
+		PbMessage* parent = (PbMessage*)(node->data);
 		return parent->elements;
 	}
-	if (strcmp(state->current_obj_type, "PbEnum") == 0)
+	if (strcmp(node->data_type, "PbEnum") == 0)
 	{
-		PbEnum* parent = (PbEnum*)(state->current_obj);
+		PbEnum* parent = (PbEnum*)(node->data);
 		return parent->elements;
 	}
-	if (strcmp(state->current_obj_type, "PbOneOf") == 0)
+	if (strcmp(node->data_type, "PbOneOf") == 0)
 	{
-		PbOneOf* parent = (PbOneOf*)(state->current_obj);
+		PbOneOf* parent = (PbOneOf*)(node->data);
 		return parent->elements;
 	}
-	if (strcmp(state->current_obj_type, "PbExtend") == 0)
+	if (strcmp(node->data_type, "PbExtend") == 0)
 	{
-		PbExtend* parent = (PbExtend*)(state->current_obj);
+		PbExtend* parent = (PbExtend*)(node->data);
 		return parent->elements;
 	}
 
 	return NULL;
-}
-
-ObjectInfo* get_parent_object_info(char* current_object_id, char* obj_type, State* state)
-{
-	ObjectInfo* r = (ObjectInfo*)g_malloc(sizeof(ObjectInfo));
-	r->obj_id = NULL;
-	r->obj_type = NULL;
-	void* obj = g_hashtable_get(current_object_id, state->obj_dic);
-
-	if (strcmp(obj_type, "PbMessage") == 0)
-	{
-		PbMessage* current_obj = (PbMessage*)obj;
-		r->obj_id = current_obj->parent_id;
-		r->obj_type = current_obj->parent_type;
-
-		return r;
-	}
-	if (strcmp(obj_type, "PbEnum") == 0)
-	{
-		PbEnum* current_obj = (PbEnum*)obj;
-		r->obj_id = current_obj->parent_id;
-		r->obj_type = current_obj->parent_type;
-
-		return r;
-	}
-	if (strcmp(obj_type, "PbOneOf") == 0)
-	{
-		PbOneOf* current_obj = (PbOneOf*)obj;
-		r->obj_id = current_obj->parent_id;
-		r->obj_type = current_obj->parent_type;
-
-		return r;
-
-
-	}
-	if (strcmp(obj_type, "PbExtend") == 0)
-	{
-		PbExtend* current_obj = (PbExtend*)obj;
-		r->obj_id = current_obj->parent_id;
-		r->obj_type = current_obj->parent_type;
-
-		return r;
-	}
-
-	return r;
-}
-
-void current_obj_to_parent_obj(State* state)
-{
-	if (strcmp(state->current_obj_type, "PbMessage") == 0)
-	{
-		PbMessage* parent = (PbMessage*)(state->current_obj);
-		state->parent_obj = parent;
-		state->parent_obj_type = "PbMessage";
-		return;
-	}
-	if (strcmp(state->current_obj_type, "PbEnum") == 0)
-	{
-		PbEnum* parent = (PbEnum*)(state->current_obj);
-		state->parent_obj = parent;
-		state->parent_obj_type = "PbEnum";
-		return;
-	}
-	if (strcmp(state->current_obj_type, "PbOneOf") == 0)
-	{
-		PbOneOf* parent = (PbOneOf*)(state->current_obj);
-		state->parent_obj = parent;
-		state->parent_obj_type = "PbOneOf";
-		return;
-	}
-	if (strcmp(state->current_obj_type, "PbExtend") == 0)
-	{
-		PbExtend* parent = (PbExtend*)(state->current_obj);
-		state->parent_obj = parent;
-		state->parent_obj_type = "PbExtend";
-		return;
-	}
-}
-
-void parent_obj_to_current_obj(State* state)
-{
-	if (state->parent_obj_type == NULL)
-	{
-		return;
-	}
-
-	if (strcmp(state->parent_obj_type, "PbMessage") == 0)
-	{
-		PbMessage* current_obj = (PbMessage*)(state->current_obj);
-		if (current_obj->parent_id == NULL)
-		{
-			state->parent_obj_type = NULL;
-		}
-		else
-		{
-			state->current_obj = g_hashtable_get(current_obj->parent_id, state->obj_dic);
-			state->current_obj_type = "PbMessage";
-
-			ObjectInfo* info = get_parent_object_info(current_obj->id, current_obj->parent_type, state);
-			state->parent_obj_type = info->obj_type;
-		}
-		return;
-	}
-	if (strcmp(state->parent_obj_type, "PbEnum") == 0)
-	{
-		PbEnum* current_obj = (PbEnum*)(state->current_obj);
-		if (current_obj->parent_id == NULL)
-		{
-			state->parent_obj_type = NULL;
-		}
-		else
-		{
-			state->current_obj = g_hashtable_get(current_obj->parent_id, state->obj_dic);
-			state->current_obj_type = "PbEnum";
-
-			ObjectInfo* info = get_parent_object_info(current_obj->id, current_obj->parent_type, state);
-			state->parent_obj_type = info->obj_type;
-		}
-		return;
-	}
-	if (strcmp(state->parent_obj_type, "PbOneOf") == 0)
-	{
-		PbOneOf* current_obj = (PbOneOf*)(state->current_obj);
-		if (current_obj->parent_id == NULL)
-		{
-			state->parent_obj_type = NULL;
-		}
-		else
-		{
-			state->current_obj = g_hashtable_get(current_obj->parent_id, state->obj_dic);
-			state->current_obj_type = "PbOneOf";
-
-			ObjectInfo* info = get_parent_object_info(current_obj->id, current_obj->parent_type, state);
-			state->parent_obj_type = info->obj_type;
-		}
-		return;
-	}
-	if (strcmp(state->parent_obj_type, "PbExtend") == 0)
-	{
-		PbExtend* current_obj = (PbExtend*)(state->current_obj);
-		if (current_obj->parent_id == NULL)
-		{
-			state->parent_obj_type = NULL;
-		}
-		else
-		{
-			state->current_obj = g_hashtable_get(current_obj->parent_id, state->obj_dic);
-			state->current_obj_type = "PbExtend";
-
-			ObjectInfo* info = get_parent_object_info(current_obj->id, current_obj->parent_type, state);
-			state->parent_obj_type = info->obj_type;
-		}
-		return;
-	}
 }

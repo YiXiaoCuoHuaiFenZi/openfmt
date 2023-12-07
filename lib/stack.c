@@ -31,24 +31,26 @@ void pop_stack(Stack stack, void (* free_data_callback)(PtrToStackNode ptr_node)
 	{
 		PtrToStackNode first_node = stack->next;
 		stack->next = stack->next->next;
-		free_data_callback(first_node->data);
+		if (free_data_callback != NULL)
+			free_data_callback(first_node->data);
 		g_free(to_void_ptr(&first_node));
 	}
 }
 
-void push_stack(void* data, Stack stack)
+void push_stack(void* data, char* data_type, Stack stack)
 {
 	PtrToStackNode ptr_node = (struct StackNode*)g_malloc(sizeof(struct StackNode));
 	ptr_node->data = data;
+	ptr_node->data_type = data_type;
 	ptr_node->next = stack->next;
 	stack->next = ptr_node;
 }
 
-void* top_stack(Stack stack, void (* free_data_callback)(PtrToStackNode ptr_node))
+PtrToStackNode top_stack(Stack stack, void (* free_data_callback)(PtrToStackNode ptr_node))
 {
 	if (!is_empty_stack(stack))
 	{
-		return stack->next->data;
+		return stack->next;
 	}
 	printf("%s", "Empty stack!");
 	exit(-1);
