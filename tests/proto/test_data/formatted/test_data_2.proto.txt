@@ -12,7 +12,7 @@ option objc_class_prefix = "dasdas";
 **    The RFIC (Reason for Issuance Code) is the group of services the EMD belongs to.
 **    Examples: A => Air Transportation, C => Baggage and G => In-flight services.
 **    All fare baggage these 2 passengers can take is 2  2 = 4
-**    <PaymentCardCharacteristics xmlns="http://ndc.skyscanner.net">
+**    <PaymentCardCharacteristics xmlns="http://ndc.google.net">
 **    This is a single character code indicating the reason for issuance.
 **    Examples: A => Air Transportation, C => Baggage and G => In-flight services.
 */
