@@ -233,7 +233,7 @@ void parse_proto_string(Protobuf* protobuf, const char* proto_str)
 			if (top_comments != NULL)
 			{
 				PtrToStackNode stack_node = (PtrToStackNode)top_stack(object_stack, NULL);
-				update_current_obj_comments(stack_node, top_comments);
+				append_bottom_comments(stack_node, top_comments);
 				/*
 				** the top_comments is bottom comments actually, and the comment value data will be added to the object,
 				** so we must release this extra list data.
@@ -280,6 +280,7 @@ void parse_proto_string(Protobuf* protobuf, const char* proto_str)
 			continue;
 		}
 
+		// parse object element
 		if (status == message || status == one_of || status == proto_enum || status == service || status == extend ||
 			status == message_element || status == enum_element || status == service_element)
 		{

@@ -33,7 +33,7 @@ void append_as_bottom_comments(PbCommentList* comments, PbCommentList* bottom_co
 	}
 }
 
-void update_current_obj_comments(PtrToStackNode node, PbCommentList* bottom_comments)
+void append_bottom_comments(PtrToStackNode node, PbCommentList* bottom_comments)
 {
 	if (strcmp(node->data_type, "PbMessage") == 0)
 	{

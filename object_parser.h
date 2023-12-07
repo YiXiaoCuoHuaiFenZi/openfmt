@@ -11,7 +11,7 @@
 
 void append_as_bottom_comments(PbCommentList* comments, PbCommentList* bottom_comments);
 
-void update_current_obj_comments(PtrToStackNode node, PbCommentList* bottom_comments);
+void append_bottom_comments(PtrToStackNode node, PbCommentList* bottom_comments);
 
 List get_parent_elements(Stack object_stack);
 
