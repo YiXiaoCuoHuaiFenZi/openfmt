@@ -22,7 +22,7 @@ Status get_status_from_key_word(const char* key_word);
 void parse_obj(
 		const char* proto_str,
 		unsigned long* index,
-		Status* status,
+		const Status* status,
 		Protobuf* protobuf,
 		PbCommentList* comments,
 		Stack object_stack
