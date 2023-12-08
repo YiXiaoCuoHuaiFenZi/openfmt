@@ -18,7 +18,6 @@ typedef enum
 	start,
 	line_comment,
 	block_comment_start,
-	comment,
 	syntax,
 	package,
 	option,

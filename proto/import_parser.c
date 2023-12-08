@@ -14,17 +14,17 @@
 
 void parse_import(const char* proto_str, unsigned long* index, PbCommentList* comments, Protobuf* protobuf)
 {
-	char* import_str = get_str_until(proto_str, index, ';', false);
-	if (import_str != NULL)
+	char* target_str = get_str_until(proto_str, index, ';', false);
+	if (target_str != NULL)
 	{
-		char* value = trim(import_str);
-		g_free(to_void_ptr(&import_str));
+		char* value = trim(target_str);
+		g_free(to_void_ptr(&target_str));
 
 		PbImport* pb_import = (PbImport*)g_malloc(sizeof(PbImport));
 		pb_import->value = value;
 		pb_import->comments = comments;
 
-		// 解析单行注释
+		// parse single line comment
 		PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
 		if (single_line_comment != NULL)
 		{

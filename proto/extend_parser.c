@@ -52,7 +52,7 @@ void parse_extend(
 			append_linked_list(pb_extend, "PbExtend", get_parent_elements(object_stack));
 		}
 
-		// 解析单行注释
+		// parse single line comment
 		PbComment* line_comment = pick_up_single_line_comment(proto_str, index);
 		if (line_comment != NULL)
 		{

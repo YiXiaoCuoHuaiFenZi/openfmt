@@ -30,7 +30,8 @@ void parse_option(const char* proto_str, unsigned long* index, PbCommentList* co
 	}
 
 	pb_option->comments = comments;
-	// 解析单行注释
+
+	// parse single line comment
 	PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
 	if (single_line_comment != NULL)
 	{

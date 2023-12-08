@@ -10,17 +10,6 @@
 #include "../lib/str.h"
 #include "../lib/memory.h"
 
-bool is_syntax(char* str)
-{
-	char* t = trim(str);
-	char* r = replace(" ", "", t);
-	bool is = starts_with("syntax=", r);
-	g_free(to_void_ptr(&t));
-	g_free(to_void_ptr(&r));
-	return is;
-}
-
-
 bool is_map_element(char* str)
 {
 	// the map element looks like: map<string, Project> projects = 3;
@@ -63,9 +52,6 @@ bool is_message_element(char* str)
 {
 	// Example: repeated common.Tiger work_legs = 3;               // Chronological work  legs
 	if (!is_element(str))
-		return false;
-
-	if (is_syntax(str))
 		return false;
 
 	if (is_service_element(str))

@@ -9,8 +9,6 @@
 
 #include <stdbool.h>
 
-bool is_syntax(char* line);
-
 bool is_element(char* line);
 
 bool is_message_element(char* line);
