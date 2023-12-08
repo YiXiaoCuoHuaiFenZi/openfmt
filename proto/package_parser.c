@@ -13,11 +13,11 @@
 
 void parse_package(const char* proto_str, unsigned long* index, PbCommentList* comments, Protobuf* protobuf)
 {
-	char* ss = get_str_until(proto_str, index, ';', false);
-	if (ss != NULL)
+	char* s = get_str_until(proto_str, index, ';', false);
+	if (s != NULL)
 	{
-		char* value = trim(ss);
-		g_free(to_void_ptr(&ss));
+		char* value = trim(s);
+		g_free(to_void_ptr(&s));
 
 		PbPackage* pb_package = (PbPackage*)g_malloc(sizeof(PbPackage));
 		pb_package->value = value;

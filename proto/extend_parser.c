@@ -34,11 +34,11 @@ void parse_extend(
 		Stack object_stack
 )
 {
-	char* extend_str = get_str_until(proto_str, index, '{', false);
-	if (extend_str != NULL)
+	char* s = get_str_until(proto_str, index, '{', false);
+	if (s != NULL)
 	{
-		char* name = trim(extend_str);
-		g_free(to_void_ptr(&extend_str));
+		char* name = trim(s);
+		g_free(to_void_ptr(&s));
 
 		PbExtend* pb_extend = make_pb_extend(name, comments);
 		g_free(to_void_ptr(&name));

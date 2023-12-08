@@ -46,33 +46,33 @@ char* clean_comment_str(const char* comment)
 
 	if (starts_with("**", trimmed_comment))
 	{
-		char* s_1 = trim_prefix(trimmed_comment, "**");
-		char* s_2 = trim(s_1);
-		g_free(to_void_ptr(&s_1));
+		char* s0 = trim_prefix(trimmed_comment, "**");
+		char* s1 = trim(s0);
+		g_free(to_void_ptr(&s0));
 		g_free(to_void_ptr(&trimmed_comment));
-		return s_2;
+		return s1;
 	}
 
 	bool is_line_comment = starts_with("//", trimmed_comment);
 	if (is_line_comment)
 	{
-		char* s_1 = trim_prefix(trimmed_comment, "//");
-		char* s_2 = trim(s_1);
-		g_free(to_void_ptr(&s_1));
+		char* s0 = trim_prefix(trimmed_comment, "//");
+		char* s1 = trim(s0);
+		g_free(to_void_ptr(&s0));
 		g_free(to_void_ptr(&trimmed_comment));
-		return s_2;
+		return s1;
 	}
 
 	bool is_block_comment = starts_with("/*", trimmed_comment) && ends_with("*/", trimmed_comment);
 	if (is_block_comment)
 	{
-		char* s_1 = trim_prefix(trimmed_comment, "/*");
-		char* s_2 = trim_suffix(s_1, "*/");
-		char* s_3 = trim(s_2);
-		g_free(to_void_ptr(&s_1));
-		g_free(to_void_ptr(&s_2));
+		char* s0 = trim_prefix(trimmed_comment, "/*");
+		char* s1 = trim_suffix(s0, "*/");
+		char* s2 = trim(s1);
+		g_free(to_void_ptr(&s0));
+		g_free(to_void_ptr(&s1));
 		g_free(to_void_ptr(&trimmed_comment));
-		return s_3;
+		return s2;
 	}
 
 	return trimmed_comment;

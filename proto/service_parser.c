@@ -31,11 +31,11 @@ void parse_service(
 		Stack object_stack
 )
 {
-	char* str = get_str_until(proto_str, index, '{', false);
-	if (str != NULL)
+	char* s = get_str_until(proto_str, index, '{', false);
+	if (s != NULL)
 	{
-		char* name = trim(str);
-		g_free(to_void_ptr(&str));
+		char* name = trim(s);
+		g_free(to_void_ptr(&s));
 
 		PbService* pb_service = make_pb_service(name, comments);
 		g_free(to_void_ptr(&name));

@@ -61,8 +61,8 @@ PbEnumElement* make_pb_enum_element(char* text, PbCommentList* top_comments)
 
 void parse_pb_enum_element(const char* proto_str, unsigned long* index, PbCommentList* comments, Stack object_stack)
 {
-	char* text = get_str_until(proto_str, index, ';', true);
-	PbEnumElement* pb_enum_element = make_pb_enum_element(text, comments);
+	char* s = get_str_until(proto_str, index, ';', true);
+	PbEnumElement* pb_enum_element = make_pb_enum_element(s, comments);
 
 	// parse line comment
 	PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
@@ -73,5 +73,5 @@ void parse_pb_enum_element(const char* proto_str, unsigned long* index, PbCommen
 	PbEnum* obj = (PbEnum*)(top_stack(object_stack, NULL)->data);
 	append_linked_list(pb_enum_element, "PbEnumElement", obj->elements);
 
-	g_free(to_void_ptr(&text));
+	g_free(to_void_ptr(&s));
 }

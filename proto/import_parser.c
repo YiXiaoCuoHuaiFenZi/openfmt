@@ -14,11 +14,11 @@
 
 void parse_import(const char* proto_str, unsigned long* index, PbCommentList* comments, Protobuf* protobuf)
 {
-	char* target_str = get_str_until(proto_str, index, ';', false);
-	if (target_str != NULL)
+	char* s = get_str_until(proto_str, index, ';', false);
+	if (s != NULL)
 	{
-		char* value = trim(target_str);
-		g_free(to_void_ptr(&target_str));
+		char* value = trim(s);
+		g_free(to_void_ptr(&s));
 
 		PbImport* pb_import = (PbImport*)g_malloc(sizeof(PbImport));
 		pb_import->value = value;

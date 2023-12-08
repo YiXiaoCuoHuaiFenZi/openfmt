@@ -32,11 +32,11 @@ void parse_pb_enum(
 		Stack object_stack
 )
 {
-	char* str = get_str_until(proto_str, index, '{', false);
-	if (str != NULL)
+	char* s = get_str_until(proto_str, index, '{', false);
+	if (s != NULL)
 	{
-		char* name = trim(str);
-		g_free(to_void_ptr(&str));
+		char* name = trim(s);
+		g_free(to_void_ptr(&s));
 
 		PbEnum* pb_enum = make_pb_enum(name, comments);
 		g_free(to_void_ptr(&name));
