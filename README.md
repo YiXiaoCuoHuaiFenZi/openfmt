@@ -3,6 +3,7 @@
 Open source code format tool for Protobuf.
 
 ## Usage
+
 ```shell
 ****************************************************************************************************
 *                                     Protobuf file formatter                                      *
@@ -35,7 +36,9 @@ help:
 ```
 
 ## Example
+
 Before format:
+
 ```protobuf
 // test multiple empty lines at the end of proto file.
 
@@ -72,6 +75,7 @@ message TestOuter {string header = 1;message TestInner {string header = 1;// Tes
 ```
 
 After format:
+
 ```protobuf
 /*
 **    test multiple empty lines at the end of proto file.
