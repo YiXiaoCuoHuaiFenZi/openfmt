@@ -23,7 +23,7 @@ void parse_package(const char* proto_str, unsigned long* index, PbCommentList* c
 		pb_package->value = value;
 		pb_package->comments = comments;
 
-		// parse single line comment
+		// parse line comment
 		PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
 		if (single_line_comment != NULL)
 		{

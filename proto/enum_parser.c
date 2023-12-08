@@ -50,7 +50,7 @@ void parse_pb_enum(
 			append_linked_list(pb_enum, "PbEnum", get_parent_elements(object_stack));
 		}
 
-		// parse single line comment
+		// parse line comment
 		PbComment* line_comment = pick_up_single_line_comment(proto_str, index);
 		if (line_comment != NULL)
 		{

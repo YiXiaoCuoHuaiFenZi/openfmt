@@ -34,7 +34,7 @@ void parse_syntax(const char* proto_str, unsigned long* index, PbCommentList* co
 		pb_syntax->value = value;
 		pb_syntax->comments = comments;
 
-		// parse single line comment
+		// parse line comment
 		PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
 		if (single_line_comment != NULL)
 		{

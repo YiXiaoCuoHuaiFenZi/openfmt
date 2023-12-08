@@ -167,7 +167,7 @@ void parse_message_element(const char* proto_str, unsigned long* index, PbCommen
 	char* text = get_str_until(proto_str, index, ';', true);
 	PbMessageElement* pb_message_element = make_pb_message_element(text, comments);
 
-	// parse single line comment
+	// parse line comment
 	PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
 	if (single_line_comment != NULL)
 	{

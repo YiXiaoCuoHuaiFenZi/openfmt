@@ -50,7 +50,7 @@ void parse_pb_service_element(const char* proto_str, unsigned long* index, PbCom
 	char* text = get_str_until(proto_str, index, ';', true);
 	PbServiceElement* pb_service_element = make_pb_service_element(text, comments);
 
-	// parse single line comment
+	// parse line comment
 	PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
 	if (single_line_comment != NULL)
 	{
