@@ -6,10 +6,10 @@
 ***********************************************************************************************************************/
 #include <string.h>
 #include "proto.h"
-#include "../util/util.h"
-#include "../lib/str.h"
-#include "../lib/memory.h"
 #include "comment_parser.h"
+#include "../lib/str.h"
+#include "../util/util.h"
+#include "../lib/memory.h"
 
 void print_text(PbText* text)
 {

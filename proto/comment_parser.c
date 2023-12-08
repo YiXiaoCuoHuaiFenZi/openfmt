@@ -9,7 +9,6 @@
 #include <ctype.h>
 #include "common.h"
 #include "comment_parser.h"
-#include "../lib/str.h"
 #include "proto.h"
 #include "../lib/memory.h"
 

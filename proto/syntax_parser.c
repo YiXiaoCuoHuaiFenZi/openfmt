@@ -6,11 +6,10 @@
 ***********************************************************************************************************************/
 #include <string.h>
 #include "syntax_parser.h"
-#include "../lib/str.h"
-#include "../lib/memory.h"
-#include "../lib/os.h"
 #include "common.h"
 #include "comment_parser.h"
+#include "../lib/os.h"
+#include "../lib/memory.h"
 
 void parse_syntax(const char* proto_str, unsigned long* index, PbCommentList* comments, Protobuf* protobuf)
 {

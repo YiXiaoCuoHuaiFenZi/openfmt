@@ -5,11 +5,10 @@
 **    更新日期：    2023-06-28
 ***********************************************************************************************************************/
 #include <string.h>
-#include "../lib/str.h"
 #include "option_parser.h"
-#include "../lib/memory.h"
 #include "common.h"
 #include "comment_parser.h"
+#include "../lib/memory.h"
 
 void parse_option(const char* proto_str, unsigned long* index, PbCommentList* comments, Protobuf* protobuf)
 {

@@ -9,8 +9,6 @@
 #include "import_parser.h"
 #include "message_parser.h"
 #include "object_parser.h"
-#include "../lib/g_hash_table.h"
-#include "../lib/str.h"
 #include "../lib/memory.h"
 
 void append_as_bottom_comments(PbCommentList* comments, PbCommentList* bottom_comments)

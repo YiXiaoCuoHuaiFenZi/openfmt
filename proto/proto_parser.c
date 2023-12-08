@@ -13,14 +13,10 @@
 #include "comment_parser.h"
 #include "detector.h"
 #include "import_parser.h"
-#include "../lib/memory.h"
-#include "../lib/str_queue.h"
-#include "../lib/os.h"
 #include "object_parser.h"
 #include "option_parser.h"
 #include "package_parser.h"
 #include "syntax_parser.h"
-#include "../util/file_helper.h"
 #include "message_ele_parser.h"
 #include "message_parser.h"
 #include "enum_ele_parser.h"
@@ -29,6 +25,9 @@
 #include "service_parser.h"
 #include "oneof_parser.h"
 #include "extend_parser.h"
+#include "../lib/os.h"
+#include "../lib/memory.h"
+#include "../util/file_helper.h"
 
 Protobuf* parse(const char* file_path)
 {

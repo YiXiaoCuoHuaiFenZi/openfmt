@@ -8,7 +8,6 @@
 #include "common.h"
 #include "comment_parser.h"
 #include "message_ele_parser.h"
-#include "../lib/str.h"
 #include "../lib/memory.h"
 
 PbMessageElement* make_pb_message_element(char* text, PbCommentList* top_comments)

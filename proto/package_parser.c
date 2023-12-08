@@ -4,12 +4,12 @@
 **    创建日期：    2022-10-21
 **    更新日期：    2023-06-28
 ***********************************************************************************************************************/
-#include "package_parser.h"
 #include <stdlib.h>
-#include "../lib/str.h"
-#include "../lib/memory.h"
 #include "comment_parser.h"
+#include "package_parser.h"
 #include "common.h"
+#include "../lib/memory.h"
+
 
 void parse_package(const char* proto_str, unsigned long* index, PbCommentList* comments, Protobuf* protobuf)
 {

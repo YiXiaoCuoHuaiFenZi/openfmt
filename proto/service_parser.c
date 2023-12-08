@@ -4,11 +4,10 @@
 **    创建日期：    2022-11-15
 **    更新日期：    2023-06-28
 ***********************************************************************************************************************/
-#include "../lib/str.h"
-#include "../lib/uuid.h"
 #include "common.h"
 #include "comment_parser.h"
 #include "service_parser.h"
+#include "../lib/uuid.h"
 #include "../lib/memory.h"
 
 PbService* make_pb_service(char* name, PbCommentList* comments)
