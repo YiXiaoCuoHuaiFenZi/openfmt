@@ -35,4 +35,6 @@ int test_bytes_to_hex_str();
 
 int test_repeat();
 
+int test_pick_str_until();
+
 #endif //OPENFMT_TEST_STR_H

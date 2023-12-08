@@ -178,4 +178,18 @@ char* bytes_to_hex_str(const byte input[], int len);
 ***********************************************************************************************************************/
 char* repeat(const char* s, unsigned int times);
 
+/***********************************************************************************************************************
+**    作   者：    一小撮坏分子
+**    功能描述：    pick up a sub-string from the string start from the first charactor to the target charactor.
+**                example one: input "abcdefghigklm", 'e', and false, it will return "abcd"
+**                example two: input "abcdefghigklm", 'e', and true, it will return "abcde"
+**    参数列表：    s:       string look substring from.
+**                ch:      target charactor looks for.
+**                include: if the sub-string include the target chractor.
+**                return: sub-string meets the condition or NULL when no target chractor exits in the string.
+**    创建日期：    2023-12-08
+**    更新日期：    2023-12-08
+***********************************************************************************************************************/
+char* pick_str_until(const char* s, char ch, bool include);
+
 #endif //OPENFMT_STR_H

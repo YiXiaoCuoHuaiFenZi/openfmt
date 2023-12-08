@@ -24,7 +24,13 @@ void parse_syntax(const char* proto_str, unsigned long* index, PbCommentList* co
 		fail(message);
 	}
 	*index = *index + 1;
-	char* s = get_str_until(proto_str, index, ';', false);
+
+	char* s = pick_str_until(proto_str + *index, ';', false);
+	if (s == NULL)
+		fail("target char not found.");
+	else
+		*index = *index + strlen(s) + 1; // increase extra 1 to skip the ';' charactor.
+
 	if (s != NULL)
 	{
 		char* value = trim(s);

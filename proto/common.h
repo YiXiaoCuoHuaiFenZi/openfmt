@@ -38,8 +38,4 @@ bool is_new_line(char c);
 
 void skip_spaces(const char* str, unsigned long* index);
 
-char* get_str_until(const char* str, unsigned long* index, char ch, bool include);
-
-char* pick_str_until(const char* str, unsigned long* index, char ch, bool include);
-
 #endif //OPENFMT_COMMON_H

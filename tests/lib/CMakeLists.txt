@@ -20,6 +20,7 @@ add_test(NAME test_char_to_binary_str_with_space COMMAND openfmt-lib-tester test
 add_test(NAME test_str_to_hex_str COMMAND openfmt-lib-tester test_str_to_hex_str)
 add_test(NAME test_bytes_to_hex_str COMMAND openfmt-lib-tester test_bytes_to_hex_str)
 add_test(NAME test_repeat COMMAND openfmt-lib-tester test_repeat)
+add_test(NAME test_pick_str_until COMMAND openfmt-lib-tester test_pick_str_until)
 
 # tests for g_list
 add_test(NAME test_G_NodeTemplate_int COMMAND openfmt-lib-tester test_G_NodeTemplate_int)

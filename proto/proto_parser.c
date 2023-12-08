@@ -283,8 +283,10 @@ void parse_proto_string(Protobuf* protobuf, const char* proto_str)
 		if (status == message || status == one_of || status == proto_enum || status == service || status == extend ||
 			status == message_element || status == enum_element || status == service_element)
 		{
+			char* text = pick_str_until(proto_str + *index_ptr, ';', true);
+			if (text == NULL)
+				fail("target char not found.");
 
-			char* text = pick_str_until(proto_str, index_ptr, ';', true);
 			if (is_message_element(text))
 			{
 				status = message_element;

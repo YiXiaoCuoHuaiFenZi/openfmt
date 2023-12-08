@@ -8,6 +8,7 @@
 #include "comment_parser.h"
 #include "service_ele_parser.h"
 #include "../lib/memory.h"
+#include "../lib/os.h"
 
 PbServiceElement* make_pb_service_element(char* text, PbCommentList* top_comments)
 {
@@ -47,7 +48,12 @@ PbServiceElement* make_pb_service_element(char* text, PbCommentList* top_comment
 
 void parse_pb_service_element(const char* proto_str, unsigned long* index, PbCommentList* comments, Stack object_stack)
 {
-	char* s = get_str_until(proto_str, index, ';', true);
+	char* s = pick_str_until(proto_str + *index, ';', true);
+	if (s == NULL)
+		fail("target char not found.");
+	else
+		*index = *index + strlen(s);
+
 	PbServiceElement* pb_service_element = make_pb_service_element(s, comments);
 
 	// parse line comment

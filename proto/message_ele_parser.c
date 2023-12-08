@@ -9,6 +9,7 @@
 #include "comment_parser.h"
 #include "message_ele_parser.h"
 #include "../lib/memory.h"
+#include "../lib/os.h"
 
 PbMessageElement* make_pb_message_element(char* text, PbCommentList* top_comments)
 {
@@ -164,7 +165,12 @@ PbMessageElement* make_common_message_element(char* text, PbCommentList* top_com
 
 void parse_message_element(const char* proto_str, unsigned long* index, PbCommentList* comments, Stack object_stack)
 {
-	char* s = get_str_until(proto_str, index, ';', true);
+	char* s = pick_str_until(proto_str + *index, ';', true);
+	if (s == NULL)
+		fail("target char not found.");
+	else
+		*index = *index + strlen(s);
+
 	PbMessageElement* pb_message_element = make_pb_message_element(s, comments);
 
 	// parse line comment

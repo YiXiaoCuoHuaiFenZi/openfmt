@@ -339,3 +339,32 @@ int test_repeat()
 
 	return TEST_SUCCESS;
 }
+
+int test_pick_str_until()
+{
+	char* s0 = pick_str_until("abcdefghijklmn\n\raddasd\n9adasd", 'e', true);
+	if (strcmp(s0, "abcde") != 0)
+	{
+		return TEST_FAIL;
+	}
+
+	char* s1 = pick_str_until("abcdefghijklmn\n\raddasd\n9adasd", 'e', false);
+	if (strcmp(s1, "abcd") != 0)
+	{
+		return TEST_FAIL;
+	}
+
+	char* s3 = pick_str_until("abcdefghijklmn\n\raddasd\n9adasd", '\n', true);
+	if (strcmp(s3, "abcdefghijklmn\n") != 0)
+	{
+		return TEST_FAIL;
+	}
+
+	char* s4 = pick_str_until("abcdefghijklmn\n\raddasd\n9adasd", '9', false);
+	if (strcmp(s4, "abcdefghijklmn\n\raddasd\n") != 0)
+	{
+		return TEST_FAIL;
+	}
+
+	return TEST_SUCCESS;
+}

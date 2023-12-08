@@ -45,6 +45,8 @@ int main(int argc, char* args[])
 		return test_bytes_to_hex_str();
 	if (strcmp(args[1], "test_repeat") == 0)
 		return test_repeat();
+	if (strcmp(args[1], "test_pick_str_until") == 0)
+		return test_pick_str_until();
 
 	// test g_list
 	if (strcmp(args[1], "test_G_NodeTemplate_int") == 0)

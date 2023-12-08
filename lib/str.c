@@ -302,3 +302,40 @@ char* repeat(const char* s, unsigned int times)
 
 	return r;
 }
+
+char* pick_str_until(const char* s, char ch, bool include)
+{
+	int i = 0;
+
+	bool found = false;
+	while (s[i] != '\0')
+	{
+		if (s[i] == ch)
+		{
+			found = true;
+			i++;  // index start from 0, so increase 1 when found the charactor.
+			break;
+		}
+		i++;
+	}
+
+	if (!found)
+	{
+		return NULL;
+	}
+
+	if (include)
+	{
+		char* r = (char*)g_malloc(i + 1);
+		memcpy(r, s, i);
+		r[i] = '\0';
+		return r;
+	}
+	else
+	{
+		char* r = (char*)g_malloc(i);
+		memcpy(r, s, i - 1);
+		r[i - 1] = '\0';
+		return r;
+	}
+}

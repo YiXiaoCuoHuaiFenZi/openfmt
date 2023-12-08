@@ -9,18 +9,30 @@
 #include "common.h"
 #include "comment_parser.h"
 #include "../lib/memory.h"
+#include "../lib/os.h"
 
 void parse_option(const char* proto_str, unsigned long* index, PbCommentList* comments, Protobuf* protobuf)
 {
 	PbOption* pb_option = (PbOption*)g_malloc(sizeof(PbOption));
-	char* s0 = get_str_until(proto_str, index, '=', false);
+	char* s0 = pick_str_until(proto_str + *index, '=', false);
+	if (s0 == NULL)
+		fail("target char not found.");
+	else
+		*index = *index + strlen(s0) + 1; // increase extra 1 to skip the '=' charactor.
+
 	if (s0 != NULL)
 	{
 		char* name = trim(s0);
 		g_free(to_void_ptr(&s0));
 		pb_option->name = name;
 	}
-	char* s1 = get_str_until(proto_str, index, ';', false);
+
+	char* s1 = pick_str_until(proto_str + *index, ';', false);
+	if (s1 == NULL)
+		fail("target char not found.");
+	else
+		*index = *index + strlen(s1) + 1; // increase extra 1 to skip the ';' charactor.
+
 	if (s1 != NULL)
 	{
 		char* value = trim(s1);

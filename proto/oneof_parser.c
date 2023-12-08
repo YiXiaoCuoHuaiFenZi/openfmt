@@ -9,6 +9,7 @@
 #include "oneof_parser.h"
 #include "../lib/uuid.h"
 #include "../lib/memory.h"
+#include "../lib/os.h"
 
 PbOneOf* make_pb_oneof(char* name, PbCommentList* comments)
 {
@@ -32,7 +33,12 @@ void parse_oneof(
 		Stack object_stack
 )
 {
-	char* s = get_str_until(proto_str, index, '{', false);
+	char* s = pick_str_until(proto_str + *index, '{', false);
+	if (s == NULL)
+		fail("target char not found.");
+	else
+		*index = *index + strlen(s) + 1; // increase extra 1 to skip the '{' charactor.
+
 	if (s != NULL)
 	{
 		char* name = trim(s);
