@@ -364,9 +364,7 @@ void format_option(
 	create_add_pb_text(" ", color_config.default_color, text_list);
 	create_add_pb_text(pb_option->name, color_config.option_name, text_list);
 
-	/*
-	** align by equal sign, fill extra spaces between the option name and equal sign.
-	*/
+	// align by equal sign, fill extra spaces between the option name and equal sign.
 	if (config.align_by_equal_sign)
 	{
 		unsigned int option_name_len = strlen(pb_option->name);
@@ -381,9 +379,7 @@ void format_option(
 
 	if (!config.top_comment && has_right_comment(pb_option->comments))
 	{
-		/*
-		** align comments if align by equal sign, fill extra spaces between the option value and single line comment.
-		*/
+		// align comments if align by equal sign, fill extra spaces between the option value and single line comment.
 		if (config.align_by_equal_sign)
 		{
 			unsigned int option_value_len = strlen(pb_option->value);
@@ -569,9 +565,7 @@ void format_message_element(
 	create_add_pb_text(" ", color_config.default_color, text_list);
 	create_add_pb_text(ele->name, color_config.message_element_name, text_list);
 
-	/*
-	** align by equal sign, fill extra spaces between the element name and equal sign.
-	*/
+	// align by equal sign, fill extra spaces between the element name and equal sign.
 	if (config.align_by_equal_sign)
 	{
 		unsigned int fill_space_amount = meli.max_len_before_equal_sign - cmlbes;
@@ -682,9 +676,7 @@ void format_enum_element(
 	g_free(to_void_ptr(&spaces));
 	create_add_pb_text(ele->name, color_config.enum_element_name, text_list);
 
-	/*
-	** align by equal sign, fill extra spaces between the element name and equal sign.
-	*/
+	// align by equal sign, fill extra spaces between the element name and equal sign.
 	if (config.align_by_equal_sign)
 	{
 		char* spacess = repeat(" ", eeli.maxLengthOfName - strlen(ele->name));

@@ -13,18 +13,18 @@
 void parse_option(const char* proto_str, unsigned long* index, PbCommentList* comments, Protobuf* protobuf)
 {
 	PbOption* pb_option = (PbOption*)g_malloc(sizeof(PbOption));
-	char* sss = get_str_until(proto_str, index, '=', false);
-	if (sss != NULL)
+	char* s0 = get_str_until(proto_str, index, '=', false);
+	if (s0 != NULL)
 	{
-		char* name = trim(sss);
-		g_free(to_void_ptr(&sss));
+		char* name = trim(s0);
+		g_free(to_void_ptr(&s0));
 		pb_option->name = name;
 	}
-	char* ssss = get_str_until(proto_str, index, ';', false);
-	if (ssss != NULL)
+	char* s1 = get_str_until(proto_str, index, ';', false);
+	if (s1 != NULL)
 	{
-		char* value = trim(ssss);
-		g_free(to_void_ptr(&ssss));
+		char* value = trim(s1);
+		g_free(to_void_ptr(&s1));
 		pb_option->value = value;
 	}
 

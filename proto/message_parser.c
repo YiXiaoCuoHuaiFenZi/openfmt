@@ -34,11 +34,11 @@ void parse_message(
 		Stack object_stack
 )
 {
-	char* message_str = get_str_until(proto_str, index, '{', false);
-	if (message_str != NULL)
+	char* s = get_str_until(proto_str, index, '{', false);
+	if (s != NULL)
 	{
-		char* name = trim(message_str);
-		g_free(to_void_ptr(&message_str));
+		char* name = trim(s);
+		g_free(to_void_ptr(&s));
 
 		PbMessage* pb_message = make_pb_message(name, comments);
 		g_free(to_void_ptr(&name));
