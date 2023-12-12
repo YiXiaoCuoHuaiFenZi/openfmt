@@ -501,8 +501,13 @@ void format_imports(Protobuf* protobuf, PbTextList* text_list)
 	create_add_pb_text("\n", color_config.default_color, text_list);
 }
 
-void get_max_message_element_length(List elements, MessageElementLengthInfo* message_element_len_info)
+
+MessageElementLengthInfo* get_max_message_element_lengths(List elements)
 {
+	MessageElementLengthInfo* lengths = (MessageElementLengthInfo*)g_malloc(sizeof(MessageElementLengthInfo));
+	lengths->max_len_before_equal_sign = 0;
+	lengths->max_len_between_equal_sign_and_semicolon = 0;
+
 	List cur = elements->next;
 	while (cur)
 	{
@@ -516,9 +521,9 @@ void get_max_message_element_length(List elements, MessageElementLengthInfo* mes
 				len1 = strlen(ele->label) + strlen(ele->type) + strlen(ele->name);
 				len1++; // additional space between label and type.
 			}
-			if (len1 > message_element_len_info->max_len_before_equal_sign)
+			if (len1 > lengths->max_len_before_equal_sign)
 			{
-				message_element_len_info->max_len_before_equal_sign = len1;
+				lengths->max_len_before_equal_sign = len1;
 			}
 
 			unsigned int len2 = strlen(ele->number);
@@ -527,20 +532,44 @@ void get_max_message_element_length(List elements, MessageElementLengthInfo* mes
 				len2 = strlen(ele->number) + strlen(ele->annotation);
 				len2++; // additional space between number and annotation.
 			}
-			if (len2 > message_element_len_info->max_len_between_equal_sign_and_semicolon)
+			if (len2 > lengths->max_len_between_equal_sign_and_semicolon)
 			{
-				message_element_len_info->max_len_between_equal_sign_and_semicolon = len2;
+				lengths->max_len_between_equal_sign_and_semicolon = len2;
 			}
 		}
 		cur = cur->next;
 	}
+	return lengths;
+}
+
+MessageElementLengthInfo* get_oneof_message_element_lengths(List elements)
+{
+	MessageElementLengthInfo* lengths = (MessageElementLengthInfo*)g_malloc(sizeof(MessageElementLengthInfo));
+	lengths->max_len_before_equal_sign = 0;
+	lengths->max_len_between_equal_sign_and_semicolon = 0;
+	List cur = elements->next;
+	while (cur)
+	{
+		if (strcmp(cur->data_type, "PbOneOf") == 0)
+		{
+			PbOneOf* oneof = (PbOneOf*)cur->data;
+			MessageElementLengthInfo* one_of_ele_lengths = get_max_message_element_lengths(oneof->elements);
+			if (lengths->max_len_before_equal_sign < one_of_ele_lengths->max_len_before_equal_sign)
+				lengths->max_len_before_equal_sign = one_of_ele_lengths->max_len_before_equal_sign;
+			if (lengths->max_len_between_equal_sign_and_semicolon <
+				one_of_ele_lengths->max_len_between_equal_sign_and_semicolon)
+				lengths->max_len_between_equal_sign_and_semicolon = one_of_ele_lengths->max_len_between_equal_sign_and_semicolon;
+		}
+		cur = cur->next;
+	}
+	return lengths;
 }
 
 void format_message_element(
 		Protobuf* protobuf,
 		PbMessageElement* ele,
 		unsigned int indents,
-		MessageElementLengthInfo meli,
+		MessageElementLengthInfo* meli,
 		PbTextList* text_list
 )
 {
@@ -568,7 +597,7 @@ void format_message_element(
 	// align by equal sign, fill extra spaces between the element name and equal sign.
 	if (config.align_by_equal_sign)
 	{
-		unsigned int fill_space_amount = meli.max_len_before_equal_sign - cmlbes;
+		unsigned int fill_space_amount = meli->max_len_before_equal_sign - cmlbes;
 		char* spacess = repeat(" ", fill_space_amount);
 		create_add_pb_text(spacess, color_config.default_color, text_list);
 		g_free(to_void_ptr(&spacess));
@@ -595,7 +624,7 @@ void format_message_element(
 
 	if (!config.top_comment && has_right_comment(ele->comments))
 	{
-		unsigned int space_amount = meli.max_len_between_equal_sign_and_semicolon - cmlbesas;
+		unsigned int space_amount = meli->max_len_between_equal_sign_and_semicolon - cmlbesas;
 		space_amount = space_amount + 2; // make sure there are two spaces between semicolon and single line comment
 		char* spacess = repeat(" ", space_amount);
 		create_add_pb_text(spacess, color_config.default_color, text_list);
@@ -606,11 +635,46 @@ void format_message_element(
 	create_add_pb_text("\n", color_config.default_color, text_list);
 }
 
-void format_message_elements(Protobuf* protobuf, List elements, unsigned int indents, PbTextList* text_list)
+void format_message_elements(Protobuf* protobuf, List elements, unsigned int indents, MessageElementLengthInfo* meli,
+		PbTextList* text_list)
 {
-	MessageElementLengthInfo meli = { 0, 0 };
+	MessageElementLengthInfo* common_ele_lengths = get_max_message_element_lengths(elements);
+	MessageElementLengthInfo* oneof_ele_lengths = get_oneof_message_element_lengths(elements);
 
-	get_max_message_element_length(elements, &meli);
+	MessageElementLengthInfo* final_lengths = (MessageElementLengthInfo*)g_malloc(sizeof(MessageElementLengthInfo));
+	final_lengths->max_len_before_equal_sign = common_ele_lengths->max_len_before_equal_sign;
+	final_lengths->max_len_between_equal_sign_and_semicolon = common_ele_lengths->max_len_between_equal_sign_and_semicolon;
+
+	int indents_unit = protobuf->config.indents_unit;
+
+	// if meli is not NULL, it is the parent all elements max lengths all OneOf elements.
+	if (meli != NULL && meli->max_len_before_equal_sign != 0)
+	{
+		if (final_lengths->max_len_before_equal_sign + indents_unit < meli->max_len_before_equal_sign)
+		{
+			final_lengths->max_len_before_equal_sign = meli->max_len_before_equal_sign - indents_unit;
+		}
+		if (final_lengths->max_len_between_equal_sign_and_semicolon + indents_unit <
+			meli->max_len_between_equal_sign_and_semicolon)
+		{
+			final_lengths->max_len_between_equal_sign_and_semicolon =
+					meli->max_len_between_equal_sign_and_semicolon;
+		}
+	}
+	else
+	{
+		// if max length of oneof elements is greater than the max length of common message elements, use max length of elements of oneof.
+		if (final_lengths->max_len_before_equal_sign < oneof_ele_lengths->max_len_before_equal_sign + indents_unit)
+		{
+			final_lengths->max_len_before_equal_sign = oneof_ele_lengths->max_len_before_equal_sign + indents_unit;
+		}
+		if (final_lengths->max_len_between_equal_sign_and_semicolon <
+			oneof_ele_lengths->max_len_between_equal_sign_and_semicolon)
+		{
+			final_lengths->max_len_between_equal_sign_and_semicolon =
+					oneof_ele_lengths->max_len_between_equal_sign_and_semicolon;
+		}
+	}
 
 	List cur = elements->next;
 	while (cur)
@@ -618,14 +682,20 @@ void format_message_elements(Protobuf* protobuf, List elements, unsigned int ind
 		if (strcmp(cur->data_type, "PbMessageElement") == 0)
 		{
 			PbMessageElement* ele = (PbMessageElement*)cur->data;
-			format_message_element(protobuf, ele, indents, meli, text_list);
+			format_message_element(protobuf, ele, indents, final_lengths, text_list);
+		}
+		else if (strcmp(cur->data_type, "PbOneOf") == 0)
+		{
+			format_object(protobuf, cur->data, cur->data_type, indents, final_lengths, text_list);
 		}
 		else
 		{
-			format_object(protobuf, cur->data, cur->data_type, indents, text_list);
+			format_object(protobuf, cur->data, cur->data_type, indents, NULL, text_list);
 		}
 		cur = cur->next;
 	}
+
+//	g_free(to_void_ptr(&final_lengths));
 }
 
 
@@ -717,7 +787,8 @@ void format_enum_element(
 	create_add_pb_text("\n", color_config.default_color, text_list);
 }
 
-void format_enum_elements(Protobuf* protobuf, List elements, unsigned int indents, PbTextList* text_list)
+void format_enum_elements(Protobuf* protobuf, List elements, unsigned int indents, MessageElementLengthInfo* meli,
+		PbTextList* text_list)
 {
 	EnumElementLengthInfo eeli = { 0, 0 };
 
@@ -767,7 +838,8 @@ void format_service_element(
 	create_add_pb_text("\n", color_config.default_color, text_list);
 }
 
-void format_service_elements(Protobuf* protobuf, List elements, unsigned int indents, PbTextList* text_list)
+void format_service_elements(Protobuf* protobuf, List elements, unsigned int indents, MessageElementLengthInfo* meli,
+		PbTextList* text_list)
 {
 	List cur = elements->next;
 	while (cur)
@@ -788,8 +860,9 @@ void create_object_text(
 		List object_elements,
 		Protobuf* protobuf,
 		unsigned int indents,
+		MessageElementLengthInfo* meli,
 		PbTextList* text_list,
-		void (element_format_func)(Protobuf*, List, unsigned int, PbTextList*)
+		void (element_format_func)(Protobuf*, List, unsigned int, MessageElementLengthInfo*, PbTextList*)
 )
 {
 	PbConfig config = protobuf->config;
@@ -811,7 +884,7 @@ void create_object_text(
 		format_right_comment(object_comments, color_config.comment, text_list);
 	}
 	create_add_pb_text("\n", color_config.default_color, text_list);
-	element_format_func(protobuf, object_elements, indents + config.indents_unit, text_list);
+	element_format_func(protobuf, object_elements, indents + config.indents_unit, meli, text_list);
 	format_bottom_comment(object_comments, color_config.comment, indents + config.indents_unit, text_list);
 	char* spaces_bottom = repeat(" ", indents);
 	create_add_pb_text(spaces_bottom, color_config.default_color, text_list); // add indents
@@ -819,7 +892,9 @@ void create_object_text(
 	create_add_pb_text("}\n", color_config.default_color, text_list);
 }
 
-void format_object(Protobuf* protobuf, void* object, char* data_type, unsigned int indents, PbTextList* text_list)
+void
+format_object(Protobuf* protobuf, void* object, char* data_type, unsigned int indents, MessageElementLengthInfo* meli,
+		PbTextList* text_list)
 {
 	if (strcmp(data_type, "PbMessage") == 0)
 	{
@@ -831,6 +906,7 @@ void format_object(Protobuf* protobuf, void* object, char* data_type, unsigned i
 				obj->elements,
 				protobuf,
 				indents,
+				meli,
 				text_list,
 				format_message_elements
 		);
@@ -847,6 +923,7 @@ void format_object(Protobuf* protobuf, void* object, char* data_type, unsigned i
 				obj->elements,
 				protobuf,
 				indents,
+				meli,
 				text_list,
 				format_enum_elements
 		);
@@ -863,6 +940,7 @@ void format_object(Protobuf* protobuf, void* object, char* data_type, unsigned i
 				obj->elements,
 				protobuf,
 				indents,
+				meli,
 				text_list,
 				format_service_elements
 		);
@@ -879,6 +957,7 @@ void format_object(Protobuf* protobuf, void* object, char* data_type, unsigned i
 				obj->elements,
 				protobuf,
 				indents,
+				meli,
 				text_list,
 				format_message_elements
 		);
@@ -895,6 +974,7 @@ void format_object(Protobuf* protobuf, void* object, char* data_type, unsigned i
 				obj->elements,
 				protobuf,
 				indents,
+				meli,
 				text_list,
 				format_message_elements
 		);
@@ -908,7 +988,7 @@ void format_objects(Protobuf* protobuf, PbTextList* text_list)
 	List cur = protobuf->objects->next;
 	while (cur)
 	{
-		format_object(protobuf, cur->data, cur->data_type, 0, text_list);
+		format_object(protobuf, cur->data, cur->data_type, 0, NULL, text_list);
 		if (cur->next)
 		{
 			create_add_pb_text("\n", color_config.default_color, text_list);

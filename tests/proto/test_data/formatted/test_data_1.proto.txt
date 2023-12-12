@@ -104,11 +104,11 @@ message DemoRequestB {
     **    test_oneoftest_oneoftest_oneoftest_oneof test_oneof
     */
     oneof test_oneof {
-        string name            = 6;  // Use to validate the test_oneof name
+        string name                              = 6;  // Use to validate the test_oneof name
         /*
         **    Use to validate the test_oneof sub_message
         */
-        SubMessage sub_message = 7;
+        SubMessage sub_message                   = 7;
     }
     SubMessage DemoRequestBed                    = 8;  // asdasd
 }
