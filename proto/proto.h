@@ -216,30 +216,30 @@ typedef struct ProtobufStruct
 	PbSyntax* syntax;
 	PbPackage* package;
 	PbOptionList* options;
-	/*
-	** PbImport object list
-	*/
+	// PbImport object list
 	PbImportList* imports;
-	/*
-	**  PbMessage, PbService, PbEnum object list
-	*/
+	// PbMessage, PbService, PbEnum object list
 	List objects;
 	PbTextList* colorful_text_list;
 	PbConfig config;
 	PbCommentList* comments;
 } Protobuf;
 
-typedef struct MessageElementLengthInfo
+typedef struct MessageElementLength
 {
-	unsigned int max_len_before_equal_sign;
-	unsigned int max_len_between_equal_sign_and_semicolon;
-} MessageElementLengthInfo;
+	// max string length from the element start to the equal sign.
+	unsigned int max_name_len;
+	// max string length from equal sign to the semicolon of the element.
+	unsigned int max_value_len;
+} MessageElementLength;
 
-typedef struct EnumElementLengthInfo
+typedef struct EnumElementLength
 {
-	unsigned int maxLengthOfName;
-	unsigned int max_len_between_equal_sign_and_semicolon;
-} EnumElementLengthInfo;
+	// max string length of enum element name.
+	unsigned int max_name_len;
+	// max string length from equal sign to the semicolon of the element.
+	unsigned int max_value_len;
+} EnumElementLength;
 
 void print_text(PbText* text);
 
@@ -291,34 +291,32 @@ void format_import(Protobuf* protobuf, PbImport* pb_import, unsigned int max_imp
 
 void format_imports(Protobuf* protobuf, PbTextList* text_list);
 
-void get_max_message_element_length(List elements, MessageElementLengthInfo* meli,unsigned int indents_unit);
+MessageElementLength* get_max_message_element_lengths(List elements);
 
-MessageElementLengthInfo *get_max_message_element_lengths(List elements);
-
-MessageElementLengthInfo *get_oneof_message_element_lengths(List elements);
+MessageElementLength* get_oneof_message_element_lengths(List elements);
 
 void format_message_element(
 		Protobuf* protobuf,
 		PbMessageElement* ele,
 		unsigned int indents,
-		MessageElementLengthInfo* message_element_len_info,
+		MessageElementLength* message_element_len_info,
 		PbTextList* text_list
 );
 
-void format_message_elements(Protobuf* protobuf, List elements, unsigned int indents, MessageElementLengthInfo* meli,
+void format_message_elements(Protobuf* protobuf, List elements, unsigned int indents, MessageElementLength* lengths,
 		PbTextList* text_list);
 
-void find_max_enum_element_length(List elements, EnumElementLengthInfo* enum_element_len_info);
+void find_max_enum_element_length(List elements, EnumElementLength* enum_element_len_info);
 
 void format_enum_element(
 		Protobuf* protobuf,
 		PbEnumElement* ele,
 		unsigned int indents,
-		EnumElementLengthInfo enum_element_len_info,
+		EnumElementLength enum_element_len_info,
 		PbTextList* text_list
 );
 
-void format_enum_elements(Protobuf* protobuf, List elements, unsigned int indents, MessageElementLengthInfo* meli,
+void format_enum_elements(Protobuf* protobuf, List elements, unsigned int indents, MessageElementLength* lengths,
 		PbTextList* text_list);
 
 void format_service_element(
@@ -328,7 +326,7 @@ void format_service_element(
 		PbTextList* text_list
 );
 
-void format_service_elements(Protobuf* protobuf, List elements, unsigned int indents, MessageElementLengthInfo* meli,
+void format_service_elements(Protobuf* protobuf, List elements, unsigned int indents, MessageElementLength* lengths,
 		PbTextList* text_list);
 
 void create_object_text(
@@ -338,13 +336,13 @@ void create_object_text(
 		List object_elements,
 		Protobuf* protobuf,
 		unsigned int indents,
-		MessageElementLengthInfo* meli,
+		MessageElementLength* lengths,
 		PbTextList* text_list,
-		void (* element_format_func)(Protobuf*, List, unsigned int, MessageElementLengthInfo*, PbTextList*)
+		void (* element_format_func)(Protobuf*, List, unsigned int, MessageElementLength*, PbTextList*)
 );
 
 void
-format_object(Protobuf* protobuf, void* object, char* data_type, unsigned int indents, MessageElementLengthInfo* meli,
+format_object(Protobuf* protobuf, void* object, char* data_type, unsigned int indents, MessageElementLength* lengths,
 		PbTextList* text_list);
 
 void format_objects(Protobuf* protobuf, PbTextList* text_list);
