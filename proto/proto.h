@@ -291,9 +291,9 @@ void format_import(Protobuf* protobuf, PbImport* pb_import, unsigned int max_imp
 
 void format_imports(Protobuf* protobuf, PbTextList* text_list);
 
-MessageElementLength* get_max_message_element_lengths(List elements);
+void get_max_message_element_lengths(List elements, MessageElementLength* lengths);
 
-MessageElementLength* get_oneof_message_element_lengths(List elements);
+void get_oneof_message_element_lengths(List elements, MessageElementLength* lengths);
 
 void format_message_element(
 		Protobuf* protobuf,

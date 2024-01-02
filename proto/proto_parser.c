@@ -215,7 +215,7 @@ void parse_proto_string(Protobuf* protobuf, const char* proto_str)
 			}
 			else
 			{
-				dispose_list(PbCommentNode, top_comments, free_PbComment);
+				free_comment_list(&top_comments);
 			}
 			break;
 		}

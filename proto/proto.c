@@ -502,9 +502,8 @@ void format_imports(Protobuf* protobuf, PbTextList* text_list)
 }
 
 
-MessageElementLength* get_max_message_element_lengths(List elements)
+void get_max_message_element_lengths(List elements, MessageElementLength* lengths)
 {
-	MessageElementLength* lengths = (MessageElementLength*)g_malloc(sizeof(MessageElementLength));
 	lengths->max_name_len = 0;
 	lengths->max_value_len = 0;
 
@@ -539,12 +538,10 @@ MessageElementLength* get_max_message_element_lengths(List elements)
 		}
 		cur = cur->next;
 	}
-	return lengths;
 }
 
-MessageElementLength* get_oneof_message_element_lengths(List elements)
+void get_oneof_message_element_lengths(List elements, MessageElementLength* lengths)
 {
-	MessageElementLength* lengths = (MessageElementLength*)g_malloc(sizeof(MessageElementLength));
 	lengths->max_name_len = 0;
 	lengths->max_value_len = 0;
 	List cur = elements->next;
@@ -553,16 +550,16 @@ MessageElementLength* get_oneof_message_element_lengths(List elements)
 		if (strcmp(cur->data_type, "PbOneOf") == 0)
 		{
 			PbOneOf* oneof = (PbOneOf*)cur->data;
-			MessageElementLength* one_of_ele_lengths = get_max_message_element_lengths(oneof->elements);
-			if (lengths->max_name_len < one_of_ele_lengths->max_name_len)
-				lengths->max_name_len = one_of_ele_lengths->max_name_len;
+			MessageElementLength one_of_ele_lengths;
+			get_max_message_element_lengths(oneof->elements, &one_of_ele_lengths);
+			if (lengths->max_name_len < one_of_ele_lengths.max_name_len)
+				lengths->max_name_len = one_of_ele_lengths.max_name_len;
 
-			if (lengths->max_value_len < one_of_ele_lengths->max_value_len)
-				lengths->max_value_len = one_of_ele_lengths->max_value_len;
+			if (lengths->max_value_len < one_of_ele_lengths.max_value_len)
+				lengths->max_value_len = one_of_ele_lengths.max_value_len;
 		}
 		cur = cur->next;
 	}
-	return lengths;
 }
 
 void format_message_element(
@@ -638,32 +635,34 @@ void format_message_element(
 void format_message_elements(Protobuf* protobuf, List elements, unsigned int indents, MessageElementLength* lengths,
 		PbTextList* text_list)
 {
-	MessageElementLength* common_ele_lengths = get_max_message_element_lengths(elements);
-	MessageElementLength* oneof_ele_lengths = get_oneof_message_element_lengths(elements);
+	MessageElementLength common_ele_lengths;
+	get_max_message_element_lengths(elements, &common_ele_lengths);
+	MessageElementLength oneof_ele_lengths;
+	get_oneof_message_element_lengths(elements, &oneof_ele_lengths);
 
-	MessageElementLength* final_lengths = (MessageElementLength*)g_malloc(sizeof(MessageElementLength));
-	final_lengths->max_name_len = common_ele_lengths->max_name_len;
-	final_lengths->max_value_len = common_ele_lengths->max_value_len;
+	MessageElementLength final_lengths;
+	final_lengths.max_name_len = common_ele_lengths.max_name_len;
+	final_lengths.max_value_len = common_ele_lengths.max_value_len;
 
 	int indents_unit = protobuf->config.indents_unit;
 
 	// if lengths is not NULL, it is the parent all elements max lengths all OneOf elements.
 	if (lengths != NULL && lengths->max_name_len != 0)
 	{
-		if (final_lengths->max_name_len + indents_unit < lengths->max_name_len)
-			final_lengths->max_name_len = lengths->max_name_len - indents_unit;
+		if (final_lengths.max_name_len + indents_unit < lengths->max_name_len)
+			final_lengths.max_name_len = lengths->max_name_len - indents_unit;
 
-		if (final_lengths->max_value_len + indents_unit < lengths->max_value_len)
-			final_lengths->max_value_len = lengths->max_value_len;
+		if (final_lengths.max_value_len + indents_unit < lengths->max_value_len)
+			final_lengths.max_value_len = lengths->max_value_len;
 	}
 	else
 	{
 		// if max length of oneof elements is greater than the max length of common message elements, use max length of elements of oneof.
-		if (final_lengths->max_name_len < oneof_ele_lengths->max_name_len + indents_unit)
-			final_lengths->max_name_len = oneof_ele_lengths->max_name_len + indents_unit;
+		if (final_lengths.max_name_len < oneof_ele_lengths.max_name_len + indents_unit)
+			final_lengths.max_name_len = oneof_ele_lengths.max_name_len + indents_unit;
 
-		if (final_lengths->max_value_len < oneof_ele_lengths->max_value_len)
-			final_lengths->max_value_len = oneof_ele_lengths->max_value_len;
+		if (final_lengths.max_value_len < oneof_ele_lengths.max_value_len)
+			final_lengths.max_value_len = oneof_ele_lengths.max_value_len;
 	}
 
 	List cur = elements->next;
@@ -672,11 +671,11 @@ void format_message_elements(Protobuf* protobuf, List elements, unsigned int ind
 		if (strcmp(cur->data_type, "PbMessageElement") == 0)
 		{
 			PbMessageElement* ele = (PbMessageElement*)cur->data;
-			format_message_element(protobuf, ele, indents, final_lengths, text_list);
+			format_message_element(protobuf, ele, indents, &final_lengths, text_list);
 		}
 		else if (strcmp(cur->data_type, "PbOneOf") == 0)
 		{
-			format_object(protobuf, cur->data, cur->data_type, indents, final_lengths, text_list);
+			format_object(protobuf, cur->data, cur->data_type, indents, &final_lengths, text_list);
 		}
 		else
 		{
@@ -684,8 +683,6 @@ void format_message_elements(Protobuf* protobuf, List elements, unsigned int ind
 		}
 		cur = cur->next;
 	}
-
-//	g_free(to_void_ptr(&final_lengths));
 }
 
 
