@@ -80,6 +80,7 @@ Protobuf* parse(const char* file_path)
 
 	char* content = read_file(file_path);
 	parse_proto_string(protobuf, content);
+	g_free(to_void_ptr((&content)));
 	return protobuf;
 }
 
@@ -304,6 +305,9 @@ void parse_proto_string(Protobuf* protobuf, const char* proto_str)
 				status = service_element;
 				parse_obj(proto_str, index_ptr, &status, protobuf, top_comments, object_stack);
 			}
+
+			g_free(to_void_ptr(&text));
 		}
 	}
+	g_free(to_void_ptr(&object_stack));
 }

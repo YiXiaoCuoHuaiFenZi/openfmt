@@ -168,8 +168,8 @@ void parse_message_element(const char* proto_str, unsigned long* index, PbCommen
 	char* s = pick_str_until(proto_str + *index, ';', true);
 	if (s == NULL)
 		fail("target char not found.");
-	else
-		*index = *index + strlen(s);
+
+	*index = *index + strlen(s);
 
 	PbMessageElement* pb_message_element = make_pb_message_element(s, comments);
 

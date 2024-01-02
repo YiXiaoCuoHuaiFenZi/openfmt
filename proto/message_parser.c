@@ -38,33 +38,30 @@ void parse_message(
 	char* s = pick_str_until(proto_str + *index, '{', false);
 	if (s == NULL)
 		fail("target char not found.");
-	else
-		*index = *index + strlen(s) + 1; // increase extra 1 to skip the '{' charactor.
 
-	if (s != NULL)
+	*index = *index + strlen(s) + 1; // increase extra 1 to skip the '{' charactor.
+
+	char* name = trim(s);
+	g_free(to_void_ptr(&s));
+
+	PbMessage* pb_message = make_pb_message(name, comments);
+	g_free(to_void_ptr(&name));
+
+	if (is_empty_stack(object_stack))
 	{
-		char* name = trim(s);
-		g_free(to_void_ptr(&s));
-
-		PbMessage* pb_message = make_pb_message(name, comments);
-		g_free(to_void_ptr(&name));
-
-		if (is_empty_stack(object_stack))
-		{
-			append_linked_list(pb_message, "PbMessage", protobuf->objects);
-		}
-		else
-		{
-			append_linked_list(pb_message, "PbMessage", get_parent_elements(object_stack));
-		}
-
-		// parse line comment
-		PbComment* line_comment = pick_up_line_comment(proto_str, index);
-		if (line_comment != NULL)
-		{
-			append_list(PbCommentNode, pb_message->comments, line_comment);
-		}
-
-		push_stack(pb_message, "PbMessage", object_stack);
+		append_linked_list(pb_message, "PbMessage", protobuf->objects);
 	}
+	else
+	{
+		append_linked_list(pb_message, "PbMessage", get_parent_elements(object_stack));
+	}
+
+	// parse line comment
+	PbComment* line_comment = pick_up_line_comment(proto_str, index);
+	if (line_comment != NULL)
+	{
+		append_list(PbCommentNode, pb_message->comments, line_comment);
+	}
+
+	push_stack(pb_message, "PbMessage", object_stack);
 }

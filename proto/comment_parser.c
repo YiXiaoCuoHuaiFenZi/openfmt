@@ -11,6 +11,7 @@
 #include "comment_parser.h"
 #include "proto.h"
 #include "../lib/memory.h"
+#include "../lib/os.h"
 
 PbCommentList* make_comments(GCharList* commentLines, PbPosition position)
 {
@@ -81,10 +82,14 @@ char* clean_comment_str(const char* comment)
 PbComment* pick_up_line_comment(const char* proto_str, unsigned long* index)
 {
 	char* s = pick_str_until(proto_str + *index, '\n', true);
+	if (s == NULL)
+		fail("target char not found.");
+
 	unsigned long* index_ptr = NULL;
 	unsigned long tmp_index = 0;
 	index_ptr = &tmp_index;
 	char* line_comment = pick_up_comment_str(s, index_ptr);
+
 	if (line_comment != NULL)
 	{
 		char* line_comment_processed = clean_comment_str(line_comment);
@@ -94,9 +99,10 @@ PbComment* pick_up_line_comment(const char* proto_str, unsigned long* index)
 		pb_comment->pos = RIGHT;
 
 		*index = *index + strlen(s);
+		g_free(to_void_ptr(&s));
 		return pb_comment;
 	}
-
+	g_free(to_void_ptr(&s));
 	return NULL;
 }
 
