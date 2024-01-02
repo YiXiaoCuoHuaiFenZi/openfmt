@@ -78,7 +78,7 @@ char* clean_comment_str(const char* comment)
 	return trimmed_comment;
 }
 
-PbComment* pick_up_single_line_comment(const char* proto_str, unsigned long* index)
+PbComment* pick_up_line_comment(const char* proto_str, unsigned long* index)
 {
 	char* s = pick_str_until(proto_str + *index, '\n', true);
 	unsigned long* index_ptr = NULL;

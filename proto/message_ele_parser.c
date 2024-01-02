@@ -174,10 +174,10 @@ void parse_message_element(const char* proto_str, unsigned long* index, PbCommen
 	PbMessageElement* pb_message_element = make_pb_message_element(s, comments);
 
 	// parse line comment
-	PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
-	if (single_line_comment != NULL)
+	PbComment* line_comment = pick_up_line_comment(proto_str, index);
+	if (line_comment != NULL)
 	{
-		append_list(PbCommentNode, pb_message_element->comments, single_line_comment);
+		append_list(PbCommentNode, pb_message_element->comments, line_comment);
 	}
 
 	PbMessage* obj = (PbMessage*)(top_stack(object_stack, NULL)->data);

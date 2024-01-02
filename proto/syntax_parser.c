@@ -41,10 +41,10 @@ void parse_syntax(const char* proto_str, unsigned long* index, PbCommentList* co
 		pb_syntax->comments = comments;
 
 		// parse line comment
-		PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
-		if (single_line_comment != NULL)
+		PbComment* line_comment = pick_up_line_comment(proto_str, index);
+		if (line_comment != NULL)
 		{
-			append_list(PbCommentNode, pb_syntax->comments, single_line_comment);
+			append_list(PbCommentNode, pb_syntax->comments, line_comment);
 		}
 		protobuf->syntax = pb_syntax;
 	}

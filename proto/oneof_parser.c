@@ -57,7 +57,7 @@ void parse_oneof(
 		}
 
 		// parse line comment
-		PbComment* line_comment = pick_up_single_line_comment(proto_str, index);
+		PbComment* line_comment = pick_up_line_comment(proto_str, index);
 		if (line_comment != NULL)
 		{
 			append_list(PbCommentNode, pb_one_of->comments, line_comment);

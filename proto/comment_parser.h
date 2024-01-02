@@ -20,7 +20,7 @@ void free_GChar(GCharNode* ptr);
 
 char* clean_comment_str(const char* comment);
 
-PbComment* pick_up_single_line_comment(const char* proto_str, unsigned long* index);
+PbComment* pick_up_line_comment(const char* proto_str, unsigned long* index);
 
 char* pick_up_comment_str(const char* proto_str, unsigned long* index);
 

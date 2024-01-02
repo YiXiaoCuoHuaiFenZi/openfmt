@@ -71,10 +71,10 @@ void parse_pb_enum_element(const char* proto_str, unsigned long* index, PbCommen
 	PbEnumElement* pb_enum_element = make_pb_enum_element(s, comments);
 
 	// parse line comment
-	PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
-	if (single_line_comment != NULL)
+	PbComment* line_comment = pick_up_line_comment(proto_str, index);
+	if (line_comment != NULL)
 	{
-		append_list(PbCommentNode, pb_enum_element->comments, single_line_comment);
+		append_list(PbCommentNode, pb_enum_element->comments, line_comment);
 	}
 	PbEnum* obj = (PbEnum*)(top_stack(object_stack, NULL)->data);
 	append_linked_list(pb_enum_element, "PbEnumElement", obj->elements);

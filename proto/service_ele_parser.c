@@ -57,10 +57,10 @@ void parse_pb_service_element(const char* proto_str, unsigned long* index, PbCom
 	PbServiceElement* pb_service_element = make_pb_service_element(s, comments);
 
 	// parse line comment
-	PbComment* single_line_comment = pick_up_single_line_comment(proto_str, index);
-	if (single_line_comment != NULL)
+	PbComment* line_comment = pick_up_line_comment(proto_str, index);
+	if (line_comment != NULL)
 	{
-		append_list(PbCommentNode, pb_service_element->comments, single_line_comment);
+		append_list(PbCommentNode, pb_service_element->comments, line_comment);
 	}
 	PbService* obj = (PbService*)(top_stack(object_stack, NULL)->data);
 	append_linked_list(pb_service_element, "PbServiceElement", obj->elements);
