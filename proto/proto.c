@@ -621,8 +621,11 @@ void format_message_element(
 
 	if (!config.top_comment && has_right_comment(ele->comments))
 	{
-		unsigned int space_amount = lengths->max_value_len - cmlbesas;
-		space_amount = space_amount + 2; // make sure there are two spaces between semicolon and single line comment
+		unsigned int space_amount = 2; // make sure there are two spaces between semicolon and single line comment
+		if (config.align_by_equal_sign)
+		{
+			space_amount += lengths->max_value_len - cmlbesas;
+		}
 		char* spacess = repeat(" ", space_amount);
 		create_add_pb_text(spacess, color_config.default_color, text_list);
 		g_free(to_void_ptr(&spacess));
@@ -636,11 +639,10 @@ void format_message_elements(Protobuf* protobuf, List elements, unsigned int ind
 		PbTextList* text_list)
 {
 	MessageElementLength common_ele_lengths;
-	get_max_message_element_lengths(elements, &common_ele_lengths);
 	MessageElementLength oneof_ele_lengths;
-	get_oneof_message_element_lengths(elements, &oneof_ele_lengths);
-
 	MessageElementLength final_lengths;
+	get_max_message_element_lengths(elements, &common_ele_lengths);
+	get_oneof_message_element_lengths(elements, &oneof_ele_lengths);
 	final_lengths.max_name_len = common_ele_lengths.max_name_len;
 	final_lengths.max_value_len = common_ele_lengths.max_value_len;
 
