@@ -17,9 +17,9 @@ int main(int argc, char* args[])
 //	// test for format proto files under a directory.
 	if (strcmp(args[1], "test_format_directory") == 0){
 		printf("(strcmp(args[1], \"test_format_directory\") == 0).\n");
-		return test_format_directory("test_data/malformed", "test_data/formatted");
+		return 0;
 	}
-
+	return test_format_directory("test_data/malformed", "test_data/formatted");
 	printf("test proto aaa.\n");
 	return 0;
 }
