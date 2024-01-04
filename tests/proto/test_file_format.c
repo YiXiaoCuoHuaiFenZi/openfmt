@@ -10,8 +10,11 @@
 
 int test_format_directory(char* malformed_file_directory, char* formatted_file_directory)
 {
+	printf("test folder %s\n", malformed_file_directory);
 	List proto_files = create_linked_list();
+	printf("start get proto_files from %s\n", malformed_file_directory);
 	list_type_files(malformed_file_directory, "proto", proto_files);
+	printf("start get proto_files from %s\n", malformed_file_directory);
 
 	PtrToLinkedListNode file_cur = proto_files->next;
 

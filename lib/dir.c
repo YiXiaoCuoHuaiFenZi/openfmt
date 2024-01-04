@@ -85,11 +85,14 @@ void list_type_files(const char* base_path, const char* extension, List list)
 {
 	char temp_path[1000];
 	struct dirent* p_dirent;
+	printf("start opendir.\n");
 	DIR* dir = opendir(base_path);
+	printf("end opendir.\n");
 	if (dir)
 	{
 		while ((p_dirent = readdir(dir)) != NULL)
 		{
+			printf("p_dirent .%s\n", p_dirent->d_name);
 			if (strcmp(p_dirent->d_name, ".") != 0 && strcmp(p_dirent->d_name, "..") != 0)
 			{
 				strcpy(temp_path, base_path);
