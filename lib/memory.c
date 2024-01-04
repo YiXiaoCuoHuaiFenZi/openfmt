@@ -20,11 +20,11 @@ void* g_malloc(size_t size)
 
 void* g_free(void** ptr)
 {
-//	if (*ptr)
-//	{
-//		free(*ptr);
-//		*ptr = NULL;
-//	}
+	if (*ptr)
+	{
+		free(*ptr);
+		*ptr = NULL;
+	}
 
 	return NULL;
 }
