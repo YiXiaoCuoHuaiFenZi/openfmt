@@ -9,6 +9,8 @@
 
 int main(int argc, char* args[])
 {
+	printf("test proto.\n");
+	printf("test proto %d.\n", argc);
 	if (argc < 2)
 		return 1;
 
