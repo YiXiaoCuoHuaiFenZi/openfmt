@@ -11,8 +11,8 @@ int main(int argc, char* args[])
 {
 	printf("test proto.\n");
 	printf("test proto %d.\n", argc);
-//	if (argc < 2)
-//		return 1;
+	if (argc < 2)
+		return 1;
 //
 //	// test for format proto files under a directory.
 //	if (strcmp(args[1], "test_format_directory") == 0)
