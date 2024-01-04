@@ -8,7 +8,6 @@
 #include <dirent.h>
 #include "proto_parser.h"
 #include "../lib/dir.h"
-#include "../lib/str.h"
 #include "../lib/file.h"
 #include "../lib/memory.h"
 
