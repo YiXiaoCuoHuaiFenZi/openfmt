@@ -1,9 +1,9 @@
 /***********************************************************************************************************************
-**    作   者：    一小撮坏分子
-**    功能描述：    simple hash table, source code comes from
-**                https://www.digitalocean.com/community/tutorials/hash-table-in-c-plus-plus
-**    创建日期：    2022-11-14
-**    更新日期：    2022-11-14
+**    Author:          YiXiaoCuoHuaiFenZi
+**    Functionality:   simple hash table, source code comes from
+**                     https://www.digitalocean.com/community/tutorials/hash-table-in-c-plus-plus
+**    Created Date:    2022-11-14
+**    Updated Date:    2022-11-14
 ***********************************************************************************************************************/
 #ifndef OPENFMT_HASH_TABLE_H
 #define OPENFMT_HASH_TABLE_H
@@ -12,10 +12,10 @@
 typedef struct Item Item;
 
 /***********************************************************************************************************************
-**    作   者：    一小撮坏分子
-**    功能描述：    Define the Hash Table Item here
-**    创建日期：    2022-10-26
-**    更新日期：    2022-10-26
+**    Author:          YiXiaoCuoHuaiFenZi
+**    Functionality:   Define the Hash Table Item here
+**    Created Date:    2022-10-26
+**    Updated Date:    2022-10-26
 ***********************************************************************************************************************/
 struct Item
 {
@@ -26,10 +26,10 @@ struct Item
 typedef struct HashTable HashTable;
 
 /***********************************************************************************************************************
-**    作   者：    一小撮坏分子
-**    功能描述：    Define the Hash Table here
-**    创建日期：    2022-10-26
-**    更新日期：    2022-10-26
+**    Author:          YiXiaoCuoHuaiFenZi
+**    Functionality:   Define the Hash Table here
+**    Created Date:    2022-10-26
+**    Updated Date:    2022-10-26
 ***********************************************************************************************************************/
 struct HashTable
 {

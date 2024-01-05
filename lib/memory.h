@@ -1,8 +1,8 @@
 /***********************************************************************************************************************
-**    作   者：    一小撮坏分子
-**    功能描述：    general memory resource management functions
-**    创建日期：    2023-05-17
-**    更新日期：    2023-05-17
+**    Author:          YiXiaoCuoHuaiFenZi
+**    Functionality:   general memory resource management functions
+**    Created Date:    2023-05-17
+**    Updated Date:    2023-05-17
 ***********************************************************************************************************************/
 #ifndef OPENFMT_MEMORY_H
 #define OPENFMT_MEMORY_H
@@ -11,30 +11,30 @@
 #include  <stdlib.h>
 
 /***********************************************************************************************************************
-**    作   者：    一小撮坏分子
-**    功能描述：    memory allocation with check.
-**    参数列表：    size:   the size of memory to be allocated.
-**                return: void pointer, if NULL, allocate failed with message printed.
-**    创建日期：    2023-05-17
-**    更新日期：    2023-05-17
+**    Author:          YiXiaoCuoHuaiFenZi
+**    Functionality:   memory allocation with check.
+**    Parameters:      size:   the size of memory to be allocated.
+**                     return: void pointer, if NULL, allocate failed with message printed.
+**    Created Date:    2023-05-17
+**    Updated Date:    2023-05-17
 ***********************************************************************************************************************/
 void* g_malloc(size_t size);
 
 /***********************************************************************************************************************
-**    作   者：    一小撮坏分子
-**    功能描述：    free memory and set the target pointer to NULL.
-**    参数列表：    ptr:    pointer to the target pointer, the memory pointed to by the target pointer will be freed.
-**                return: None.
-**    创建日期：    2023-05-17
-**    更新日期：    2023-06-01
+**    Author:          YiXiaoCuoHuaiFenZi
+**    Functionality:   free memory and set the target pointer to NULL.
+**    Parameters:      ptr:    pointer to the target pointer, the memory pointed to by the target pointer will be freed.
+**                     return: None.
+**    Created Date:    2023-05-17
+**    Updated Date:    2023-06-01
 ***********************************************************************************************************************/
 void* g_free(void** ptr);
 
 /***********************************************************************************************************************
-**    作   者：    一小撮坏分子
-**    功能描述：    convert pointer to void**
-**    创建日期：    2023-12-06
-**    更新日期：    2023-12-06
+**    Author:          YiXiaoCuoHuaiFenZi
+**    Functionality:   convert pointer to void**
+**    Created Date:    2023-12-06
+**    Updated Date:    2023-12-06
 ***********************************************************************************************************************/
 #define to_void_ptr(value) (void**)(value)
 

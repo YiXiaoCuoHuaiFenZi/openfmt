@@ -1,8 +1,8 @@
 /***********************************************************************************************************************
-**    作   者：    一小撮坏分子
-**    功能描述：    Generic list implementations using macros.
-**    创建日期：    2022-10-26
-**    更新日期：    2023-06-28
+**    Author:          YiXiaoCuoHuaiFenZi
+**    Functionality:   Generic list implementations using macros.
+**    Created Date:    2022-10-26
+**    Updated Date:    2023-06-28
 ***********************************************************************************************************************/
 #ifndef OPENFMT_G_LIST_H
 #define OPENFMT_G_LIST_H
@@ -19,10 +19,10 @@ typedef unsigned long UnsignedLong;
 typedef G_NodeTemplate(UnsignedLong) GUnsignedLongNode, GUnsignedLongList;
 
 /***********************************************************************************************************************
-**    作   者：    一小撮坏分子
-**    功能描述：    The generic macro method of creating type specified list.
-**    创建日期：    2022-10-26
-**    更新日期：    2022-10-26
+**    Author:          YiXiaoCuoHuaiFenZi
+**    Functionality:   The generic macro method of creating type specified list.
+**    Created Date:    2022-10-26
+**    Updated Date:    2022-10-26
 ***********************************************************************************************************************/
 #define create_list(type) ({                                                   \
     type *head = (type *) malloc(sizeof(type));                                \
@@ -37,10 +37,10 @@ typedef G_NodeTemplate(UnsignedLong) GUnsignedLongNode, GUnsignedLongList;
  })
 
 /***********************************************************************************************************************
-**    作   者：    一小撮坏分子
-**    功能描述：    The generic macro method of appending element to the list.
-**    创建日期：    2022-10-26
-**    更新日期：    2022-10-26
+**    Author:          YiXiaoCuoHuaiFenZi
+**    Functionality:   The generic macro method of appending element to the list.
+**    Created Date:    2022-10-26
+**    Updated Date:    2022-10-26
 ***********************************************************************************************************************/
 #define append_list(type, inst, element) ({                                    \
     type *temp_node  = (type *) malloc(sizeof(type));                          \
@@ -62,20 +62,20 @@ typedef G_NodeTemplate(UnsignedLong) GUnsignedLongNode, GUnsignedLongList;
  })
 
 /***********************************************************************************************************************
-**    作   者：    一小撮坏分子
-**    功能描述：    Check if list is empty.
-**    创建日期：    2022-10-26
-**    更新日期：    2022-10-26
+**    Author:          YiXiaoCuoHuaiFenZi
+**    Functionality:   Check if list is empty.
+**    Created Date:    2022-10-26
+**    Updated Date:    2022-10-26
 ***********************************************************************************************************************/
 #define is_empty_list(inst) ({                                                 \
     inst->next == NULL;                                                        \
  })
 
 /***********************************************************************************************************************
-**    作   者：    一小撮坏分子
-**    功能描述：    Dispose list.
-**    创建日期：    2022-10-26
-**    更新日期：    2022-10-26
+**    Author:          YiXiaoCuoHuaiFenZi
+**    Functionality:   Dispose list.
+**    Created Date:    2022-10-26
+**    Updated Date:    2022-10-26
 ***********************************************************************************************************************/
 #define dispose_list(type, inst, data_free_func) ({                            \
     if (is_empty_list(inst))                                                   \

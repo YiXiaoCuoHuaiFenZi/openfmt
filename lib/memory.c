@@ -1,8 +1,8 @@
 /***********************************************************************************************************************
-**    作   者：    一小撮坏分子
-**    功能描述：    implementations of general memory resource management functions.
-**    创建日期：    2023-05-17
-**    更新日期：    2023-06-01
+**    Author:          YiXiaoCuoHuaiFenZi
+**    Functionality:   implementations of general memory resource management functions.
+**    Created Date:    2023-05-17
+**    Updated Date:    2023-06-01
 ***********************************************************************************************************************/
 #include "memory.h"
 

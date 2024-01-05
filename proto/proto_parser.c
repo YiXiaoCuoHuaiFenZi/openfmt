@@ -1,9 +1,8 @@
 /***********************************************************************************************************************
-**    作   者：    一小撮坏分子
-**    功能描述：    Provide methods to deserialize proto file to Protobuf
-*object.
-**    创建日期：    2022-09-30
-**    更新日期：    2023-06-28
+**    Author:          YiXiaoCuoHuaiFenZi
+**    Functionality:   Provide methods to deserialize proto file to Protobuf object.
+**    Created Date:    2022-09-30
+**    Updated Date:    2023-06-28
 ***********************************************************************************************************************/
 #include <ctype.h>
 #include <stdlib.h>
