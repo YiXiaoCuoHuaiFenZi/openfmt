@@ -351,8 +351,6 @@ void format_comments(Protobuf* protobuf, PbTextList* text_list);
 
 void format_protobuf(Protobuf* protobuf, const char* file_path);
 
-char* str_join(PbTextList* text_list);
-
 void write_to_file(PbTextList* text_list, const char* file_path);
 
 void free_PbText(PbTextNode* ptr);

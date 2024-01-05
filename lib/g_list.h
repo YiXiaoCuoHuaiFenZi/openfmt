@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define G_NodeTemplate(Type) struct G ##Type ##Node{ Type *data; struct G ##Type ##Node *next; }
+#define G_NodeTemplate(Type) struct G_##Type##Node{ Type *data; struct G_##Type##Node *next; }
 typedef G_NodeTemplate(int) GIntNode, GIntList;
 typedef G_NodeTemplate(float) GFloatNode, GFloatList;
 typedef G_NodeTemplate(char) GCharNode, GCharList;
