@@ -180,7 +180,7 @@ void parse_message_element(const char* proto_str, unsigned long* index, PbCommen
 		append_list(PbCommentNode, pb_message_element->comments, line_comment);
 	}
 
-	PbMessage* obj = (PbMessage*)(top_stack(object_stack, NULL)->data);
+	PbMessage* obj = (PbMessage*)(top_stack(object_stack)->data);
 	append_linked_list(pb_message_element, "PbMessageElement", obj->elements);
 
 	g_free(to_void_ptr(&s));

@@ -76,7 +76,7 @@ void parse_pb_enum_element(const char* proto_str, unsigned long* index, PbCommen
 	{
 		append_list(PbCommentNode, pb_enum_element->comments, line_comment);
 	}
-	PbEnum* obj = (PbEnum*)(top_stack(object_stack, NULL)->data);
+	PbEnum* obj = (PbEnum*)(top_stack(object_stack)->data);
 	append_linked_list(pb_enum_element, "PbEnumElement", obj->elements);
 
 	g_free(to_void_ptr(&s));

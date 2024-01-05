@@ -231,7 +231,7 @@ void parse_proto_string(Protobuf* protobuf, const char* proto_str)
             **/
 			if (top_comments != NULL)
 			{
-				PtrToStackNode stack_node = (PtrToStackNode)top_stack(object_stack, NULL);
+				PtrToStackNode stack_node = (PtrToStackNode)top_stack(object_stack);
 				append_bottom_comments(stack_node, top_comments);
 				/*
 				** the top_comments is bottom comments actually, and the comment value data will be added to the object,

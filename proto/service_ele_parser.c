@@ -62,7 +62,7 @@ void parse_pb_service_element(const char* proto_str, unsigned long* index, PbCom
 	{
 		append_list(PbCommentNode, pb_service_element->comments, line_comment);
 	}
-	PbService* obj = (PbService*)(top_stack(object_stack, NULL)->data);
+	PbService* obj = (PbService*)(top_stack(object_stack)->data);
 	append_linked_list(pb_service_element, "PbServiceElement", obj->elements);
 
 	g_free(to_void_ptr(&s));

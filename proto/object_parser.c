@@ -61,7 +61,7 @@ void append_bottom_comments(PtrToStackNode node, PbCommentList* bottom_comments)
 
 List get_parent_elements(Stack object_stack)
 {
-	PtrToStackNode node = (PtrToStackNode)top_stack(object_stack, NULL);
+	PtrToStackNode node = (PtrToStackNode)top_stack(object_stack);
 
 	if (strcmp(node->data_type, "PbMessage") == 0)
 	{

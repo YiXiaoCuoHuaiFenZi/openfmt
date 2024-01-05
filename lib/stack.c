@@ -1,6 +1,6 @@
 /***********************************************************************************************************************
 **    Author:          YiXiaoCuoHuaiFenZi
-**    Functionality:
+**    Functionality:   Methods to handle generic stack.
 **    Created Date:    2022-10-03
 **    Updated Date:    2023-06-28
 ***********************************************************************************************************************/
@@ -46,7 +46,7 @@ void push_stack(void* data, char* data_type, Stack stack)
 	stack->next = ptr_node;
 }
 
-PtrToStackNode top_stack(Stack stack, void (* free_data_callback)(PtrToStackNode ptr_node))
+PtrToStackNode top_stack(Stack stack)
 {
 	if (!is_empty_stack(stack))
 	{
@@ -54,4 +54,10 @@ PtrToStackNode top_stack(Stack stack, void (* free_data_callback)(PtrToStackNode
 	}
 	printf("%s", "Empty stack!");
 	exit(-1);
+}
+
+void dispose_stack(Stack stack, void (* free_data_callback)(PtrToStackNode ptr_node))
+{
+	printf("not implemented method dispose_stack.");
+	exit(1);
 }
