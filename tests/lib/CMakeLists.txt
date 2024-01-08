@@ -39,5 +39,5 @@ add_test(NAME test_print_files COMMAND openfmt-lib-tester test_print_files)
 add_test(NAME test_random_bytes COMMAND openfmt-lib-tester test_random_bytes)
 add_test(NAME test_uuid4 COMMAND openfmt-lib-tester test_uuid4)
 
-# test for hash table
-add_test(NAME test_hash_table COMMAND openfmt-lib-tester test_hash_table)
+# test for generic hash table
+add_test(NAME test_g_hash_table COMMAND openfmt-lib-tester test_g_hash_table)

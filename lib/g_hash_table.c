@@ -1,8 +1,9 @@
 /***********************************************************************************************************************
 **    Author:          YiXiaoCuoHuaiFenZi
-**    Functionality:
-**    Created Date:    2022-11-23
-**    Updated Date:    2023-06-28
+**    Functionality:   simple hash table, source code comes from
+**                     https://www.digitalocean.com/community/tutorials/hash-table-in-c-plus-plus
+**    Created Date:    2022-11-14
+**    Updated Date:    2022-11-14
 ***********************************************************************************************************************/
 #include <stdlib.h>
 #include <string.h>
@@ -38,7 +39,12 @@ GItem* g_create_item(const char* key, const char* data_type, void* data, void (*
 	item->key = str_copy(key);
 	item->data = data;
 	item->data_type = str_copy(data_type);
-	item->data_free_func = data_free_func;
+
+	if (data_free_func != NULL)
+		item->data_free_func = data_free_func;
+	else
+		item->data_free_func = NULL;
+
 
 	return item;
 }
@@ -98,7 +104,7 @@ void g_hashtable_put(char* key, const char* data_type, void* data, void (* data_
 	{
 		if (table->count == table->size)
 		{
-			fail("Insert Error: Hash Table is full\n");
+			fail("Put Error: Hash Table is full\n");
 			g_free_item(item);
 			return;
 		}

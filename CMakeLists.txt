@@ -54,12 +54,8 @@ add_executable(openfmt
         lib/str_queue.h
         lib/g_list.c
         lib/g_list.h
-        lib/g_hash_table.c
-        lib/g_hash_table.h
         lib/uuid.c
         lib/uuid.h
-        lib/hash_table.c
-        lib/hash_table.h
         lib/file.c
         lib/file.h
         util/util.c
@@ -121,8 +117,8 @@ add_executable(openfmt-lib-tester
         tests/lib/test_dir.h
         tests/lib/test_uuid.c
         tests/lib/test_uuid.h
-        tests/lib/test_hash_table.c
-        tests/lib/test_hash_table.h
+        tests/lib/test_g_hash_table.c
+        tests/lib/test_g_hash_table.h
         tests/macro.c
         tests/macro.h
         lib/dir.c
@@ -133,8 +129,6 @@ add_executable(openfmt-lib-tester
         lib/linked_list.h
         lib/uuid.c
         lib/uuid.h
-        lib/hash_table.c
-        lib/hash_table.h
         lib/g_hash_table.c
         lib/g_hash_table.h
         lib/memory.c
@@ -199,12 +193,8 @@ add_executable(openfmt-tester
         lib/str_queue.h
         lib/g_list.c
         lib/g_list.h
-        lib/g_hash_table.c
-        lib/g_hash_table.h
         lib/uuid.c
         lib/uuid.h
-        lib/hash_table.c
-        lib/hash_table.h
         lib/file.c
         lib/file.h
         util/util.c

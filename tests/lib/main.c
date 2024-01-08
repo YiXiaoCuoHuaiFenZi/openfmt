@@ -9,7 +9,7 @@
 #include "g_list_test.h"
 #include "test_dir.h"
 #include "test_uuid.h"
-#include "test_hash_table.h"
+#include "test_g_hash_table.h"
 
 int main(int argc, char* args[])
 {
@@ -77,8 +77,8 @@ int main(int argc, char* args[])
 		return test_uuid4();
 
 	// test hash table
-	if (strcmp(args[1], "test_hash_table") == 0)
-		return test_hash_table();
+	if (strcmp(args[1], "test_g_hash_table") == 0)
+		return test_g_hash_table();
 
 	return 0;
 }
