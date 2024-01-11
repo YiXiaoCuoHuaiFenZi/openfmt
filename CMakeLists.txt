@@ -89,6 +89,8 @@ configure_file(tests/proto/test_data/malformed/test_data_7.proto ${CMAKE_CURRENT
 
 configure_file(tests/proto/test_data/malformed/test_data_8.proto ${CMAKE_CURRENT_BINARY_DIR}/tests/proto/test_data/malformed/test_data_8.proto COPYONLY)
 
+configure_file(tests/proto/test_data/malformed/test_data_9.proto ${CMAKE_CURRENT_BINARY_DIR}/tests/proto/test_data/malformed/test_data_9.proto COPYONLY)
+
 configure_file(tests/proto/test_data/formatted/test_data_1.proto.txt ${CMAKE_CURRENT_BINARY_DIR}/tests/proto/test_data/formatted/test_data_1.proto.txt COPYONLY)
 
 configure_file(tests/proto/test_data/formatted/test_data_2.proto.txt ${CMAKE_CURRENT_BINARY_DIR}/tests/proto/test_data/formatted/test_data_2.proto.txt COPYONLY)
@@ -104,6 +106,8 @@ configure_file(tests/proto/test_data/formatted/test_data_6.proto.txt ${CMAKE_CUR
 configure_file(tests/proto/test_data/formatted/test_data_7.proto.txt ${CMAKE_CURRENT_BINARY_DIR}/tests/proto/test_data/formatted/test_data_7.proto.txt COPYONLY)
 
 configure_file(tests/proto/test_data/formatted/test_data_8.proto.txt ${CMAKE_CURRENT_BINARY_DIR}/tests/proto/test_data/formatted/test_data_8.proto.txt COPYONLY)
+
+configure_file(tests/proto/test_data/formatted/test_data_9.proto.txt ${CMAKE_CURRENT_BINARY_DIR}/tests/proto/test_data/formatted/test_data_9.proto.txt COPYONLY)
 
 configure_file(tests/proto/test_data/formatted/test_data_4.proto.txt ${CMAKE_CURRENT_BINARY_DIR}/tests/proto/test_data/formatted/test_new_lines.proto.txt COPYONLY)
 

@@ -43,22 +43,23 @@ typedef G_NodeTemplate(UnsignedLong) GUnsignedLongNode, GUnsignedLongList;
 **    Updated Date:    2022-10-26
 ***********************************************************************************************************************/
 #define append_list(type, inst, element) ({                                    \
-    type *temp_node  = (type *) malloc(sizeof(type));                          \
-    if (temp_node == NULL)                                                     \
-    {                                                                          \
-        printf("%s", "Out of space!");                                         \
-        exit(-1);                                                              \
+    if((inst) != NULL)                                                         \
+	{                                                                          \
+	   type *temp_node  = (type *) malloc(sizeof(type));                       \
+       if (temp_node == NULL)                                                  \
+       {                                                                       \
+           printf("%s", "Out of space!");                                      \
+           exit(-1);                                                           \
+       }                                                                       \
+       type *cur = inst;                                                       \
+       while (cur->next != NULL)                                               \
+       {                                                                       \
+           cur = cur->next;                                                    \
+       }                                                                       \
+       temp_node->data = element;                                              \
+       temp_node->next = cur->next;                                            \
+       cur->next = temp_node;                                                  \
     }                                                                          \
-                                                                               \
-    type *cur = inst;                                                          \
-    while (cur->next != NULL)                                                  \
-    {                                                                          \
-        cur = cur->next;                                                       \
-    }                                                                          \
-                                                                               \
-    temp_node->data = element;                                                 \
-    temp_node->next = cur->next;                                               \
-    cur->next = temp_node;                                                     \
  })
 
 /***********************************************************************************************************************

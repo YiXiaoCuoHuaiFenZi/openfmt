@@ -513,13 +513,33 @@ void get_max_message_element_lengths(List elements, MessageElementLength* length
 		if (strcmp(cur->data_type, "PbMessageElement") == 0)
 		{
 			PbMessageElement* ele = (PbMessageElement*)cur->data;
+			unsigned int len1 = 0;
 
-			unsigned int len1 = strlen(ele->type) + strlen(ele->name);
 			if (ele->label)
 			{
-				len1 = strlen(ele->label) + strlen(ele->type) + strlen(ele->name);
-				len1++; // additional space between label and type.
+				len1 = strlen(ele->label);
+				/*
+		        ** reserved type of element hasn't type and name, only contains lable and values(number).
+		        **   example 1: reserved 8; // repeated string hook_name = 7;
+		        **   example 2: reserved 2, 15, 9 to 11;
+		        **   example 3: reserved "foo", "bar";
+		        **   if it has name, it should be a common element, need to add a space between the label and type.
+		        */
+				if (ele->name)
+					len1++; // one additional space
 			}
+
+			if (ele->type)
+			{
+				len1 += strlen(ele->type);
+				len1++; // one additional space
+			}
+
+			if (ele->name)
+			{
+				len1 += strlen(ele->name);
+			}
+
 			if (len1 > lengths->max_name_len)
 			{
 				lengths->max_name_len = len1;
@@ -528,8 +548,8 @@ void get_max_message_element_lengths(List elements, MessageElementLength* length
 			unsigned int len2 = strlen(ele->number);
 			if (ele->annotation)
 			{
-				len2 = strlen(ele->number) + strlen(ele->annotation);
 				len2++; // additional space between number and annotation.
+				len2 += strlen(ele->annotation);
 			}
 			if (len2 > lengths->max_value_len)
 			{
@@ -578,18 +598,38 @@ void format_message_element(
 	char* spaces = repeat(" ", indents);
 	create_add_pb_text(spaces, color_config.default_color, text_list); // add indents
 	g_free(to_void_ptr(&spaces));
-	unsigned int cmlbes = strlen(ele->type) + strlen(ele->name); // max_name_len of current element.
+	unsigned int cmlbes = 0;
 	if (ele->label)
 	{
-		cmlbes = strlen(ele->label) + strlen(ele->type) + strlen(ele->name);
-		cmlbes++; // additional space between label and type.
+		cmlbes = strlen(ele->label);
+		/*
+		** reserved type of element hasn't type and name, only contains lable and values(number).
+		**   example 1: reserved 8; // repeated string hook_name = 7;
+		**   example 2: reserved 2, 15, 9 to 11;
+		**   example 3: reserved "foo", "bar";
+		**   if it has name, it should be a common element, need to add a space between the label and type.
+		*/
+		if (ele->name)
+			cmlbes++;
 
 		create_add_pb_text(ele->label, color_config.message_element_label, text_list);
 		create_add_pb_text(" ", color_config.default_color, text_list);
 	}
-	create_add_pb_text(ele->type, color_config.message_element_type, text_list);
-	create_add_pb_text(" ", color_config.default_color, text_list);
-	create_add_pb_text(ele->name, color_config.message_element_name, text_list);
+
+	if (ele->type)
+	{
+		cmlbes += strlen(ele->type);
+		cmlbes++;
+
+		create_add_pb_text(ele->type, color_config.message_element_type, text_list);
+		create_add_pb_text(" ", color_config.default_color, text_list);
+	}
+
+	if (ele->name)
+	{
+		cmlbes += strlen(ele->name);
+		create_add_pb_text(ele->name, color_config.message_element_name, text_list);
+	}
 
 	// align by equal sign, fill extra spaces between the element name and equal sign.
 	if (config.align_by_equal_sign)
@@ -600,9 +640,19 @@ void format_message_element(
 		g_free(to_void_ptr(&spacess));
 	}
 
-	create_add_pb_text(" = ", color_config.default_color, text_list);
-	create_add_pb_text(ele->number, color_config.message_element_number, text_list);
+	if (ele->name)
+	{
+		// only common element has name and numbers, the reservered type of element has no name, so only print "=" for
+		// elements which has name.
+		create_add_pb_text(" = ", color_config.default_color, text_list);
+	}
+	else
+	{
+		// use three space to instead " = "
+		create_add_pb_text("  ", color_config.default_color, text_list);
+	}
 
+	create_add_pb_text(ele->number, color_config.message_element_number, text_list);
 	unsigned int cmlbesas = strlen(ele->number); // max_value_len of current element.
 	if (ele->annotation)
 	{

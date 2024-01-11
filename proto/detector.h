@@ -19,4 +19,6 @@ bool is_enum_element(char* line);
 
 bool is_service_element(char* line);
 
+bool is_reserved_data_field(char* str);
+
 #endif //OPENFMT_DETECTOR_H

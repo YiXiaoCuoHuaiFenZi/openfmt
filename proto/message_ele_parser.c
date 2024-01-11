@@ -13,18 +13,17 @@
 
 PbMessageElement* make_pb_message_element(char* text, PbCommentList* top_comments)
 {
-	PbMessageElement* pb_message_element = NULL;
 	char* s0 = strstr(text, "map<");
 	if (s0)
-	{
-		pb_message_element = make_map_message_element(text, top_comments);
-	}
-	else
-	{
-		pb_message_element = make_common_message_element(text, top_comments);
-	}
+		return make_map_message_element(text, top_comments);
 
-	return pb_message_element;
+	char* s1 = trim(text);
+	bool is_reserved = starts_with("reserved", text);
+	g_free(to_void_ptr(&s1));
+	if (is_reserved)
+		return make_reserved_message_element(text, top_comments);
+
+	return make_common_message_element(text, top_comments);
 }
 
 PbMessageElement* make_message_element(
@@ -145,8 +144,8 @@ PbMessageElement* make_common_message_element(char* text, PbCommentList* top_com
 		g_free(to_void_ptr(&s4));
 
 		// get the annotation value.
-		char* s5 = sub_str_between_str(text, "[",
-				";");  //  the annotation maybe contains ']' so not get the value by "[" and "]"
+		// the annotation contains ']' so not get the value by "[" and "]"
+		char* s5 = sub_str_between_str(text, "[", ";");
 		char* s6 = trim(s5);
 		unsigned int size = strlen(s6) + 2; // '[', and '\0'
 		annotation = (char*)g_malloc(size);
@@ -159,7 +158,18 @@ PbMessageElement* make_common_message_element(char* text, PbCommentList* top_com
 	}
 
 	PbMessageElement* pb_message_element = make_message_element(label, type, name, number, annotation, top_comments);
+	return pb_message_element;
+}
 
+PbMessageElement* make_reserved_message_element(char* text, PbCommentList* top_comments)
+{
+	// reserved 8; // repeated string hook_name = 7;
+	// reserved 2, 15, 9 to 11;
+	char* s3 = sub_str_between_str(text, "reserved", ";");
+	char* number = trim(s3);
+	g_free(to_void_ptr(&s3));
+
+	PbMessageElement* pb_message_element = make_message_element(str_copy("reserved"), NULL, NULL, number, NULL, top_comments);
 	return pb_message_element;
 }
 

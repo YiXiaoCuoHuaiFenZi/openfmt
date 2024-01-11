@@ -20,6 +20,9 @@ char* str_copy(const char* str)
 
 char* trim(const char* str)
 {
+	if (str == NULL)
+		return NULL;
+
 	unsigned int len = strlen(str);
 
 	// trim leading space
@@ -189,10 +192,16 @@ char* replace(const char* old, const char* new, const char* str)
 char* sub_str_between_str(const char* str, const char* start, const char* end)
 {
 	char* s = str_copy(str);
+	char* has_start = strstr(s, start);
+	if (has_start == NULL)
+		return NULL;
+
+	char* has_end = strstr(s, end);
+	if (has_end == NULL)
+		return NULL;
+
 	char* start_s = strstr(s, start) + strlen(start);
 	char* end_s = strstr(s, end);
-	if (start_s == NULL || end_s == NULL)
-		return NULL;
 
 	unsigned int size = end_s - start_s + 1;
 	char* v = (char*)g_malloc(size);

@@ -22,9 +22,11 @@ PbMessageElement* make_message_element(
 		PbCommentList* comments
 );
 
-PbMessageElement* make_map_message_element(char* line, PbCommentList* top_comments);
+PbMessageElement* make_map_message_element(char* text, PbCommentList* top_comments);
 
-PbMessageElement* make_common_message_element(char* line, PbCommentList* top_comments);
+PbMessageElement* make_common_message_element(char* text, PbCommentList* top_comments);
+
+PbMessageElement* make_reserved_message_element(char* text,  PbCommentList* top_comments);
 
 void parse_message_element(const char* proto_str, unsigned long* index, PbCommentList* comments, Stack object_stack);
 

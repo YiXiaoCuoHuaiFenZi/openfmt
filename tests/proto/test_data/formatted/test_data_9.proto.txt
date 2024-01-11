@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package aaaa.bb.cc;
+
+message AGate {
+    uint64 igate                = 7 [(validate.rules).message.skip = true];  // / Input gate ID of the "next" module
+    reserved                      8;                                         // repeated string hook_name = 7;
+    repeated GateHook gatehooks = 9;                                         // / List of gate hook
+}
+
+message BGate {
+    uint64 igate                = 7 [(validate.rules).message.skip = true];                   // / Input gate ID of the "next" module
+    reserved                      2, 15, 9, 12, 9,2, 15, 9,2, 15, 9,2, 15, 9,2, 15, 9 to 11;  // repeated string hook_name = 7;
+    repeated GateHook gatehooks = 9;                                                          // / List of gate hook
+}
+
+message Foo {
+    reserved   2, 15, 9 to 11;
+    reserved   "foo", "bar";
+}

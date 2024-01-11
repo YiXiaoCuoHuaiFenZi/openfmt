@@ -30,6 +30,9 @@ bool is_element(char* str)
 	if (semicolon == NULL)
 		return false;
 
+	if (is_reserved_data_field(str))
+		return true;
+
 	if (double_slash && semicolon > double_slash)
 		return false;
 
@@ -53,6 +56,9 @@ bool is_message_element(char* str)
 	// Example: repeated common.Tiger work_legs = 3;               // Chronological work  legs
 	if (!is_element(str))
 		return false;
+
+	if (is_reserved_data_field(str))
+		return true;
 
 	if (is_service_element(str))
 		return false;
@@ -84,6 +90,22 @@ bool is_message_element(char* str)
 		token = strtok(NULL, " ");
 	}
 	return space_amount >= 2;
+}
+
+bool is_reserved_data_field(char* str)
+{
+	char* semicolon = strstr(str, ";");
+	if (semicolon == NULL)
+		return false;
+
+	// Example of reserved keyword.
+	// reserved 2, 15, 9 to 11;
+	// reserved "foo", "bar";
+	char* reserved_key_word = strstr(str, "reserved ");
+	if (reserved_key_word)
+		return true;
+
+	return false;
 }
 
 bool is_enum_element(char* str)
