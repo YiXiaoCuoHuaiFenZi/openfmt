@@ -63,33 +63,24 @@ char* trim_prefix(const char* str, const char* prefix)
 		return str_copy(str);
 	}
 
-	unsigned int index = 0;
-	while (index < prefix_len)
+	unsigned int str_index = 0;
+	while (str_index < str_len)
 	{
-		if (*str == *prefix)
+		unsigned int match_index;
+		for (match_index = 0; match_index < prefix_len && str[str_index + match_index + 1]; match_index++)
 		{
-			str++;
-			prefix++;
-			index++;
+			if (str[str_index + match_index] != prefix[match_index])
+				break;
+		}
+		if (match_index == prefix_len)
+		{
+			str_index += prefix_len;
 		}
 		else
-		{
 			break;
-		}
 	}
 
-	if (index == prefix_len - 1)
-	{
-		unsigned int size = str_len - prefix_len + 1;
-		char* result = (char*)g_malloc(size);
-		memcpy(result, str, str_len);
-		result[size - 1] = '\0';
-		return result;
-	}
-	else
-	{
-		return str_copy(str);
-	}
+	return str_copy(str + str_index);
 }
 
 char* trim_suffix(const char* str, const char* suffix)
@@ -101,35 +92,34 @@ char* trim_suffix(const char* str, const char* suffix)
 		return str_copy(str);
 	}
 
-	unsigned int index = suffix_len;
+	unsigned int index = str_len;
 	const char* str_end = str + strlen(str) - 1;
 	const char* suffix_end = suffix + strlen(suffix) - 1;
+	unsigned int match_time = 0;
 	while (index > 0)
 	{
-		if (*str_end == *suffix_end)
+		unsigned int mached_count = 0;
+		while (*str_end == *suffix_end)
 		{
 			str_end--;
 			suffix_end--;
 			index--;
+			mached_count++;
+		}
+		if (mached_count == strlen(suffix))
+		{
+			suffix_end = suffix + strlen(suffix) - 1;
+			match_time++;
 		}
 		else
-		{
 			break;
-		}
 	}
 
-	if (index == 0)
-	{
-		unsigned int size = str_len - suffix_len + 1;
-		char* result = (char*)g_malloc(size);
-		memcpy(result, str, str_len - strlen(str_end + 1));
-		result[size - 1] = '\0';
-		return result;
-	}
-	else
-	{
-		return str_copy(str);
-	}
+	unsigned int size = str_len - suffix_len * match_time + 1;
+	char* result = (char*)g_malloc(size);
+	memcpy(result, str, str_len - strlen(str_end + 1));
+	result[size - 1] = '\0';
+	return result;
 }
 
 char* trim_pre_suf(const char* str, const char* substr)
