@@ -243,7 +243,7 @@ int test_trim_suffix()
 	else
 		g_free(to_void_ptr(&s0));
 
-	// TODO: not working for below case, please fix it!!!
+	// FIXME: not working for below case, please fix it!!!
 //	char* s5 = trim_suffix("你好啊今天是个好日子是个好日子是个好日子", "个好日子");
 //	if (strcmp(s5, "你好啊今天是") != 0)
 //	{
