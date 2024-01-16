@@ -63,6 +63,11 @@ char* trim_prefix(const char* str, const char* prefix)
 		return str_copy(str);
 	}
 
+	if (str_len == prefix_len && strcmp(str, prefix) == 0)
+	{
+		return str_copy("");
+	}
+
 	unsigned int str_index = 0;
 	while (str_index < str_len)
 	{
@@ -90,6 +95,11 @@ char* trim_suffix(const char* str, const char* suffix)
 	if (str_len < suffix_len || suffix_len == 0)
 	{
 		return str_copy(str);
+	}
+
+	if (str_len == suffix_len && strcmp(str, suffix) == 0)
+	{
+		return str_copy("");
 	}
 
 	unsigned int index = str_len;

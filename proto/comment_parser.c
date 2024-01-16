@@ -43,40 +43,37 @@ void free_GChar(GCharNode* ptr)
 
 char* clean_comment_str(const char* comment)
 {
-	char* trimmed_comment = trim(comment);
+	char* cleaned_comment = NULL;
+	char* trimed_comment = trim(comment);
 
-	if (starts_with("**", trimmed_comment))
+	if (starts_with("//", trimed_comment))
 	{
-		char* s0 = trim_prefix(trimmed_comment, "**");
-		char* s1 = trim(s0);
+		cleaned_comment = trim_prefix(trimed_comment, "//");
+		g_free(to_void_ptr(&trimed_comment));
+	}
+	else if (starts_with("/*", trimed_comment) && ends_with("*/", trimed_comment))
+	{
+		char* s0 = trim_prefix(trimed_comment, "/*");
+		cleaned_comment = trim_suffix(s0, "*/");
 		g_free(to_void_ptr(&s0));
-		g_free(to_void_ptr(&trimmed_comment));
-		return s1;
+		g_free(to_void_ptr(&trimed_comment));
+	}
+	else
+	{
+		cleaned_comment = trimed_comment;
 	}
 
-	bool is_line_comment = starts_with("//", trimmed_comment);
-	if (is_line_comment)
-	{
-		char* s0 = trim_prefix(trimmed_comment, "//");
-		char* s1 = trim(s0);
-		g_free(to_void_ptr(&s0));
-		g_free(to_void_ptr(&trimmed_comment));
-		return s1;
-	}
+	char* r0 = trim(cleaned_comment);
+	char* r1 = trim_pre_suf(r0, " ");
+	char* r2 = trim_pre_suf(r1, "*");
+	char* r3 = trim_pre_suf(r2, "/");
+	char* r4 = trim(r3);
+	g_free(to_void_ptr(&r0));
+	g_free(to_void_ptr(&r1));
+	g_free(to_void_ptr(&r2));
+	g_free(to_void_ptr(&r3));
 
-	bool is_block_comment = starts_with("/*", trimmed_comment) && ends_with("*/", trimmed_comment);
-	if (is_block_comment)
-	{
-		char* s0 = trim_prefix(trimmed_comment, "/*");
-		char* s1 = trim_suffix(s0, "*/");
-		char* s2 = trim(s1);
-		g_free(to_void_ptr(&s0));
-		g_free(to_void_ptr(&s1));
-		g_free(to_void_ptr(&trimmed_comment));
-		return s2;
-	}
-
-	return trimmed_comment;
+	return r4;
 }
 
 PbComment* pick_up_line_comment(const char* proto_str, unsigned long* index)
@@ -216,18 +213,24 @@ GCharList* pick_up_all_comments(const char* proto_str, unsigned long* index)
 			//  TODO: find a elegant method to split the string to lines.
 			//   The strtok discard multiple empty lines if use it directly: strtok(cleaned_comment, "\n");
 			char* replaced_comment = replace("\n", "\n~~", cleaned_comment);
-			g_free(to_void_ptr(&cleaned_comment));
 			char* token = strtok(replaced_comment, "~~");
-
-			// loop through the string to extract all other tokens
-			while (token != NULL)
+			if (token == NULL)
 			{
-				char* s = clean_comment_str(token);
-				append_list(GCharNode, comments, trim(s));
-				g_free(to_void_ptr(&s));
-				token = strtok(NULL, "~~");
+				append_list(GCharNode, comments, trim(replaced_comment));
+			}
+			else
+			{
+				// loop through the string to extract all other tokens
+				while (token != NULL)
+				{
+					char* s = clean_comment_str(token);
+					append_list(GCharNode, comments, trim(s));
+					g_free(to_void_ptr(&s));
+					token = strtok(NULL, "~~");
+				}
 			}
 			g_free(to_void_ptr(&replaced_comment));
+			g_free(to_void_ptr(&cleaned_comment));
 		}
 		else
 		{

@@ -5,9 +5,9 @@
 syntax = "proto3";  // dasd
 
 /*
-**    *test multiple empty lines at the end of proto file.sdfsdf/ syntax = "proto3";*
+**    test multiple empty lines at the end of proto file.sdfsdf/ syntax = "proto3";
 **    test multiple empty lines at the end of proto file.
-**    test multiple empty lines at the end of proto file. /*
+**    test multiple empty lines at the end of proto file.
 */
 package dasdsadsd;  // dadsasdasd
 

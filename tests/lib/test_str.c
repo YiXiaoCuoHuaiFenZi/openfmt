@@ -174,6 +174,25 @@ int test_trim_prefix()
 	else
 		g_free(to_void_ptr(&s7));
 
+	char* s8 = trim_prefix("//\n", "//");
+	if (strcmp(s8, "\n") != 0)
+	{
+		g_free(to_void_ptr(&s8));
+		return TEST_FAIL;
+	}
+	else
+		g_free(to_void_ptr(&s8));
+
+	char* s9 = trim_prefix("//", "//");
+	if (strcmp(s9, "") != 0)
+	{
+		g_free(to_void_ptr(&s9));
+		return TEST_FAIL;
+	}
+	else
+		g_free(to_void_ptr(&s9));
+
+
 	return TEST_SUCCESS;
 }
 
@@ -233,6 +252,15 @@ int test_trim_suffix()
 //	}
 //	else
 //		g_free(to_void_ptr(&s5));
+
+	char* s6 = trim_suffix("//", "//");
+	if (strcmp(s6, "") != 0)
+	{
+		g_free(to_void_ptr(&s6));
+		return TEST_FAIL;
+	}
+	else
+		g_free(to_void_ptr(&s6));
 
 	return TEST_SUCCESS;
 }
