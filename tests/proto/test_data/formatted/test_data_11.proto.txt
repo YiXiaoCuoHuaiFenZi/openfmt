@@ -1,0 +1,5 @@
+message PassengerGroupKey {
+    option deprecated         = true;  // DEPRECATED!!!
+    int32 adults              = 1;     // Number of adult passengers
+    repeated int32 child_ages = 2;     // Array with integer child ages
+}

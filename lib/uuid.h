@@ -1,16 +1,14 @@
 /***********************************************************************************************************************
 **    Author:          YiXiaoCuoHuaiFenZi
-**    Functionality:
+**    Functionality:   Method signatures of UUID generator.
 **    Created Date:    2022-11-02
-**    Updated Date:    2022-11-02
+**    Updated Date:    2024-01-25
 ***********************************************************************************************************************/
 #ifndef OPENFMT_UUID_H
 #define OPENFMT_UUID_H
 
 #include "type.h"
 
-struct UUID_;
-typedef struct UUID_ UUID;
 /***********************************************************************************************************************
 **              https://www.rfc-editor.org/rfc/rfc4122
 **                       Layout and Byte Order
@@ -27,7 +25,7 @@ typedef struct UUID_ UUID;
 ** |                         node (2-5)                            |
 ** +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ***********************************************************************************************************************/
-struct UUID_
+typedef struct
 {
 	byte time_low[4];
 	byte time_mid[2];
@@ -47,7 +45,7 @@ struct UUID_
 	char* value;                          // f81d4fae-7dec-11d0-a765-00a0c91e6bf6
 	char* hex;                            // f81d4fae7dec11d0a76500a0c91e6bf6
 	char* urn;                            // urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6
-};
+} UUID;
 
 void read_urandom();
 

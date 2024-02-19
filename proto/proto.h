@@ -18,7 +18,7 @@ typedef enum PositionStruct
 	RIGHT
 } PbPosition;
 
-typedef struct CommentStruct
+typedef struct
 {
 	char* text;
 	PbPosition pos;
@@ -26,19 +26,19 @@ typedef struct CommentStruct
 
 typedef G_NodeTemplate(PbComment) PbCommentNode, PbCommentList;
 
-typedef struct SyntaxStruct
+typedef struct
 {
 	char* value;
 	PbCommentList* comments;
 } PbSyntax;
 
-typedef struct PackageStruct
+typedef struct
 {
 	char* value;
 	PbCommentList* comments;
 } PbPackage;
 
-typedef struct ImportStruct
+typedef struct
 {
 	char* value;
 	PbCommentList* comments;
@@ -46,7 +46,7 @@ typedef struct ImportStruct
 
 typedef G_NodeTemplate(PbImport) PbImportNode, PbImportList;
 
-typedef struct OptionStruct
+typedef struct
 {
 	char* name;
 	char* value;
@@ -55,7 +55,7 @@ typedef struct OptionStruct
 
 typedef G_NodeTemplate(PbOption) PbOptionNode, PbOptionList;
 
-typedef struct ElementStruct
+typedef struct
 {
 	char* label;
 	char* type;
@@ -65,7 +65,7 @@ typedef struct ElementStruct
 	PbCommentList* comments;
 } PbElement;
 
-typedef struct MessageElementStruct
+typedef struct
 {
 	char* label;
 	char* type;
@@ -75,7 +75,7 @@ typedef struct MessageElementStruct
 	PbCommentList* comments;
 } PbMessageElement;
 
-typedef struct MessageStruct
+typedef struct
 {
 	char* id;
 	char* parent_id;
@@ -85,7 +85,7 @@ typedef struct MessageStruct
 	List elements;
 } PbMessage;
 
-typedef struct ExtendElementStruct
+typedef struct
 {
 	char* label;
 	char* type;
@@ -95,7 +95,7 @@ typedef struct ExtendElementStruct
 	PbCommentList* comments;
 } PbExtendElement;
 
-typedef struct ExtendStruct
+typedef struct
 {
 	char* id;
 	char* parent_id;
@@ -105,7 +105,7 @@ typedef struct ExtendStruct
 	List elements;
 } PbExtend;
 
-typedef struct OneOfElementStruct
+typedef struct
 {
 	char* label;
 	char* type;
@@ -115,7 +115,7 @@ typedef struct OneOfElementStruct
 	PbCommentList* comments;
 } PbOneOfElement;
 
-typedef struct OneOfStruct
+typedef struct
 {
 	char* id;
 	char* parent_id;
@@ -125,7 +125,7 @@ typedef struct OneOfStruct
 	List elements;
 } PbOneOf;
 
-typedef struct EnumElementStruct
+typedef struct
 {
 	char* name;
 	char* number;
@@ -133,7 +133,7 @@ typedef struct EnumElementStruct
 	PbCommentList* comments;
 } PbEnumElement;
 
-typedef struct EnumStruct
+typedef struct
 {
 	char* id;
 	char* parent_id;
@@ -143,7 +143,7 @@ typedef struct EnumStruct
 	List elements;
 } PbEnum;
 
-typedef struct ServiceElementStruct
+typedef struct
 {
 	char* label;
 	char* name;
@@ -152,7 +152,7 @@ typedef struct ServiceElementStruct
 	PbCommentList* comments;
 } PbServiceElement;
 
-typedef struct ServiceStruct
+typedef struct
 {
 	char* id;
 	char* parent_id;
@@ -162,7 +162,7 @@ typedef struct ServiceStruct
 	List elements;
 } PbService;
 
-typedef struct TextColorConfigStruct
+typedef struct
 {
 	int default_color;
 	int default_key_word;
@@ -193,7 +193,7 @@ typedef struct TextColorConfigStruct
 	int comment;
 } PbTextColorConfig;
 
-typedef struct ConfigStruct
+typedef struct
 {
 	int indents_unit;
 	bool align_by_equal_sign;
@@ -203,7 +203,7 @@ typedef struct ConfigStruct
 	PbTextColorConfig text_color_config;
 } PbConfig;
 
-typedef struct TextStruct
+typedef struct
 {
 	char* text;
 	int color;
@@ -211,7 +211,7 @@ typedef struct TextStruct
 
 typedef G_NodeTemplate(PbText) PbTextNode, PbTextList;
 
-typedef struct ProtobufStruct
+typedef struct
 {
 	PbSyntax* syntax;
 	PbPackage* package;
@@ -225,7 +225,7 @@ typedef struct ProtobufStruct
 	PbCommentList* comments;
 } Protobuf;
 
-typedef struct MessageElementLength
+typedef struct
 {
 	// max string length from the element start to the equal sign.
 	unsigned int max_name_len;
@@ -233,7 +233,7 @@ typedef struct MessageElementLength
 	unsigned int max_value_len;
 } MessageElementLength;
 
-typedef struct EnumElementLength
+typedef struct
 {
 	// max string length of enum element name.
 	unsigned int max_name_len;

@@ -9,7 +9,22 @@
 
 #include <stdbool.h>
 
-struct DoublyLinkedListNode;
+typedef struct
+{
+	/*
+	** 万能指针，以便存储任何类型的数据，实现泛型。
+	*/
+	void* data;
+	/*
+	**  上一个节点的指针
+	*/
+	struct DoublyLinkedListNode* previous;
+	/*
+	**  下一个节点的指针
+	*/
+	struct DoublyLinkedListNode* next;
+} DoublyLinkedListNode;
+
 typedef struct DoublyLinkedListNode* DoublyLinkedList;
 typedef struct DoublyLinkedListNode* Position;
 
@@ -29,19 +44,5 @@ void append_doubly_linked_list(void* data, DoublyLinkedList list);
 
 void dispose_doubly_linked_list(DoublyLinkedList list, void (* free_data_callback)(void* data));
 
-struct DoublyLinkedListNode
-{
-	/*
-	** 万能指针，以便存储任何类型的数据，实现泛型。
-	*/
-	void* data;
-	/*
-	**  上一个节点的指针
-	*/
-	struct DoublyLinkedListNode* previous;
-	/*
-	**  下一个节点的指针
-	*/
-	struct DoublyLinkedListNode* next;
-};
+
 #endif //OPENFMT_DOUBLY_LINKED_LIST_H

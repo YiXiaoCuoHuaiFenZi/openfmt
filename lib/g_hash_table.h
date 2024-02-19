@@ -10,37 +10,33 @@
 #define G_CAPACITY 991           // Size of the Hash Table
 #define G_PRIME 7                // Used in second hash function
 
-typedef struct GItem GItem;
-
 /***********************************************************************************************************************
 **    Author:          YiXiaoCuoHuaiFenZi
 **    Functionality:   Define the hash table item.
 **    Created Date:    2022-10-26
-**    Updated Date:    2022-10-26
+**    Updated Date:    2024-01-15
 ***********************************************************************************************************************/
-struct GItem
+typedef struct
 {
 	char* key;                       // the hash key of the data.
 	void* data;                      // data to be stored
 	char* data_type;                 // data type of the stored data, used to convert the data to a solid data object.
 
 	void (* data_free_func)(void*);  // the free call back method to free the data, used in free the whole hash table.
-};
-
-typedef struct GHashTable GHashTable;
+} GItem;
 
 /***********************************************************************************************************************
 **    Author:          YiXiaoCuoHuaiFenZi
 **    Functionality:   Define the hash table.
 **    Created Date:    2022-10-26
-**    Updated Date:    2022-10-26
+**    Updated Date:    2024-01-15
 ***********************************************************************************************************************/
-struct GHashTable
+typedef struct
 {
 	GItem** items;  // Contains an array of pointers to items
 	int size;
 	int count;
-};
+} GHashTable;
 
 /***********************************************************************************************************************
 **    Author:          YiXiaoCuoHuaiFenZi

@@ -268,9 +268,25 @@ void parse_proto_string(Protobuf* protobuf, const char* proto_str)
 			if (match)
 			{
 				index = index + len + 1;
-				status = get_status_from_key_word(key_word);
-				parse_obj(proto_str, index_ptr, &status, protobuf, top_comments, object_stack);
-				is_obj = true;
+				// the option key word is in the object:
+				// message PassengerGroupKey {
+				//  option deprecated = true; // DEPRECATED!!!
+				//  int32 adults = 1; // Number of adult passengers
+				//  repeated int32 child_ages = 2; // Array with integer child ages
+				// }
+				if ((status == message || status == one_of || status == proto_enum || status == service ||
+					 status == extend) && get_status_from_key_word(key_word) == option)
+				{
+					// move the index to the start of "option" so it can be parsed as message element.
+					index = index - strlen("option") - 1;
+					is_obj = false;
+				}
+				else
+				{
+					status = get_status_from_key_word(key_word);
+					parse_obj(proto_str, index_ptr, &status, protobuf, top_comments, object_stack);
+					is_obj = true;
+				}
 				break;
 			}
 		}
