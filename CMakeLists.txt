@@ -4,7 +4,7 @@ project(openfmt C)
 set(CMAKE_C_STANDARD 99)
 
 add_executable(openfmt
-        proto/main.c
+        main.c
         proto/proto.c
         proto/proto.h
         proto/proto_parser.c

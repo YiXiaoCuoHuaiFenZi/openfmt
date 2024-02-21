@@ -2,15 +2,15 @@
 **    Author:          YiXiaoCuoHuaiFenZi
 **    Functionality:   Program entrance.
 **    Created Date:    2022-09-30
-**    Updated Date:    2023-06-28
+**    Updated Date:    2024-02-21
 ***********************************************************************************************************************/
 #include <string.h>
 #include <dirent.h>
-#include "proto_parser.h"
-#include "../lib/dir.h"
-#include "../lib/str.h"
-#include "../lib/file.h"
-#include "../lib/memory.h"
+#include "proto/proto_parser.h"
+#include "lib/dir.h"
+#include "lib/str.h"
+#include "lib/file.h"
+#include "lib/memory.h"
 
 const char* VERSION = "1.0.0";
 
